@@ -357,26 +357,37 @@ class Site extends CI_Controller
         $elements[0]->sort="1";
         $elements[0]->header="ID";
         $elements[0]->alias="id";
+        
         $elements[1]=new stdClass();
         $elements[1]->field="`hotel_hotel`.`name`";
         $elements[1]->sort="1";
         $elements[1]->header="Name";
         $elements[1]->alias="name";
+        
         $elements[2]=new stdClass();
         $elements[2]->field="`hotel_hotel`.`initialbalance`";
         $elements[2]->sort="1";
         $elements[2]->header="Initial Balance";
         $elements[2]->alias="initialbalance";
+        
         $elements[3]=new stdClass();
         $elements[3]->field="`hotel_hotel`.`location`";
         $elements[3]->sort="1";
         $elements[3]->header="Location";
         $elements[3]->alias="location";
+        
         $elements[4]=new stdClass();
         $elements[4]->field="`hotel_hotel`.`user`";
         $elements[4]->sort="1";
-        $elements[4]->header="User";
+        $elements[4]->header="Userid";
         $elements[4]->alias="user";
+        
+        $elements[5]=new stdClass();
+        $elements[5]->field="`user`.`name`";
+        $elements[5]->sort="1";
+        $elements[5]->header="User";
+        $elements[5]->alias="username";
+        
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
         $orderby=$this->input->get_post("orderby");
@@ -391,7 +402,7 @@ class Site extends CI_Controller
         $orderby="id";
         $orderorder="ASC";
         }
-        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_hotel`");
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_hotel` LEFT OUTER JOIN `user` ON `user`.`id`=`hotel_hotel`.`user`");
         $this->load->view("json",$data);
     }
 
@@ -502,46 +513,73 @@ class Site extends CI_Controller
         $elements[0]->sort="1";
         $elements[0]->header="ID";
         $elements[0]->alias="id";
+        
         $elements[1]=new stdClass();
         $elements[1]->field="`hotel_order`.`user`";
         $elements[1]->sort="1";
         $elements[1]->header="User";
         $elements[1]->alias="user";
+        
         $elements[2]=new stdClass();
         $elements[2]->field="`hotel_order`.`admin`";
         $elements[2]->sort="1";
         $elements[2]->header="Admin";
         $elements[2]->alias="admin";
+        
         $elements[3]=new stdClass();
         $elements[3]->field="`hotel_order`.`hotel`";
         $elements[3]->sort="1";
         $elements[3]->header="Hotel";
         $elements[3]->alias="hotel";
+        
         $elements[4]=new stdClass();
         $elements[4]->field="`hotel_order`.`days`";
         $elements[4]->sort="1";
         $elements[4]->header="Days";
         $elements[4]->alias="days";
+        
         $elements[5]=new stdClass();
         $elements[5]->field="`hotel_order`.`userrate`";
         $elements[5]->sort="1";
         $elements[5]->header="User Rate";
         $elements[5]->alias="userrate";
+        
         $elements[6]=new stdClass();
         $elements[6]->field="`hotel_order`.`hotelrate`";
         $elements[6]->sort="1";
         $elements[6]->header="Hotel Rate";
         $elements[6]->alias="hotelrate";
+        
         $elements[7]=new stdClass();
         $elements[7]->field="`hotel_order`.`status`";
         $elements[7]->sort="1";
         $elements[7]->header="Status";
         $elements[7]->alias="status";
+        
         $elements[8]=new stdClass();
         $elements[8]->field="`hotel_order`.`price`";
         $elements[8]->sort="1";
         $elements[8]->header="Price";
         $elements[8]->alias="price";
+        
+        $elements[9]=new stdClass();
+        $elements[9]->field="`tab1`.`name`";
+        $elements[9]->sort="1";
+        $elements[9]->header="User";
+        $elements[9]->alias="username";
+        
+        $elements[10]=new stdClass();
+        $elements[10]->field="`tab2`.`name`";
+        $elements[10]->sort="1";
+        $elements[10]->header="Admin";
+        $elements[10]->alias="adminname";
+        
+        $elements[11]=new stdClass();
+        $elements[11]->field="`hotel_hotel`.`name`";
+        $elements[11]->sort="1";
+        $elements[11]->header="Hotel";
+        $elements[11]->alias="hotelname";
+        
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
         $orderby=$this->input->get_post("orderby");
@@ -549,14 +587,14 @@ class Site extends CI_Controller
         $maxrow=$this->input->get_post("maxrow");
         if($maxrow=="")
         {
-        $maxrow=20;
+            $maxrow=20;
         }
         if($orderby=="")
         {
-        $orderby="id";
-        $orderorder="ASC";
+            $orderby="id";
+            $orderorder="ASC";
         }
-        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_order`");
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_order` LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel`");
         $this->load->view("json",$data);
     }
 
@@ -695,26 +733,43 @@ class Site extends CI_Controller
         $elements[0]->sort="1";
         $elements[0]->header="ID";
         $elements[0]->alias="id";
+        
         $elements[1]=new stdClass();
         $elements[1]->field="`hotel_transaction`.`user`";
         $elements[1]->sort="1";
         $elements[1]->header="User";
         $elements[1]->alias="user";
+        
         $elements[2]=new stdClass();
         $elements[2]->field="`hotel_transaction`.`hotel`";
         $elements[2]->sort="1";
         $elements[2]->header="Hotel";
         $elements[2]->alias="hotel";
+        
         $elements[3]=new stdClass();
         $elements[3]->field="`hotel_transaction`.`amount`";
         $elements[3]->sort="1";
         $elements[3]->header="Amount";
         $elements[3]->alias="amount";
+        
         $elements[4]=new stdClass();
         $elements[4]->field="`hotel_transaction`.`status`";
         $elements[4]->sort="1";
         $elements[4]->header="Status";
         $elements[4]->alias="status";
+        
+        $elements[5]=new stdClass();
+        $elements[5]->field="`user`.`name`";
+        $elements[5]->sort="1";
+        $elements[5]->header="User";
+        $elements[5]->alias="username";
+        
+        $elements[6]=new stdClass();
+        $elements[6]->field="`hotel_hotel`.`name`";
+        $elements[6]->sort="1";
+        $elements[6]->header="Hotel";
+        $elements[6]->alias="hotelname";
+        
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
         $orderby=$this->input->get_post("orderby");
@@ -722,14 +777,14 @@ class Site extends CI_Controller
         $maxrow=$this->input->get_post("maxrow");
         if($maxrow=="")
         {
-        $maxrow=20;
+            $maxrow=20;
         }
         if($orderby=="")
         {
-        $orderby="id";
-        $orderorder="ASC";
+            $orderby="id";
+            $orderorder="ASC";
         }
-        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_transaction`");
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_transaction` LEFT OUTER JOIN `hotel_hotel` ON `hotel_transaction`.`hotel`=`hotel_hotel`.`id` LEFT OUTER JOIN `user` ON `hotel_transaction`.`user`=`user`.`id`");
         $this->load->view("json",$data);
     }
 
@@ -848,21 +903,37 @@ class Site extends CI_Controller
         $elements[0]->sort="1";
         $elements[0]->header="ID";
         $elements[0]->alias="id";
+        
         $elements[1]=new stdClass();
         $elements[1]->field="`hotel_log`.`admin`";
         $elements[1]->sort="1";
         $elements[1]->header="Admin";
         $elements[1]->alias="admin";
+        
         $elements[2]=new stdClass();
         $elements[2]->field="`hotel_log`.`user`";
         $elements[2]->sort="1";
         $elements[2]->header="User";
         $elements[2]->alias="user";
+        
         $elements[3]=new stdClass();
         $elements[3]->field="`hotel_log`.`text`";
         $elements[3]->sort="1";
         $elements[3]->header="Text";
         $elements[3]->alias="text";
+        
+        $elements[4]=new stdClass();
+        $elements[4]->field="`tab1`.`name`";
+        $elements[4]->sort="1";
+        $elements[4]->header="User";
+        $elements[4]->alias="username";
+        
+        $elements[5]=new stdClass();
+        $elements[5]->field="`tab2`.`name`";
+        $elements[5]->sort="1";
+        $elements[5]->header="Admin";
+        $elements[5]->alias="adminname";
+        
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
         $orderby=$this->input->get_post("orderby");
@@ -870,14 +941,14 @@ class Site extends CI_Controller
         $maxrow=$this->input->get_post("maxrow");
         if($maxrow=="")
         {
-        $maxrow=20;
+            $maxrow=20;
         }
         if($orderby=="")
         {
-        $orderby="id";
-        $orderorder="ASC";
+            $orderby="id";
+            $orderorder="ASC";
         }
-        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_log`");
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_log` LEFT OUTER JOIN `user` AS `tab1` ON `hotel_log`.`user`=`tab1`.`id` LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_log`.`admin`");
         $this->load->view("json",$data);
     }
 
