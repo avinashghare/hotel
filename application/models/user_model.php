@@ -32,7 +32,7 @@ class User_model extends CI_Model
 	}
 	
 	
-	public function create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json)
+	public function create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill)
 	{
 		$data  = array(
 			'name' => $name,
@@ -43,6 +43,15 @@ class User_model extends CI_Model
             'socialid'=> $socialid,
             'image'=> $image,
             'json'=> $json,
+            'age'=> $age,
+            'gender'=> $gender,
+            'address'=> $address,
+            'contact'=> $contact,
+            'mobile'=> $mobile,
+            'dob'=> $dob,
+            'profession'=> $profession,
+            'vouchernumber'=> $vouchernumber,
+            'validtill'=> $validtill,
 			'logintype' => $logintype
 		);
 		$query=$this->db->insert( 'user', $data );
@@ -87,7 +96,7 @@ class User_model extends CI_Model
 		return $query;
 	}
 	
-	public function edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json)
+	public function edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill)
 	{
 		$data  = array(
 			'name' => $name,
@@ -97,6 +106,15 @@ class User_model extends CI_Model
             'socialid'=> $socialid,
             'image'=> $image,
             'json'=> $json,
+            'age'=> $age,
+            'gender'=> $gender,
+            'address'=> $address,
+            'contact'=> $contact,
+            'mobile'=> $mobile,
+            'dob'=> $dob,
+            'profession'=> $profession,
+            'vouchernumber'=> $vouchernumber,
+            'validtill'=> $validtill,
 			'logintype' => $logintype
 		);
 		if($password != "")
@@ -515,5 +533,14 @@ class User_model extends CI_Model
             return $newdata;
         }
     }
+    
+	public function getgenderdropdown()
+	{
+		$gender= array(
+			 "1" => "Male",
+			 "0" => "Female",
+			);
+		return $gender;
+	}
 }
 ?>

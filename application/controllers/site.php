@@ -34,6 +34,7 @@ class Site extends CI_Controller
 		$this->checkaccess($access);
 		$data['accesslevel']=$this->user_model->getaccesslevels();
 		$data[ 'status' ] =$this->user_model->getstatusdropdown();
+		$data[ 'gender' ] =$this->user_model->getgenderdropdown();
 		$data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
 //        $data['category']=$this->category_model->getcategorydropdown();
 		$data[ 'page' ] = 'createuser';
@@ -60,6 +61,7 @@ class Site extends CI_Controller
             $data[ 'status' ] =$this->user_model->getstatusdropdown();
             $data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
             $data['category']=$this->category_model->getcategorydropdown();
+		      $data[ 'gender' ] =$this->user_model->getgenderdropdown();
             $data[ 'page' ] = 'createuser';
             $data[ 'title' ] = 'Create User';
             $this->load->view( 'template', $data );	
@@ -74,6 +76,17 @@ class Site extends CI_Controller
             $socialid=$this->input->post('socialid');
             $logintype=$this->input->post('logintype');
             $json=$this->input->post('json');
+            
+            $age=$this->input->post('age');
+            $gender=$this->input->post('gender');
+            $address=$this->input->post('address');
+            $contact=$this->input->post('contact');
+            $mobile=$this->input->post('mobile');
+            $dob=$this->input->post('dob');
+            $profession=$this->input->post('profession');
+            $vouchernumber=$this->input->post('vouchernumber');
+            $validtill=$this->input->post('validtill');
+            
 //            $category=$this->input->post('category');
             
             $config['upload_path'] = './uploads/';
@@ -111,7 +124,7 @@ class Site extends CI_Controller
                 
 			}
             
-			if($this->user_model->create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json)==0)
+			if($this->user_model->create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill)==0)
 			$data['alerterror']="New user could not be created.";
 			else
 			$data['alertsuccess']="User created Successfully.";
@@ -215,11 +228,12 @@ class Site extends CI_Controller
 		$data[ 'status' ] =$this->user_model->getstatusdropdown();
 		$data['accesslevel']=$this->user_model->getaccesslevels();
 		$data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
+		$data[ 'gender' ] =$this->user_model->getgenderdropdown();
 		$data['before']=$this->user_model->beforeedit($this->input->get('id'));
 		$data['page']='edituser';
 		$data['page2']='block/userblock';
 		$data['title']='Edit User';
-		$this->load->view('templatewith2',$data);
+		$this->load->view('template',$data);
 	}
 	function editusersubmit()
 	{
@@ -240,6 +254,7 @@ class Site extends CI_Controller
 			$data['alerterror'] = validation_errors();
 			$data[ 'status' ] =$this->user_model->getstatusdropdown();
 			$data['accesslevel']=$this->user_model->getaccesslevels();
+		  $data[ 'gender' ] =$this->user_model->getgenderdropdown();
             $data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
 			$data['before']=$this->user_model->beforeedit($this->input->post('id'));
 			$data['page']='edituser';
@@ -259,6 +274,19 @@ class Site extends CI_Controller
             $socialid=$this->input->get_post('socialid');
             $logintype=$this->input->get_post('logintype');
             $json=$this->input->get_post('json');
+            
+            
+            $age=$this->input->post('age');
+            $gender=$this->input->post('gender');
+            $address=$this->input->post('address');
+            $contact=$this->input->post('contact');
+            $mobile=$this->input->post('mobile');
+            $dob=$this->input->post('dob');
+            $profession=$this->input->post('profession');
+            $vouchernumber=$this->input->post('vouchernumber');
+            $validtill=$this->input->post('validtill');
+            
+            
 //            $category=$this->input->get_post('category');
             
             $config['upload_path'] = './uploads/';
@@ -303,7 +331,7 @@ class Site extends CI_Controller
                 $image=$image->image;
             }
             
-			if($this->user_model->edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json)==0)
+			if($this->user_model->edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill)==0)
 			$data['alerterror']="User Editing was unsuccesful";
 			else
 			$data['alertsuccess']="User edited Successfully.";
@@ -1043,5 +1071,67 @@ class Site extends CI_Controller
         $this->load->view("redirect",$data);
     }
 
+    function viewuserhotel()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+        $id=$this->input->get('id');
+        $data['userid']=$this->input->get('id');
+		$data['table']=$this->hotel_model->gethotels();
+		$data['page']='viewuserhotel';
+		$data['title']='User Hotels';
+		$this->load->view('template',$data);
+	}
+    function createorderforuserhotel()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data["page"]="createorderforuserhotel";
+        $data["title"]="Make order";
+        $data['userid']=$this->input->get('userid');
+        $data['hotelid']=$this->input->get('hotelid');
+        $data['status']=$this->user_model->getstatusdropdown();
+        $this->load->view("template",$data);
+    
+    }
+    public function createorderforuserhotelsubmit() 
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $this->form_validation->set_rules("user","User","trim");
+        $this->form_validation->set_rules("hotel","Hotel","trim");
+        $this->form_validation->set_rules("days","Days","trim");
+        $this->form_validation->set_rules("userrate","User Rate","trim");
+        $this->form_validation->set_rules("hotelrate","Hotel Rate","trim");
+        $this->form_validation->set_rules("status","Status","trim");
+        $this->form_validation->set_rules("price","Price","trim");
+        if($this->form_validation->run()==FALSE)
+        {
+            $data["alerterror"]=validation_errors();
+            $data["page"]="createorderforuserhotel";
+            $data["title"]="Make order";
+            $data['userid']=$this->input->get_post('user');
+            $data['hotelid']=$this->input->get_post('hotel');
+            $data['status']=$this->user_model->getstatusdropdown();
+            $this->load->view("template",$data);
+        }
+        else
+        {
+            $user=$this->input->get_post("user");
+            $admin=$this->session->userdata('id');
+            $hotel=$this->input->get_post("hotel");
+            $days=$this->input->get_post("days");
+            $userrate=$this->input->get_post("userrate");
+            $hotelrate=$this->input->get_post("hotelrate");
+            $status=$this->input->get_post("status");
+            $price=$this->input->get_post("price");
+            if($this->order_model->create($user,$admin,$hotel,$days,$userrate,$hotelrate,$status,$price)==0)
+            $data["alerterror"]="Your Order could not be created.";
+            else
+            $data["alertsuccess"]="Order created Successfully.";
+            $data["redirect"]="site/viewuserhotel?id=".$user;
+            $this->load->view("redirect",$data);
+        }
+    }
 }
 ?>

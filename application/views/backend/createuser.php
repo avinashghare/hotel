@@ -46,14 +46,81 @@
 					<input type="password" id="description-field" class="form-control" name="confirmpassword" value="">
 				  </div>
 				</div>
+				
 				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">age</label>
+				  <div class="col-sm-4">
+					<input type="text" id="normal-field" class="form-control" name="age" value="<?php echo set_value('age');?>">
+				  </div>
+				</div>
+				
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label">gender</label>
+				  <div class="col-sm-4">
+					<?php
+						
+						echo form_dropdown('gender',$gender,set_value('gender'),'class="chzn-select form-control" 	data-placeholder="Choose a Logintype..."');
+					?>
+				  </div>
+				</div>
+				
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Address</label>
+				  <div class="col-sm-4">
+					<input type="text" id="normal-field" class="form-control" name="address" value="<?php echo set_value('address');?>">
+				  </div>
+				</div>
+				
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Contact</label>
+				  <div class="col-sm-4">
+					<input type="text" id="normal-field" class="form-control" name="contact" value="<?php echo set_value('contact');?>">
+				  </div>
+				</div>
+				
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Mobile</label>
+				  <div class="col-sm-4">
+					<input type="text" id="normal-field" class="form-control" name="mobile" value="<?php echo set_value('mobile');?>">
+				  </div>
+				</div>
+				
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">DOB</label>
+				  <div class="col-sm-4">
+					<input type="date" id="normal-field" class="form-control" name="dob" value="<?php echo set_value('dob');?>">
+				  </div>
+				</div>
+				
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Profession</label>
+				  <div class="col-sm-4">
+					<input type="text" id="normal-field" class="form-control" name="profession" value="<?php echo set_value('profession');?>">
+				  </div>
+				</div>
+				
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Voucher Number</label>
+				  <div class="col-sm-4">
+					<input type="text" id="normal-field" class="form-control" name="vouchernumber" value="<?php echo set_value('vouchernumber');?>">
+				  </div>
+				</div>
+				
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Valid Till</label>
+				  <div class="col-sm-4">
+					<input type="date" id="normal-field" class="form-control" name="validtill" value="<?php echo set_value('validtill');?>">
+				  </div>
+				</div>
+				
+				<div class=" form-group" style="display:none;">
 				  <label class="col-sm-2 control-label" for="normal-field">SocialId</label>
 				  <div class="col-sm-4">
 					<input type="text" id="normal-field" class="form-control" name="socialid" value="<?php echo set_value('socialid');?>">
 				  </div>
 				</div>
 				
-				<div class=" form-group">
+				<div class=" form-group" style="display:none;">
 				  <label class="col-sm-2 control-label">logintype</label>
 				  <div class="col-sm-4">
 					<?php
@@ -73,7 +140,7 @@
 				  </div>
 				</div>
 				
-				<div class=" form-group">
+				<div class=" form-group" style="display:none;">
 				  <label class="col-sm-2 control-label" for="normal-field">Image</label>
 				  <div class="col-sm-4">
 					<input type="file" id="normal-field" class="form-control" name="image" value="<?php echo set_value('image');?>">
