@@ -1,35 +1,53 @@
+<div id="page-title">
+       <a class="btn btn-primary btn-labeled fa fa-plus margined pull-right" href="<?php echo site_url('site/createuser'); ?>">Create</a>
 
-<div class="row">
-	<div class="col-lg-12">
-		<section class="panel">
-			<header class="panel-heading">
-                User Details <a class="btn btn-primary pull-right"  href="<?php echo site_url('site/createuser'); ?>"><i class="icon-plus"></i>Create </a> &nbsp; 
-	
-            </header>
-			<div class="drawchintantable">
+    <h1 class="page-header text-overflow">User Details</h1>
+</div>
+
+<div id="page-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel drawchintantable">
+
                 <?php $this->chintantable->createsearch("User List");?>
-                <table class="table table-striped table-hover" id="" cellpadding="0" cellspacing="0" >
-                <thead>
-                    <tr>
-                        <th data-field="id">Id</th>
-                        <th data-field="name">Name</th>
-<!--                        <th data-field="username">Username</th>-->
-                        <th data-field="email">Email</th>
-                        <th data-field="socialid">Socialid</th>
-                        <th data-field="logintype">logintype</th>
-                        <th data-field="json">json</th>
-                        <th data-field="accesslevelname">accesslevel</th>
-                        <th data-field="status">status</th>
-                        <th data-field="action"> Actions </th>
-                    </tr>
-                </thead>
-                <tbody>
-                   
-                </tbody>
-                </table>
-                   <?php $this->chintantable->createpagination();?>
+
+
+                <div class="fixed-table-container">
+                    <div class="fixed-table-body">
+                        <table class="table table-hover" id="" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th data-field="id">Id</th>
+                                    <th data-field="name">Name</th>
+                                    <!--                        <th data-field="username">Username</th>-->
+                                    <th data-field="email">Email</th>
+                                    <th data-field="socialid">Socialid</th>
+                                    <th data-field="logintype">logintype</th>
+                                    <th data-field="json">json</th>
+                                    <th data-field="accesslevelname">accesslevel</th>
+                                    <th data-field="status">status</th>
+                                    <th data-field="action">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="fixed-table-pagination" style="display: block;">
+                        <div class="pull-left pagination-detail">
+                                    <?php $this->chintantable->createpagination();?>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-		</section>
+
+
+
+        </div>
+    </div>
+
 		<script>
             function drawtable(resultrow) {
                 if(!resultrow.username)

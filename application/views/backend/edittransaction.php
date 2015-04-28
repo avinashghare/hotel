@@ -1,6 +1,6 @@
 <section class="panel">
     <header class="panel-heading">
-        Transaction Details
+        <h3 class="panel-title">Transaction Details</h3>
     </header>
     <div class="panel-body">
         <form class='form-horizontal tasi-form' method='post' action='<?php echo site_url("site/edittransactionsubmit");?>' enctype='multipart/form-data'>

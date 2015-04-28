@@ -1,6 +1,6 @@
 <section class="panel">
     <header class="panel-heading">
-        Hotel Details
+        <h3 class="panel-title">Hotel Details</h3>
     </header>
     <div class="panel-body">
         <form class='form-horizontal tasi-form' method='post' action='<?php echo site_url("site/edithotelsubmit");?>' enctype='multipart/form-data'>

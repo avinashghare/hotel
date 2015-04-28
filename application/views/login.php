@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Login page | CreateO</title>
+	<title>Login page | Hotel</title>
 
 
 	<!--STYLESHEET-->
@@ -83,7 +83,7 @@
 			<div class="cls-brand">
 				<a class="box-inline" href="index.html">
 					<!-- <img alt="Nifty Admin" src="img/logo.png" class="brand-icon"> -->
-					<span class="brand-title">CreateO <span class="text-thin"></span></span>
+					<span class="brand-title">Hotel <span class="text-thin"></span></span>
 				</a>
 			</div>
 		</div>

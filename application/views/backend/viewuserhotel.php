@@ -6,7 +6,7 @@
 <div class="row">
 	<div class="col-lg-12">
 		<section class="panel">
-			<header class="panel-heading">
+			<header class="page-header text-overflow" style="margin-left:10px;">
                 User Hotel Details
             </header>
 			<table class="table table-striped table-hover border-top " id="sample_1" cellpadding="0" cellspacing="0" >

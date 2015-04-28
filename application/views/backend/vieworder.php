@@ -1,37 +1,52 @@
-<div class="row" style="padding:1% 0">
-    <div class="col-md-12">
-        <a class="btn btn-primary pull-right" href="<?php echo site_url("site/createorder"); ?>"><i class="icon-plus"></i>Create </a> &nbsp;
-    </div>
+<div id="page-title">
+       <a class="btn btn-primary btn-labeled fa fa-plus margined pull-right" href="<?php echo site_url('site/createorder'); ?>">Create</a>
+
+    <h1 class="page-header text-overflow">Order Details</h1>
 </div>
-<div class="row">
-    <div class="col-lg-12">
-        <section class="panel">
-            <header class="panel-heading">
-                order Details
-            </header>
-            <div class="drawchintantable">
-                <?php $this->chintantable->createsearch("order List");?>
-                <table class="table table-striped table-hover" id="" cellpadding="0" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th data-field="id">ID</th>
-                            <th data-field="username">User</th>
-                            <th data-field="adminname">Admin</th>
-                            <th data-field="hotel">Hotel</th>
-                            <th data-field="days">Days</th>
-                            <th data-field="userrate">User Rate</th>
-                            <th data-field="hotelrate">Hotel Rate</th>
-                            <th data-field="status">Status</th>
-                            <th data-field="price">Price</th>
-                            <th data-field="action">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <?php $this->chintantable->createpagination();?>
+
+<div id="page-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel drawchintantable">
+
+                <?php $this->chintantable->createsearch("Order List");?>
+
+
+                <div class="fixed-table-container">
+                    <div class="fixed-table-body">
+                        <table class="table table-hover" id="" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th data-field="id">ID</th>
+                                    <th data-field="username">User</th>
+                                    <th data-field="adminname">Admin</th>
+                                    <th data-field="hotel">Hotel</th>
+                                    <th data-field="days">Days</th>
+                                    <th data-field="userrate">User Rate</th>
+                                    <th data-field="hotelrate">Hotel Rate</th>
+                                    <th data-field="status">Status</th>
+                                    <th data-field="price">Price</th>
+                                    <th data-field="action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="fixed-table-pagination" style="display: block;">
+                        <div class="pull-left pagination-detail">
+                                    <?php $this->chintantable->createpagination();?>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-        </section>
+
+        </div>
+    </div>
+
+       
         <script>
             function drawtable(resultrow) {
                 return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.username + "</td><td>" + resultrow.adminname + "</td><td>" + resultrow.hotelname + "</td><td>" + resultrow.days + "</td><td>" + resultrow.userrate + "</td><td>" + resultrow.hotelrate + "</td><td>" + resultrow.status + "</td><td>" + resultrow.price + "</td><td><a class='btn btn-primary btn-xs' href='<?php echo site_url('site/editorder?id=');?>" + resultrow.id + "'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-xs' href='<?php echo site_url('site/deleteorder?id='); ?>" + resultrow.id + "'><i class='icon-trash '></i></a></td></tr>";

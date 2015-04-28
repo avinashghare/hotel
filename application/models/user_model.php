@@ -32,7 +32,7 @@ class User_model extends CI_Model
 	}
 	
 	
-	public function create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill)
+	public function create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager)
 	{
 		$data  = array(
 			'name' => $name,
@@ -52,6 +52,8 @@ class User_model extends CI_Model
             'profession'=> $profession,
             'vouchernumber'=> $vouchernumber,
             'validtill'=> $validtill,
+            'executive'=> $executive,
+            'manager'=> $manager,
 			'logintype' => $logintype
 		);
 		$query=$this->db->insert( 'user', $data );
@@ -96,7 +98,7 @@ class User_model extends CI_Model
 		return $query;
 	}
 	
-	public function edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill)
+	public function edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager)
 	{
 		$data  = array(
 			'name' => $name,
@@ -115,6 +117,8 @@ class User_model extends CI_Model
             'profession'=> $profession,
             'vouchernumber'=> $vouchernumber,
             'validtill'=> $validtill,
+            'executive'=> $executive,
+            'manager'=> $manager,
 			'logintype' => $logintype
 		);
 		if($password != "")
@@ -128,6 +132,11 @@ class User_model extends CI_Model
 	public function getuserimagebyid($id)
 	{
 		$query=$this->db->query("SELECT `image` FROM `user` WHERE `id`='$id'")->row();
+		return $query;
+	}
+	public function getmanagerbyexecutive($executive)
+	{
+		$query=$this->db->query("SELECT `manager` FROM `user` WHERE `id`='$executive'")->row();
 		return $query;
 	}
 	function deleteuser($id)
@@ -148,6 +157,20 @@ class User_model extends CI_Model
 	}
     
     public function getuserdropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `user`  ORDER BY `id` ASC")->result();
+		$return=array(
+		"" => ""
+		);
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
+	}
+    
+    public function getexecutivedropdown()
 	{
 		$query=$this->db->query("SELECT * FROM `user`  ORDER BY `id` ASC")->result();
 		$return=array(

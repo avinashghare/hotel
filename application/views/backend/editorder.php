@@ -1,6 +1,6 @@
 <section class="panel">
     <header class="panel-heading">
-        order Details
+        <h3 class="panel-title">Order Details</h3>
     </header>
     <div class="panel-body">
         <form class='form-horizontal tasi-form' method='post' action='<?php echo site_url("site/editordersubmit");?>' enctype='multipart/form-data'>

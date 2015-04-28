@@ -1,17 +1,17 @@
-<div class="row" style="padding:1% 0">
-	<div class="col-md-12">
-		<div class="pull-right">
-			<a href="<?php echo site_url('site/viewusers'); ?>" class="btn btn-primary pull-right"><i class="icon-long-arrow-left"></i>&nbsp;Back</a>
-		</div>
-	</div>
+<div id="page-title">
+    <a href="<?php echo site_url('site/viewusers'); ?>" class="btn btn-primary btn-labeled fa fa-arrow-left margined pull-right">Back</a>
+
+    <h1 class="page-header text-overflow">User Details</h1>
 </div>
-<div class="row">
-	<div class="col-lg-12">
-	    <section class="panel">
-		    <header class="panel-heading">
-				 User Details
-			</header>
-			<div class="panel-body">
+
+<div id="page-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+               <div class="panel-heading">
+							<h3 class="panel-title">Create User</h3>
+						</div>
+                <div class="panel-body">
 			  <form class="form-horizontal tasi-form" method="post" action="<?php echo site_url('site/createusersubmit');?>" enctype= "multipart/form-data">
 				<div class="form-group">
 				  <label class="col-sm-2 control-label" for="normal-field">Name</label>
@@ -99,6 +99,14 @@
 				  </div>
 				</div>
 				
+				
+                <div class=" form-group">
+                    <label class="col-sm-2 control-label" for="normal-field">Executive</label>
+                    <div class="col-sm-4">
+                        <?php echo form_dropdown( "executive",$executive,set_value( 'executive'), "class='chzn-select form-control'");?>
+                    </div>
+                </div>
+                
 				<div class=" form-group">
 				  <label class="col-sm-2 control-label" for="normal-field">Voucher Number</label>
 				  <div class="col-sm-4">
@@ -184,6 +192,7 @@
 			</div>
 		</section>
 	</div>
+</div>
 </div>
 <script type="text/javascript">
     function operatorcategories() {

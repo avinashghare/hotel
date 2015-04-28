@@ -52,12 +52,9 @@ class hotel_model extends CI_Model
 		return $return;
 	}
     
-    public function gethotels()
+    public function gethotels($id)
     {
-        $query=$this->db->query("SELECT `hotel_hotel`.`id`, `hotel_hotel`.`name`, `hotel_hotel`.`initialbalance`, `hotel_hotel`.`location` ,`hotel_order`.`id` AS `orderid`, `hotel_order`.`user`, `hotel_order`.`admin`, `hotel_order`.`hotel`, `hotel_order`.`days`, `hotel_order`.`userrate`, `hotel_order`.`hotelrate`, `hotel_order`.`status`, `hotel_order`.`price`, `hotel_order`.`timestamp`
-FROM `hotel_hotel` 
-LEFT OUTER JOIN `hotel_order` ON `hotel_hotel`.`id`=`hotel_order`.`hotel`
-GROUP BY `hotel_hotel`.`id`")->result();
+        $query=$this->db->query("SELECT `hotel_hotel`.`id`, `hotel_hotel`.`name`, `hotel_hotel`.`initialbalance`, `hotel_hotel`.`location` ,`hotel_order`.`id` AS `orderid`, `hotel_order`.`user`, `hotel_order`.`admin`, `hotel_order`.`hotel`, `hotel_order`.`days`, `hotel_order`.`userrate`, `hotel_order`.`hotelrate`, `hotel_order`.`status`, `hotel_order`.`price`, `hotel_order`.`timestamp` FROM `hotel_order` RIGHT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` AND `hotel_order`.`user`='$id'")->result();
         return $query;
     }
     
