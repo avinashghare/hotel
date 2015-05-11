@@ -1,6 +1,6 @@
 <div id="page-title">
        <a class="btn btn-primary btn-labeled fa fa-plus margined pull-right" href="<?php echo site_url('site/createorder'); ?>">Create</a>
-
+<div class=" pull-right col-md-1 createbtn" ><a class="btn btn-primary btn-labeled fa fa-plus margined pull-right" href="<?php echo site_url('site/exportordercsvbyadmin'); ?>" target="_blank"><i class="icon-plus"></i>Export to CSV </a></div>
     <h1 class="page-header text-overflow">Order Details</h1>
 </div>
 
@@ -49,7 +49,15 @@
        
         <script>
             function drawtable(resultrow) {
-                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.username + "</td><td>" + resultrow.adminname + "</td><td>" + resultrow.hotelname + "</td><td>" + resultrow.days + "</td><td>" + resultrow.userrate + "</td><td>" + resultrow.hotelrate + "</td><td>" + resultrow.status + "</td><td>" + resultrow.price + "</td><td><a class='btn btn-primary btn-xs' href='<?php echo site_url('site/editorder?id=');?>" + resultrow.id + "'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-xs' href='<?php echo site_url('site/deleteorder?id='); ?>" + resultrow.id + "'><i class='icon-trash '></i></a></td></tr>";
+//                if(resultrow.status==1)
+//                {
+//                    resultrow.status="Inactive";
+//                }
+//                else if(resultrow.status==2)
+//                {
+//                    resultrow.status="Active";
+//                }
+                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.username + "</td><td>" + resultrow.adminname + "</td><td>" + resultrow.hotelname + "</td><td>" + resultrow.days + "</td><td>" + resultrow.userrate + "</td><td>" + resultrow.hotelrate + "</td><td>" + resultrow.statusname + "</td><td>" + resultrow.price + "</td><td><a class='btn btn-primary btn-xs' href='<?php echo site_url('site/editorder?id=');?>" + resultrow.id + "'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-xs' href='<?php echo site_url('site/deleteorder?id='); ?>" + resultrow.id + "'><i class='icon-trash '></i></a></td></tr>";
             }
             generatejquery("<?php echo $base_url;?>");
         </script>

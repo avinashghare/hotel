@@ -100,12 +100,37 @@
 				</div>
 				
 				
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label">Manager</label>
+				  <div class="col-sm-4">
+					<?php 	 echo form_dropdown('manager',$manager,set_value('manager'),'id="managerid" class="chzn-select form-control" 	data-placeholder="Choose a manager..."  onchange="changeexecutive()"');
+					?>
+				  </div>
+				</div>
+				
+				<div class="form-group" id="onmanagerselect">
+						<label class="col-sm-2 control-label">Executive</label>
+						<div class="col-sm-4 managerselect">
+                       <select name="executive" class="chzn-select form-control">
+						   
+						   </select>
+						</div>
+				</div>
+<!--
+                <div class=" form-group">
+                    <label class="col-sm-2 control-label" for="normal-field">Manager</label>
+                    <div class="col-sm-4">
+                        <?php echo form_dropdown( "manager",$manager,set_value( 'manager'), "class='chzn-select form-control'");?>
+                    </div>
+                </div>
+                
                 <div class=" form-group">
                     <label class="col-sm-2 control-label" for="normal-field">Executive</label>
                     <div class="col-sm-4">
                         <?php echo form_dropdown( "executive",$executive,set_value( 'executive'), "class='chzn-select form-control'");?>
                     </div>
                 </div>
+-->
                 
 				<div class=" form-group">
 				  <label class="col-sm-2 control-label" for="normal-field">Voucher Number</label>
@@ -158,11 +183,18 @@
 				<div class=" form-group">
 				  <label class="col-sm-2 control-label">Select Accesslevel</label>
 				  <div class="col-sm-4">
-					<?php 	 echo form_dropdown('accesslevel',$accesslevel,set_value('accesslevel'),'id="accesslevelid" onchange="operatorcategories()" class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..."');
+					<?php 	 echo form_dropdown('accesslevel',$accesslevel,set_value('accesslevel'),'id="accesslevelid" onchange="operatorcategories()" class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..." ');
 					?>
 				  </div>
 				</div>
 				
+				<div class=" form-group hotelclass">
+				  <label class="col-sm-2 control-label">Select Hotel</label>
+				  <div class="col-sm-4">
+					<?php 	 echo form_dropdown('hotel',$hotel,set_value('hotel'),'id="hotelid" class="chzn-select form-control" 	data-placeholder="Choose a hotel..."');
+					?>
+				  </div>
+				</div>
 <!--
 				<div class=" form-group categoryclass" style="display:none;">
 				  <label class="col-sm-2 control-label">Category</label>
@@ -175,7 +207,7 @@
 				</div>
 -->
 				
-				<div class=" form-group">
+				<div class=" form-group" style="display:none;">
 				  <label class="col-sm-2 control-label" for="normal-field">json</label>
 				  <div class="col-sm-4">
 					<input type="text" id="normal-field" class="form-control" name="json" value="<?php echo set_value('json');?>">
@@ -197,15 +229,45 @@
 <script type="text/javascript">
     function operatorcategories() {
         console.log($('#accesslevelid').val());
-        if($('#accesslevelid').val()==2)
+        if ($('#accesslevelid').val()==3)
         {
-            $( ".categoryclass" ).show();
+            $( ".hotelclass" ).show();
         }
-       
         else
         {
-            $( ".categoryclass" ).hide();
+            $( ".hotelclass" ).hide();
         }
        
     }
+    
+    function changeexecutive() {
+        console.log($('#managerid').val());
+        $.getJSON(
+            "<?php echo base_url(); ?>index.php/site/getexecutivedropdown/" + $('#managerid').val(), {
+                id: "123"
+            },
+            function (data) {
+                console.log(data);
+                nodata=data;
+                changeexecutivedropdown(data);
+
+            }
+
+        );
+    }
+                  var mallbycity=$(".storesforuser1 select").select2({allowClear: true,width:343});
+                  
+    function changeexecutivedropdown(data) {
+        $(".managerselect select").html("");
+        for(var i=0;i<data.length;i++)
+        {
+//            console.log(data[i].id);
+            $(".managerselect select").append("<option value='"+data[i].id+"'>"+data[i].name+"</option>");
+            
+        }
+        
+
+    };
+    
+    
 </script>

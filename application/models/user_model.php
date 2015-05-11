@@ -8,21 +8,23 @@ class User_model extends CI_Model
 	{
 		
 		$password=md5($password);
-		$query ="SELECT `user`.`id`,`user`.`name` as `name`,`email`,`user`.`accesslevel`,`accesslevel`.`name` as `access` FROM `user`
+		$query ="SELECT `user`.`id`,`user`.`name` as `name`,`email`,`user`.`accesslevel`,`accesslevel`.`name`as `access`,`user`.`hotel`  FROM `user`
 		INNER JOIN `accesslevel` ON `user`.`accesslevel` = `accesslevel`.`id` 
-		WHERE `email` LIKE '$username' AND `password` LIKE '$password' AND `status`=1 AND `accesslevel` IN (1,2) ";
+		WHERE `email` LIKE '$username' AND `password` LIKE '$password' AND `status`=1 AND `accesslevel` IN (1,2,3) ";
 		$row =$this->db->query( $query );
 		if ( $row->num_rows() > 0 ) {
 			$row=$row->row();
 			$this->id       = $row->id;
 			$this->name = $row->name;
 			$this->email = $row->email;
+			$this->hotel = $row->hotel;
 			$newdata        = array(
 				'id' => $this->id,
 				'email' => $this->email,
 				'name' => $this->name ,
+				'hotel' => $this->hotel ,
 				'accesslevel' => $row->accesslevel ,
-				'logged_in' => 'true',
+				'logged_in' => 'true'
 			);
 			$this->session->set_userdata( $newdata );
 			return true;
@@ -32,7 +34,7 @@ class User_model extends CI_Model
 	}
 	
 	
-	public function create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager)
+	public function create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel)
 	{
 		$data  = array(
 			'name' => $name,
@@ -54,6 +56,7 @@ class User_model extends CI_Model
             'validtill'=> $validtill,
             'executive'=> $executive,
             'manager'=> $manager,
+            'hotel'=> $hotel,
 			'logintype' => $logintype
 		);
 		$query=$this->db->insert( 'user', $data );
@@ -98,7 +101,7 @@ class User_model extends CI_Model
 		return $query;
 	}
 	
-	public function edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager)
+	public function edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel)
 	{
 		$data  = array(
 			'name' => $name,
@@ -119,6 +122,7 @@ class User_model extends CI_Model
             'validtill'=> $validtill,
             'executive'=> $executive,
             'manager'=> $manager,
+            'hotel'=> $hotel,
 			'logintype' => $logintype
 		);
 		if($password != "")
@@ -173,6 +177,20 @@ class User_model extends CI_Model
     public function getexecutivedropdown()
 	{
 		$query=$this->db->query("SELECT * FROM `user`  ORDER BY `id` ASC")->result();
+		$return=array(
+		"" => ""
+		);
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
+	}
+    
+    public function getmanagerdropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `user` WHERE `accesslevel`=4  ORDER BY `id` ASC")->result();
 		$return=array(
 		"" => ""
 		);
@@ -565,5 +583,97 @@ class User_model extends CI_Model
 			);
 		return $gender;
 	}
+    
+    
+    //for dashboard
+     public function getdetailsorcreate($number)
+	{
+		$query="SELECT * FROM `user` WHERE  `vouchernumber` ='$number'";
+		$enquirypresentornot=$this->db->query($query);
+         if($enquirypresentornot->num_rows()==0)
+         {
+             $queryinsert=$this->db->query("INSERT INTO `enquiry`(`phone`) VALUES('$number')");
+             $enquiryid=$this->db->insert_id();
+             $queryselect="SELECT `enquirylistingcategory`.`id`, `enquirylistingcategory`.`enquiryid`, `enquirylistingcategory`.`typeofenquiry`, `enquirylistingcategory`.`listing`, `enquirylistingcategory`.`category`,`enquirylistingcategory`. `comment`, `enquirylistingcategory`.`timestamp` ,IFNULL(`category`.`name`,'NA') AS `categoryname`,IFNULL(`listing`.`name`,'NA') AS `listingname`
+        FROM `enquirylistingcategory` 
+        LEFT OUTER JOIN `listing` ON `enquirylistingcategory`.`listing`=`listing`.`id`
+        INNER JOIN `enquiry` ON `enquirylistingcategory`.`enquiryid`=`enquiry`.`id`
+        LEFT OUTER JOIN `category` ON `enquirylistingcategory`.`category`=`category`.`id`
+        WHERE `enquiry`.`phone`='$number'";
+		     $queryselect=$this->db->query($queryselect);
+             $data['allenquiries']=$queryselect->result();
+             $userdetailsquery=$this->db->query("SELECT `id`, `name`, `email`, `phone`, `timestamp`, `deletestatus` FROM `enquiry` WHERE `phone`='$number'");
+             $data['userdetail']=$userdetailsquery->row();
+             return $data;
+         }
+         else
+         {
+             $userpresentornot=$enquirypresentornot->row();
+             $enquiryid=$userpresentornot->id;
+             $queryselect="SELECT `enquirylistingcategory`.`id`, `enquirylistingcategory`.`enquiryid`, `enquirylistingcategory`.`typeofenquiry`, `enquirylistingcategory`.`listing`, `enquirylistingcategory`.`category`,`enquirylistingcategory`. `comment`, `enquirylistingcategory`.`timestamp` ,IFNULL(`category`.`name`,'NA') AS `categoryname`,IFNULL(`listing`.`name`,'NA') AS `listingname`
+        FROM `enquirylistingcategory` 
+        LEFT OUTER JOIN `listing` ON `enquirylistingcategory`.`listing`=`listing`.`id`
+        INNER JOIN `enquiry` ON `enquirylistingcategory`.`enquiryid`=`enquiry`.`id`
+        LEFT OUTER JOIN `category` ON `enquirylistingcategory`.`category`=`category`.`id`
+        WHERE `enquiry`.`phone`='$number'";
+		     $queryselect=$this->db->query($queryselect);
+             $data['allenquiries']=$queryselect->result();
+             $userdetailsquery=$this->db->query("SELECT `id`, `name`, `email`, `phone`, `timestamp`, `deletestatus` FROM `enquiry` WHERE `phone`='$number'");
+             $data['userdetail']=$userdetailsquery->row();
+             return $data;
+         }
+	}
+    
+    public function getdetailsofuser($vouchernumber)
+    {
+        $getidbyvoucher=$this->db->query("SELECT * FROM `user` WHERE `vouchernumber`='$vouchernumber'");
+        if($getidbyvoucher->num_rows()==0)
+        {
+            return 0;
+        }
+        else
+        {
+            $getidbyvoucher=$getidbyvoucher->row();
+            $userid=$getidbyvoucher->id;
+        }
+        $query['userid']=$userid;
+        $query['hotels']=$this->db->query("SELECT `hotel_hotel`.`id`, `hotel_hotel`.`name`, `hotel_hotel`.`initialbalance`, `hotel_hotel`.`location` ,`hotel_order`.`id` AS `orderid`, `hotel_order`.`user`, `hotel_order`.`admin`, `hotel_order`.`hotel`, `hotel_order`.`days`, `hotel_order`.`userrate`, `hotel_order`.`hotelrate`, `hotel_order`.`status`, `hotel_order`.`price`, `hotel_order`.`timestamp` FROM `hotel_order` RIGHT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` AND `hotel_order`.`user`='$userid'")->result();
+        return $query;
+    }
+    public function getuseridfromvouchernumber($vouchernumber)
+    {
+        $getidbyvoucher=$this->db->query("SELECT * FROM `user` WHERE `vouchernumber`='$vouchernumber'");
+        if($getidbyvoucher->num_rows()==0)
+        {
+            return 0;
+        }
+        else
+        {
+            $getidbyvoucher=$getidbyvoucher->row();
+            $userid=$getidbyvoucher->id;
+            return $userid;
+        }
+    }
+    
+    public function getexecutivedropdownbymanager($manager) {
+        $query = "SELECT * FROM `user` WHERE `manager`='$manager' AND `accesslevel`=5 ORDER BY `id` ASC";
+        $user = $this->db->query($query)->result();
+        return $user;
+    }
+    
+    public function getexecutivedropdownbymanagerid($manager)
+	{
+		$query=$this->db->query("SELECT * FROM `user` WHERE `manager`='$manager' AND `accesslevel`=5 ORDER BY `id` ASC")->result();
+		$return=array(
+		"" => ""
+		);
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
+	}
+    
 }
 ?>

@@ -33,6 +33,48 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Check In</label>
+                            <div class="col-sm-4">
+                                <input type="date" id="normal-field" class="form-control" name="checkin" value='<?php echo set_value(' checkin ');?>'>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Check Out</label>
+                            <div class="col-sm-4">
+                                <input type="date" id="normal-field" class="form-control" name="checkout" value='<?php echo set_value(' checkout ');?>'>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Check In Time</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="normal-field" class="form-control" name="checkintime" value='<?php echo set_value(' checkintime ');?>'>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Check Out Time</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="normal-field" class="form-control" name="checkouttime" value='<?php echo set_value(' checkouttime ');?>'>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Adult</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="normal-field" class="form-control" name="adult" value='<?php echo set_value(' adult ');?>'>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Children</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="normal-field" class="form-control" name="children" value='<?php echo set_value(' children ');?>'>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Number Of Rooms</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="normal-field" class="form-control" name="rooms" value='<?php echo set_value(' rooms ');?>'>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label" for="normal-field">Days</label>
                             <div class="col-sm-4">
                                 <input type="text" id="normal-field" class="form-control" name="days" value='<?php echo set_value(' days ');?>'>
@@ -44,22 +86,42 @@
                                 <input type="text" id="normal-field" class="form-control" name="userrate" value='<?php echo set_value(' userrate ');?>'>
                             </div>
                         </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Total</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="normal-field" class="form-control" name="price" value='<?php echo set_value(' price ');?>'>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="normal-field">Hotel Rate</label>
                             <div class="col-sm-4">
                                 <input type="text" id="normal-field" class="form-control" name="hotelrate" value='<?php echo set_value(' hotelrate ');?>'>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Amount</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="normal-field" class="form-control" name="amount" value='<?php echo set_value(' amount ');?>'>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Profit</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="normal-field" class="form-control" name="profit" value='<?php echo set_value(' profit ');?>'>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">foodpackage</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="normal-field" class="form-control" name="foodpackage" value='<?php echo set_value(' foodpackage ');?>'>
+                            </div>
+                        </div>
                         <div class=" form-group">
                             <label class="col-sm-2 control-label" for="normal-field">Status</label>
                             <div class="col-sm-4">
                                 <?php echo form_dropdown( "status",$status,set_value( 'status'), "class='chzn-select form-control'");?>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="normal-field">Price</label>
-                            <div class="col-sm-4">
-                                <input type="text" id="normal-field" class="form-control" name="price" value='<?php echo set_value(' price ');?>'>
                             </div>
                         </div>
                         <div class="form-group">

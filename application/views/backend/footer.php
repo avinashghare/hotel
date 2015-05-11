@@ -32,12 +32,94 @@
 					<div id="mainnav-menu-wrap">
 						<div class="nano">
 							<div class="nano-content">
+							<?php   $menus = $this->menu_model->viewmenus(); 	  ?>
 								<ul id="mainnav-menu" class="list-group">
-						
+						<?php  
+				foreach($menus as $row)
+				{  
+					$pieces = explode("/", $row->url);
+					$page2="";
+					if(empty($pieces) || !isset($pieces[1]))
+					{
+						$page2="";
+					}
+					else
+						$page2=$pieces[1];
+					$submenus = $this->menu_model->getsubmenus($row->id);
+					?>
+                                <li class="<?php if($page==$page2 || $page == strtolower($row->name)) { echo 'active'; } //echo $page2;
+					if(count($submenus > 0)) 
+					{ 
+						$pages =  $this->menu_model->getpages($row->id);
+						//echo $page2; 
+						//print_r($pages);
+						echo ' sub-menu'; 
+						if(in_array($page, $pages,TRUE))
+							echo ' active';
+					}
+					?> ">
+						<a class="" href="<?php 
+						if($row->url == "")
+							echo "javascript:;";
+						else if($row->linktype == 1) echo site_url($row->url);
+						else if($row->linktype == 2) echo base_url($row->url);
+						else if($row->linktype == 3) echo ($row->url);						
+						?>" <?php if($row->linktype == 3) echo "target='_blank'"; ?>>
+							<?php  
+							if($row->icon != "")
+							{  ?>
+								<i class="<?php echo $row->icon; ?>"></i>
+					<?php	}
+							?>
+							<span><?php echo $row->name;  ?></span>
+							<span class="arrow"></span>
+						</a>
+						<?php
+						if(count($submenus) > 0)
+						{  ?>
+							<ul class="sub">
+								<?php
+								foreach($submenus as $row2)
+								{ 
+									$pieces2 = explode("/", $row2->url);
+					
+									if(empty($pieces2) || !isset($pieces2[1]))
+									{
+										$page3="";
+									}
+									else
+										$page3=$pieces2[1];
+								?>
+									<li class="<?php if($page==$page3 || $page == strtolower($row2->name)) { echo 'active'; } ?>">
+										<a href="<?php 
+											if($row2->url == "")
+												echo "javascript:;";
+											else if($row2->linktype == 1) echo site_url($row2->url);
+											else if($row2->linktype == 2) echo base_url($row2->url);
+											else if($row2->linktype == 3) echo ($row2->url);		
+										?>">
+											<?php  
+											if($row2->icon != "")
+											{  ?>
+												<i class="<?php echo $row2->icon; ?>" <?php if($row2->linktype == 3) echo "target='_blank'"; ?>></i>
+									<?php	}
+											?>
+											<?php echo $row2->name;  ?>
+										</a>
+									</li>
+						<?php	}
+								?>
+							</ul>
+				<?php	}
+						?>
+					</li>
+		  <?php }
+				?>
 									<!--Category name-->
-									<li class="list-header">Navigation</li>
+<!--									<li class="list-header">Navigation</li>-->
 						
 									<!--Menu list item-->
+<!--
 									<li class="active-link">
 										<a href="<?php echo site_url('site/index');?>">
 											<i class="fa fa-dashboard"></i>
@@ -47,66 +129,31 @@
 											</span>
 										</a>
 									</li>
+-->
+<!--
 									<li class="active-link">
 										<a href="<?php echo site_url('site/viewusers');?>">
 											<i class="fa fa-user"></i>
 											<span class="menu-title">
 												<strong>Users</strong>
-<!--												<span class="label label-success pull-right">Top</span>-->
+												<span class="label label-success pull-right">Top</span>
 											</span>
 										</a>
 									</li>
-									<li class="active-link">
-										<a href="<?php echo site_url('site/viewmanagerbyadmin');?>">
-											<i class="fa fa-user"></i>
-											<span class="menu-title">
-												<strong>Managers</strong>
-<!--												<span class="label label-success pull-right">Top</span>-->
-											</span>
-										</a>
-									</li>
-									<li class="active-link">
-										<a href="<?php echo site_url('site/viewhotel');?>">
-											<i class="fa fa-user"></i>
-											<span class="menu-title">
-												<strong>Hotel</strong>
-<!--												<span class="label label-success pull-right">Top</span>-->
-											</span>
-										</a>
-									</li>
-									<li class="active-link">
-										<a href="<?php echo site_url('site/vieworder');?>">
-											<i class="fa fa-user"></i>
-											<span class="menu-title">
-												<strong>Orders</strong>
-<!--												<span class="label label-success pull-right">Top</span>-->
-											</span>
-										</a>
-									</li>
-						
-									<li class="active-link">
-										<a href="<?php echo site_url('site/viewtransaction');?>">
-											<i class="fa fa-user"></i>
-											<span class="menu-title">
-												<strong>Transaction</strong>
-<!--												<span class="label label-success pull-right">Top</span>-->
-											</span>
-										</a>
-									</li>
-						
-									<li class="active-link">
-										<a href="<?php echo site_url('site/viewlog');?>">
-											<i class="fa fa-user"></i>
-											<span class="menu-title">
-												<strong>Log</strong>
-<!--												<span class="label label-success pull-right">Top</span>-->
-											</span>
-										</a>
-									</li>
+-->
 						
 									<!--Menu list item-->
 									
-										</ul>
+								</ul>
+
+
+								<!--Widget-->
+								<!--================================-->
+								
+								<!--================================-->
+								<!--End widget-->
+
+							
 									</div>
 								</div>
 								<!--================================-->
@@ -171,8 +218,6 @@
 			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 			<!-- Remove the class name "show-fixed" and "hide-fixed" to make the content always appears. -->
 			<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
-			<p class="pad-lft">© 2015 Your Company</p>
 
 
 
@@ -468,7 +513,7 @@
 				<button id="demo-reset-settings" class="btn btn-primary btn-labeled fa fa-refresh mar-btm">Restore Default Settings</button>
 			</div>
 		</div>
-		<button id="demo-set-btn" class="btn btn-sm"><i class="fa fa-cog fa-2x"></i></button>
+<!--		<button id="demo-set-btn" class="btn btn-sm"><i class="fa fa-cog fa-2x"></i></button>-->
 	</div>
 	<!--===================================================-->
 	<!-- END SETTINGS -->
