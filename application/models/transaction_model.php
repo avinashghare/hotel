@@ -88,5 +88,28 @@ class transaction_model extends CI_Model
 		return $type;
 	}
     
+    
+    function exporttransactionbyadmin()
+	{
+        $hotelid=$this->session->userdata('hotel');
+		$query=$this->db->query("SELECT `hotel_transaction`.`id`, `user`.`name` AS `Paid To`,`hotel_hotel`.`name` AS `Hotel`, `hotel_transaction`.`amount`, `hotel_transaction`.`paymentmethod`, `hotel_transaction`.`bankname`,`hotel_transaction`. `branchname`,`hotel_transaction`. `chequeno`,`hotel_transaction`. `chequedate` 
+        FROM `hotel_transaction`
+        LEFT OUTER JOIN `user` ON `user`.`id`=`hotel_transaction`.`user`
+        LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_transaction`.`hotel`
+        ");
+//        $query=$this->db->query($query)->result();
+        return $query;
+	}
+    function exporttransactionbyhotel()
+	{
+        $hotelid=$this->session->userdata('hotel');
+		$query=$this->db->query("SELECT `hotel_transaction`.`id`, `user`.`name` AS `Paid To`,`hotel_hotel`.`name` AS `Hotel`, `hotel_transaction`.`amount`, `hotel_transaction`.`paymentmethod`, `hotel_transaction`.`bankname`,`hotel_transaction`. `branchname`,`hotel_transaction`. `chequeno`,`hotel_transaction`. `chequedate` 
+        FROM `hotel_transaction`
+        LEFT OUTER JOIN `user` ON `user`.`id`=`hotel_transaction`.`user`
+        LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_transaction`.`hotel`
+WHERE `hotel_transaction`.`hotel`='$hotelid'");
+//        $query=$this->db->query($query)->result();
+        return $query;
+	}
 }
 ?>

@@ -2403,15 +2403,22 @@ class Site extends CI_Controller
 
     public function exportordercsvbyadmin1()
 	{
-		$access = array("3");
+		$access = array("1","3");
 		$this->checkaccess($access);
 //		$this->order_model->exportordercsvbyadmin();
 //        $data['redirect']="site/vieworder";
 //		//$data['other']="template=$template";
 //		$this->load->view("redirect",$data);
         $hotelid=$this->session->userdata('hotel');
+        $hotelname="";
+        if($hotelid=="" || $hotelid==0)
+        {
+        }
+        else
+        {
         $hoteldetails=$this->hotel_model->beforeedit($hotelid);
         $hotelname=$hoteldetails->name;
+        }
         $this->load->library('export');
 ////        $this->load->model('mymodel');
         $sql = $this->order_model->exportordercsvbyadmin1();
@@ -2427,6 +2434,86 @@ class Site extends CI_Controller
 //        to_excel($query, ['filename']);
 //        to_excel($sql,'check');
 	}
+
+    public function exportordercsvbyhotel1()
+	{
+		$access = array("3");
+		$this->checkaccess($access);
+//		$this->order_model->exportordercsvbyadmin();
+//        $data['redirect']="site/vieworder";
+//		//$data['other']="template=$template";
+//		$this->load->view("redirect",$data);
+        $hotelid=$this->session->userdata('hotel');
+        $hotelname="";
+        if($hotelid=="" || $hotelid==0)
+        {
+        }
+        else
+        {
+        $hoteldetails=$this->hotel_model->beforeedit($hotelid);
+        $hotelname=$hoteldetails->name;
+        }
+        $this->load->library('export');
+////        $this->load->model('mymodel');
+        $sql = $this->order_model->exportordercsvbyhotel1();
+//        print_r($sql);
+        $this->export->to_excel($sql, 'byhotel',$hotelname);
+        
+        
+//        $this->load->plugin('to_excel');
+//        $this->db->use_table('tablename');
+//        $this->db->select('field1', 'field2');
+        // run joins, order by, where, or anything else here
+//        $query = $this->db->get();
+//        to_excel($query, ['filename']);
+//        to_excel($sql,'check');
+	}
+
+    public function exporttransactionbyadmin()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+        $this->load->library('export');
+        $hotelname="";
+        $sql = $this->transaction_model->exporttransactionbyadmin();
+//        print_r($sql);
+        $this->export->to_excel($sql, 'byhotel',$hotelname);
+        
+	}
+    public function exporttransactionbyhotel()
+	{
+		$access = array("3");
+		$this->checkaccess($access);
+        $hotelid=$this->session->userdata('hotel');
+        $hotelname="";
+        if($hotelid=="" || $hotelid==0)
+        {
+        }
+        else
+        {
+            $hoteldetails=$this->hotel_model->beforeedit($hotelid);
+            $hotelname=$hoteldetails->name;
+        }
+        $this->load->library('export');
+        $sql = $this->transaction_model->exporttransactionbyhotel();
+//        print_r($sql);
+        $this->export->to_excel($sql, 'byhotel',$hotelname);
+        
+	}
+    
+    
+    
+	function printorderinvoice()
+	{
+		$access = array("1","3");
+		$this->checkaccess($access);
+		$data[ 'table' ] =$this->order_model->getorderdetails($this->input->get('id'));
+//		$data['before']=$this->order_model->beforeedit($this->input->get('id'));
+        $data['id']=$this->input->get('id');
+		$data['page']='orderinvoice';
+		$this->load->view('templateinvoice',$data);
+	}
+    
 
 }
 ?>

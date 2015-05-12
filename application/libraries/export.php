@@ -22,9 +22,15 @@ class Export{
                 }
                 }
                 //echo the entire table headers
-                echo '<table border="1">
-                <tr>'.$hotelname.'</tr>
-                <tr>';
+                echo '<table border="1">';
+                if($hotelname=="")
+                {
+                }
+                else
+                {
+                    echo '<tr>'.$hotelname.'</tr>';
+                }
+                echo '<tr>';
                 foreach($h as $key) {
                     $key = ucwords($key);
                     echo '<th>'.$key.'</th>';

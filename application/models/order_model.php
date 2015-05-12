@@ -159,11 +159,43 @@ LEFT OUTER JOIN `user` ON `hotel_order`.`user`=`user`.`id`");
     
     function exportordercsvbyadmin1()
 	{
+        $where="";
+        $accesslevel=$this->session->userdata('accesslevel');
+        $hotel=$this->session->userdata('hotel');
+        if($accesslevel==3)
+        {
+        $where.=" WHERE `hotel_order`.`hotel`='$hotel'";
+        }
 		$query=$this->db->query("SELECT `user`.`vouchernumber` AS `Voucher Number`, DATE(`hotel_order`.`timestamp`) AS `Booking`,`user`.`name` as `Customer Name`, `hotel_order`.`checkin` AS `Check-In`, `hotel_order`.`checkout` AS `Check-Out`, `hotel_order`.`adult` AS `Adult`, `hotel_order`.`children` AS `Children`, `hotel_order`.`rooms` AS `Number Of Rooms`, `hotel_order`.`days` AS `Number Of Days`, `hotel_order`.`userrate` AS `Per Person`, `hotel_order`.`price` AS `Total`, `hotel_order`.`hotelrate` AS `Hotel`, `hotel_order`.`amount` AS `Amt.`, `hotel_order`.`profit` AS `Profit`
 FROM `hotel_order` 
-LEFT OUTER JOIN `user` ON `hotel_order`.`user`=`user`.`id`");
+LEFT OUTER JOIN `user` ON `hotel_order`.`user`=`user`.`id` $where");
 //        $query=$this->db->query($query)->result();
         return $query;
+	}
+    
+    
+    function exportordercsvbyhotel1()
+	{
+        $hotelid=$this->session->userdata('hotel');
+		$query=$this->db->query("SELECT `user`.`vouchernumber` AS `Voucher Number`, DATE(`hotel_order`.`timestamp`) AS `Booking`,`user`.`name` as `Customer Name`, `hotel_order`.`checkin` AS `Check-In`, `hotel_order`.`checkout` AS `Check-Out`, `hotel_order`.`adult` AS `Adult`, `hotel_order`.`children` AS `Children`, `hotel_order`.`rooms` AS `Number Of Rooms`, `hotel_order`.`days` AS `Number Of Days`, `hotel_order`.`hotelrate` AS `Hotel`, `hotel_order`.`amount` AS `Amt.`
+FROM `hotel_order` 
+LEFT OUTER JOIN `user` ON `hotel_order`.`user`=`user`.`id`
+WHERE `hotel_order`.`hotel`='$hotelid'");
+//        $query=$this->db->query($query)->result();
+        return $query;
+	}
+    
+    function getorderdetails($id)
+	{
+		$query=$this->db->query("SELECT DATE(`hotel_order`.`timestamp`) AS `booking`, `hotel_order`.`checkin` AS `checkin`, `hotel_order`.`checkout` AS `checkout`, `hotel_order`.`checkintime` AS `checkintime`, `hotel_order`.`checkouttime` AS `checkouttime`, `hotel_order`.`foodpackage` AS `foodpackage`, `hotel_order`.`adult` AS `adult`, `hotel_order`.`children` AS `children`, `hotel_order`.`rooms` AS `rooms`, `hotel_order`.`days` AS `days`, `hotel_order`.`userrate` AS `userrate`, `hotel_order`.`price` AS `total`, `hotel_order`.`hotelrate` AS `hotelrate`, `hotel_order`.`amount` AS `amount`, `hotel_order`.`profit` AS `profit`,`tab1`.`name` AS `username`,`tab1`.`vouchernumber` AS `vouchernumber`,`tab2`.`name` AS `adminname`,`hotel_hotel`.`name` AS `hotelname`,`tab1`.`mobile` AS `mobile`
+FROM `hotel_order` 
+LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` 
+LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` 
+LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` 
+LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`hotel_order`.`status` 
+WHERE `hotel_order`.`id`='$id'")->row();
+        return $query;
+
 	}
     
 }
