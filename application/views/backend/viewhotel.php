@@ -10,7 +10,7 @@
         <div class="col-lg-12">
             <div class="panel drawchintantable">
 
-                <?php $this->chintantable->createsearch("Hptel List");?>
+                <?php $this->chintantable->createsearch("");?>
 
 
                 <div class="fixed-table-container">

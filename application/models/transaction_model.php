@@ -91,8 +91,11 @@ class transaction_model extends CI_Model
     
     function exporttransactionbyadmin()
 	{
+//        , `hotel_transaction`.`amount`, `hotel_transaction`.`paymentmethod`, `hotel_transaction`.`bankname`,`hotel_transaction`. `branchname`,`hotel_transaction`. `chequeno`,`hotel_transaction`. `chequedate` 
+        
+//        ,CONCAT(`hotel_transaction`.`paymentmethod`,' ',`hotel_transaction`.`bankname`,' ',`hotel_transaction`.`branchname`,' ',`hotel_transaction`.`chequeno`,' ',when `hotel_transaction`.`chequedate` == '0000-00-00' then '') as `Chq/Cash`
         $hotelid=$this->session->userdata('hotel');
-		$query=$this->db->query("SELECT `hotel_transaction`.`id`, `user`.`name` AS `Paid To`,`hotel_hotel`.`name` AS `Hotel`, `hotel_transaction`.`amount`, `hotel_transaction`.`paymentmethod`, `hotel_transaction`.`bankname`,`hotel_transaction`. `branchname`,`hotel_transaction`. `chequeno`,`hotel_transaction`. `chequedate` 
+		$query=$this->db->query("SELECT `hotel_transaction`.`id`, `user`.`name` AS `paidto`,`hotel_hotel`.`name` AS `hotel`, `hotel_transaction`.`amount`, `hotel_transaction`.`paymentmethod`, `hotel_transaction`.`bankname`,`hotel_transaction`. `branchname`,`hotel_transaction`. `chequeno`,`hotel_transaction`. `chequedate`
         FROM `hotel_transaction`
         LEFT OUTER JOIN `user` ON `user`.`id`=`hotel_transaction`.`user`
         LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_transaction`.`hotel`
@@ -103,7 +106,7 @@ class transaction_model extends CI_Model
     function exporttransactionbyhotel()
 	{
         $hotelid=$this->session->userdata('hotel');
-		$query=$this->db->query("SELECT `hotel_transaction`.`id`, `user`.`name` AS `Paid To`,`hotel_hotel`.`name` AS `Hotel`, `hotel_transaction`.`amount`, `hotel_transaction`.`paymentmethod`, `hotel_transaction`.`bankname`,`hotel_transaction`. `branchname`,`hotel_transaction`. `chequeno`,`hotel_transaction`. `chequedate` 
+		$query=$this->db->query("SELECT `hotel_transaction`.`id`, `user`.`name` AS `paidto`,`hotel_hotel`.`name` AS `hotel`, `hotel_transaction`.`amount`, `hotel_transaction`.`paymentmethod`, `hotel_transaction`.`bankname`,`hotel_transaction`. `branchname`,`hotel_transaction`. `chequeno`,`hotel_transaction`. `chequedate`
         FROM `hotel_transaction`
         LEFT OUTER JOIN `user` ON `user`.`id`=`hotel_transaction`.`user`
         LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_transaction`.`hotel`

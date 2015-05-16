@@ -10,7 +10,7 @@ class User_model extends CI_Model
 		$password=md5($password);
 		$query ="SELECT `user`.`id`,`user`.`name` as `name`,`email`,`user`.`accesslevel`,`accesslevel`.`name`as `access`,`user`.`hotel`  FROM `user`
 		INNER JOIN `accesslevel` ON `user`.`accesslevel` = `accesslevel`.`id` 
-		WHERE `email` LIKE '$username' AND `password` LIKE '$password' AND `status`=1 AND `accesslevel` IN (1,2,3) ";
+		WHERE `email` LIKE '$username' AND `password` LIKE '$password' AND `status`=1 AND `accesslevel` IN (1,2,3,4) ";
 		$row =$this->db->query( $query );
 		if ( $row->num_rows() > 0 ) {
 			$row=$row->row();
@@ -34,7 +34,7 @@ class User_model extends CI_Model
 	}
 	
 	
-	public function create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel)
+	public function create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel,$trainee)
 	{
 		$data  = array(
 			'name' => $name,
@@ -57,6 +57,7 @@ class User_model extends CI_Model
             'executive'=> $executive,
             'manager'=> $manager,
             'hotel'=> $hotel,
+            'trainee'=> $trainee,
 			'logintype' => $logintype
 		);
 		$query=$this->db->insert( 'user', $data );
@@ -101,7 +102,7 @@ class User_model extends CI_Model
 		return $query;
 	}
 	
-	public function edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel)
+	public function edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel,$trainee)
 	{
 		$data  = array(
 			'name' => $name,
@@ -123,6 +124,7 @@ class User_model extends CI_Model
             'executive'=> $executive,
             'manager'=> $manager,
             'hotel'=> $hotel,
+            'trainee'=> $trainee,
 			'logintype' => $logintype
 		);
 		if($password != "")
@@ -138,9 +140,9 @@ class User_model extends CI_Model
 		$query=$this->db->query("SELECT `image` FROM `user` WHERE `id`='$id'")->row();
 		return $query;
 	}
-	public function getmanagerbyexecutive($executive)
+	public function getmanagerbyexecutive($user)
 	{
-		$query=$this->db->query("SELECT `manager` FROM `user` WHERE `id`='$executive'")->row();
+		$query=$this->db->query("SELECT * FROM `user` WHERE `id`='$user'")->row();
 		return $query;
 	}
 	function deleteuser($id)
@@ -176,7 +178,7 @@ class User_model extends CI_Model
     
     public function getexecutivedropdown()
 	{
-		$query=$this->db->query("SELECT * FROM `user`  ORDER BY `id` ASC")->result();
+		$query=$this->db->query("SELECT * FROM `user` WHERE `accesslevel`=6  ORDER BY `id` ASC")->result();
 		$return=array(
 		"" => ""
 		);
@@ -191,6 +193,20 @@ class User_model extends CI_Model
     public function getmanagerdropdown()
 	{
 		$query=$this->db->query("SELECT * FROM `user` WHERE `accesslevel`=4  ORDER BY `id` ASC")->result();
+		$return=array(
+		"" => ""
+		);
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
+	}
+    
+    public function gettraineedropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `user` WHERE `accesslevel`=5  ORDER BY `id` ASC")->result();
 		$return=array(
 		"" => ""
 		);
@@ -673,6 +689,12 @@ class User_model extends CI_Model
 		}
 		
 		return $return;
+	}
+    
+	public function viewtraineebymanager($id)
+	{
+		$query=$this->db->query("SELECT * FROM `user` WHERE `manager`='$id' AND `accesslevel`=5")->result();
+		return $query;
 	}
     
 }

@@ -97,6 +97,7 @@
 				  </div>
 				</div>
 				
+<!--
 				<div class=" form-group">
 				  <label class="col-sm-2 control-label">Manager</label>
 				  <div class="col-sm-4">
@@ -108,11 +109,10 @@
 				<div class="form-group" id="onmanagerselect">
 						<label class="col-sm-2 control-label">Executive</label>
 						<div class="col-sm-4 managerselect">
-<!--                       <select name="executive" class="chzn-select form-control">-->
 						   <?php echo form_dropdown( "executive",$executive,set_value( 'executive',$before->executive), "class='chzn-select form-control'");?>
-<!--						   </select>-->
 						</div>
 				</div>
+-->
 <!--
                 <div class=" form-group">
                     <label class="col-sm-2 control-label" for="normal-field">Executive</label>
@@ -166,10 +166,35 @@
 				<div class=" form-group">
 				  <label class="col-sm-2 control-label">Select Accesslevel</label>
 				  <div class="col-sm-4">
-					<?php 	 echo form_dropdown('accesslevel',$accesslevel,set_value('accesslevel',$before->accesslevel),'onchange="operatorcategories()"class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..."');
+					<?php 	 echo form_dropdown('accesslevel',$accesslevel,set_value('accesslevel',$before->accesslevel),'onchange="operatorcategories()" id="accesslevelid" class="chzn-select form-control" 	data-placeholder="Choose a Accesslevel..."');
 					?>
 				  </div>
 				</div>
+				
+				<div class=" form-group managermainclass" style="display:none;">
+				  <label class="col-sm-2 control-label">Manager</label>
+				  <div class="col-sm-4">
+					<?php 	 echo form_dropdown('manager',$manager,set_value('manager',$before->manager),'id="managerid" class="chzn-select form-control" 	data-placeholder="Choose a manager..."  onchange="changetrainee()"');
+					?>
+				  </div>
+				</div>
+				
+				<div class=" form-group traineemainclass" style="display:none;">
+				  <label class="col-sm-2 control-label">Select trainee</label>
+				  <div class="col-sm-4">
+					<?php 	 echo form_dropdown('trainee',$trainee,set_value('trainee',$before->trainee),'id="traineeid" class="chzn-select form-control" 	data-placeholder="Choose a trainee..."');
+					?>
+				  </div>
+				</div>
+				
+				<div class=" form-group executivemainclass" style="display:none;">
+				  <label class="col-sm-2 control-label">Select executive</label>
+				  <div class="col-sm-4">
+					<?php 	 echo form_dropdown('executive',$executive,set_value('executive',$before->executive),'id="executiveid" class="chzn-select form-control" 	data-placeholder="Choose a executive..."');
+					?>
+				  </div>
+				</div>
+				
 				<?php
                   if($before->accesslevel==3)
                   {
@@ -243,19 +268,65 @@
     
      
     });
+//    function operatorcategories() {
+//        console.log($('#accesslevelid').val());
+//        if ($('#accesslevelid').val()==3)
+//        {
+//            $( ".hotelclass" ).show();
+//        }
+//        else
+//        {
+//            $( ".hotelclass" ).hide();
+//        }
+//       
+//    }
+    
     function operatorcategories() {
         console.log($('#accesslevelid').val());
-        if ($('#accesslevelid').val()==3)
+        if ($('#accesslevelid').val()<=2)
+        {
+            $( ".hotelclass" ).hide();
+            $( ".managermainclass" ).hide();
+            $( ".traineemainclass" ).hide();
+            $( ".executivemainclass" ).hide();
+        }
+        else if($('#accesslevelid').val()==3)
         {
             $( ".hotelclass" ).show();
+            $( ".managermainclass" ).hide();
+            $( ".traineemainclass" ).hide();
+            $( ".executivemainclass" ).hide();
+        }
+        else if($('#accesslevelid').val()==5)
+        {
+            $( ".hotelclass" ).hide();
+            $( ".managermainclass" ).show();
+            $( ".traineemainclass" ).hide();
+            $( ".executivemainclass" ).hide();
+        }
+        else if($('#accesslevelid').val()==6)
+        {
+            $( ".hotelclass" ).hide();
+            $( ".managermainclass" ).hide();
+            $( ".traineemainclass" ).show();
+            $( ".executivemainclass" ).hide();
+        }
+        else if($('#accesslevelid').val()==7)
+        {
+            $( ".hotelclass" ).hide();
+            $( ".managermainclass" ).hide();
+            $( ".traineemainclass" ).hide();
+            $( ".executivemainclass" ).show();
         }
         else
         {
             $( ".hotelclass" ).hide();
+            $( ".managermainclass" ).hide();
+            $( ".traineemainclass" ).hide();
+            $( ".executivemainclass" ).hide();
         }
        
     }
-    
     function changeexecutive() {
         console.log($('#managerid').val());
         $.getJSON(

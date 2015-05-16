@@ -22,7 +22,7 @@ class Site extends CI_Controller
 	}
 	public function index()
 	{
-		$access = array("1","2","3");
+		$access = array("1","2","3","4");
 		$this->checkaccess($access);
         $accesslevel=$this->session->userdata('accesslevel');
         if($accesslevel<=2)
@@ -32,6 +32,10 @@ class Site extends CI_Controller
         else if($accesslevel==3)
         {
         $data['page'] = 'hoteldashboard';
+        }
+        else if($accesslevel==4)
+        {
+        $data['page'] = 'managerdashboard';
         }
 		$data[ 'title' ] = 'Welcome';
 		$this->load->view( 'template', $data );	
@@ -45,6 +49,7 @@ class Site extends CI_Controller
 		$data[ 'gender' ] =$this->user_model->getgenderdropdown();
 		$data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
         $data['manager']=$this->user_model->getmanagerdropdown();
+        $data['trainee']=$this->user_model->gettraineedropdown();
         $data['executive']=$this->user_model->getexecutivedropdown();
         $data['hotel']=$this->hotel_model->gethoteldropdown();
 //        $data['category']=$this->category_model->getcategorydropdown();
@@ -74,6 +79,7 @@ class Site extends CI_Controller
             $data['category']=$this->category_model->getcategorydropdown();
             $data[ 'gender' ] =$this->user_model->getgenderdropdown();
             $data['manager']=$this->user_model->getmanagerdropdown();
+            $data['trainee']=$this->user_model->gettraineedropdown();
             $data['executive']=$this->user_model->getexecutivedropdown();
             $data['hotel']=$this->hotel_model->gethoteldropdown();
             $data[ 'page' ] = 'createuser';
@@ -102,9 +108,24 @@ class Site extends CI_Controller
             $validtill=$this->input->post('validtill');
             $executive=$this->input->post('executive');
             $hotel=$this->input->post('hotel');
-            $manager=$this->user_model->getmanagerbyexecutive($executive);
-            $manager=$manager->manager;
-//            $category=$this->input->post('category');
+            $trainee=$this->input->post('trainee');
+            $manager=$this->input->post('manager');
+//            if($accesslevel==5)
+//            {
+//                $manager=$this->user_model->getmanagerbyexecutive($trainee);
+//                $manager=$manager->manager;
+//            }
+            if($accesslevel==6)
+            {
+                $manager=$this->user_model->getmanagerbyexecutive($trainee);
+                $manager=$manager->manager;
+            }
+            if($accesslevel==7)
+            {
+                $manager=$this->user_model->getmanagerbyexecutive($executive);
+                $trainee=$manager->trainee;
+                $manager=$manager->manager;
+            }
             
             $config['upload_path'] = './uploads/';
 			$config['allowed_types'] = 'gif|jpg|png|jpeg';
@@ -141,7 +162,7 @@ class Site extends CI_Controller
                 
 			}
             
-			if($this->user_model->create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel)==0)
+			if($this->user_model->create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel,$trainee)==0)
 			$data['alerterror']="New user could not be created.";
 			else
 			$data['alertsuccess']="User created Successfully.";
@@ -246,11 +267,16 @@ class Site extends CI_Controller
 		$data['accesslevel']=$this->user_model->getaccesslevels();
 		$data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
 		$data[ 'gender' ] =$this->user_model->getgenderdropdown();
-        $data['manager']=$this->user_model->getmanagerdropdown();
+//        $data['manager']=$this->user_model->getmanagerdropdown();
 		$data['before']=$this->user_model->beforeedit($this->input->get('id'));
         $managerid=$data['before']->manager;
         $data['hotel']=$this->hotel_model->gethoteldropdown();
-        $data['executive']=$this->user_model->getexecutivedropdownbymanagerid($managerid);
+        
+        $data['manager']=$this->user_model->getmanagerdropdown();
+        $data['trainee']=$this->user_model->gettraineedropdown();
+        $data['executive']=$this->user_model->getexecutivedropdown($managerid);
+        
+//        $data['executive']=$this->user_model->getexecutivedropdownbymanagerid($managerid);
 		$data['page']='edituser';
 		$data['page2']='block/userblock';
 		$data['title']='Edit User';
@@ -279,6 +305,7 @@ class Site extends CI_Controller
             $data['executive']=$this->user_model->getexecutivedropdown();
             $data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
             $data['manager']=$this->user_model->getmanagerdropdown();
+            $data['trainee']=$this->user_model->gettraineedropdown();
             $data['hotel']=$this->hotel_model->gethoteldropdown();
 			$data['before']=$this->user_model->beforeedit($this->input->post('id'));
 			$data['page']='edituser';
@@ -311,8 +338,27 @@ class Site extends CI_Controller
             $validtill=$this->input->post('validtill');
             $executive=$this->input->post('executive');
             $hotel=$this->input->post('hotel');
-            $manager=$this->user_model->getmanagerbyexecutive($executive);
-            $manager=$manager->manager;
+            $trainee=$this->input->post('trainee');
+            $manager=$this->input->post('manager');
+//            if($accesslevel==5)
+//            {
+//                $manager=$this->user_model->getmanagerbyexecutive($trainee);
+//                $manager=$manager->manager;
+//            }
+            if($accesslevel==6)
+            {
+                $manager=$this->user_model->getmanagerbyexecutive($trainee);
+                $manager=$manager->manager;
+            }
+            if($accesslevel==7)
+            {
+                $manager=$this->user_model->getmanagerbyexecutive($executive);
+                $trainee=$manager->trainee;
+                $manager=$manager->manager;
+            }
+            
+//            $manager=$this->user_model->getmanagerbyexecutive($executive);
+//            $manager=$manager->manager;
             
             
 //            $category=$this->input->get_post('category');
@@ -359,7 +405,7 @@ class Site extends CI_Controller
                 $image=$image->image;
             }
             
-			if($this->user_model->edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel)==0)
+			if($this->user_model->edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel,$trainee)==0)
 			$data['alerterror']="User Editing was unsuccesful";
 			else
 			$data['alertsuccess']="User edited Successfully.";
@@ -853,6 +899,19 @@ class Site extends CI_Controller
         $elements[6]->sort="1";
         $elements[6]->header="Hotel";
         $elements[6]->alias="hotelname";
+        
+        $elements[7]=new stdClass();
+        $elements[7]->field="`hotel_transaction`.`paymentmethod`";
+        $elements[7]->sort="1";
+        $elements[7]->header="Payment Method";
+        $elements[7]->alias="paymentmethod";
+        
+        $elements[8]=new stdClass();
+        $elements[8]->field="`hotel_transaction`.`timestamp`";
+        $elements[8]->sort="1";
+        $elements[8]->header="Timestamp";
+        $elements[8]->alias="timestamp";
+        
         
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
@@ -2319,6 +2378,18 @@ class Site extends CI_Controller
         $elements[6]->header="Hotel";
         $elements[6]->alias="hotelname";
         
+        $elements[7]=new stdClass();
+        $elements[7]->field="`hotel_transaction`.`paymentmethod`";
+        $elements[7]->sort="1";
+        $elements[7]->header="Payment Method";
+        $elements[7]->alias="paymentmethod";
+        
+        $elements[8]=new stdClass();
+        $elements[8]->field="`hotel_transaction`.`timestamp`";
+        $elements[8]->sort="1";
+        $elements[8]->header="Timestamp";
+        $elements[8]->alias="timestamp";
+        
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
         $orderby=$this->input->get_post("orderby");
@@ -2439,10 +2510,6 @@ class Site extends CI_Controller
 	{
 		$access = array("3");
 		$this->checkaccess($access);
-//		$this->order_model->exportordercsvbyadmin();
-//        $data['redirect']="site/vieworder";
-//		//$data['other']="template=$template";
-//		$this->load->view("redirect",$data);
         $hotelid=$this->session->userdata('hotel');
         $hotelname="";
         if($hotelid=="" || $hotelid==0)
@@ -2454,30 +2521,30 @@ class Site extends CI_Controller
         $hotelname=$hoteldetails->name;
         }
         $this->load->library('export');
-////        $this->load->model('mymodel');
         $sql = $this->order_model->exportordercsvbyhotel1();
-//        print_r($sql);
         $this->export->to_excel($sql, 'byhotel',$hotelname);
         
+	}
+
+    public function exportorderexcelbyadmin()
+	{
+		$access = array("1","3");
+		$this->checkaccess($access);
+        $this->load->library('exportorderforadmin');
+        $sql = $this->order_model->exportorderforadmin();
+        $this->exportorderforadmin->to_excel($sql, 'orderDetails');
         
-//        $this->load->plugin('to_excel');
-//        $this->db->use_table('tablename');
-//        $this->db->select('field1', 'field2');
-        // run joins, order by, where, or anything else here
-//        $query = $this->db->get();
-//        to_excel($query, ['filename']);
-//        to_excel($sql,'check');
 	}
 
     public function exporttransactionbyadmin()
 	{
-		$access = array("1");
+		$access = array("1","3");
 		$this->checkaccess($access);
-        $this->load->library('export');
+        $this->load->library('transactionbyadmin');
         $hotelname="";
         $sql = $this->transaction_model->exporttransactionbyadmin();
 //        print_r($sql);
-        $this->export->to_excel($sql, 'byhotel',$hotelname);
+        $this->transactionbyadmin->to_excel($sql, 'transactionByAdmin');
         
 	}
     public function exporttransactionbyhotel()
@@ -2494,10 +2561,10 @@ class Site extends CI_Controller
             $hoteldetails=$this->hotel_model->beforeedit($hotelid);
             $hotelname=$hoteldetails->name;
         }
-        $this->load->library('export');
+        $this->load->library('transactionbyhotel');
         $sql = $this->transaction_model->exporttransactionbyhotel();
 //        print_r($sql);
-        $this->export->to_excel($sql, 'byhotel',$hotelname);
+        $this->transactionbyhotel->to_excel($sql, 'transactionByHotel',$hotelname);
         
 	}
     
@@ -2515,5 +2582,203 @@ class Site extends CI_Controller
 	}
     
 
+    //manager accesslevel
+    
+	public function managerdashboard()
+	{
+		$access = array("4");
+		$this->checkaccess($access);
+        $data['page'] = 'managerdashboard';
+		$data[ 'title' ] = 'Welcome';
+		$this->load->view( 'template', $data );	
+	}
+    
+	
+//	public function viewtraineebymanager()
+//	{
+//		$access = array("4");
+//		$this->checkaccess($access);
+//        $data['page'] = 'viewtraineebymanager';
+//		$data[ 'table' ] =$this->user_model->viewtraineebymanager($this->session->userdata('id'));
+//		$data[ 'title' ] = 'View All Trainee';
+//		$this->load->view( 'template', $data );	
+//	}
+    function viewtraineebymanager()
+	{
+		$access = array("4");
+		$this->checkaccess($access);
+		$data['page']='viewtraineebymanager';
+        $data['base_url'] = site_url("site/viewtraineebymanagerjson");
+        
+		$data['title']='View traineebymanager';
+		$this->load->view('template',$data);
+	} 
+    function viewtraineebymanagerjson()
+	{
+        $manager=$this->session->userdata('id');
+        
+		$access = array("4");
+		$this->checkaccess($access);
+        
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`user`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`user`.`name`";
+        $elements[1]->sort="1";
+        $elements[1]->header="Name";
+        $elements[1]->alias="name";
+        
+        $elements[2]=new stdClass();
+        $elements[2]->field="`user`.`email`";
+        $elements[2]->sort="1";
+        $elements[2]->header="Email";
+        $elements[2]->alias="email";
+        
+        $elements[3]=new stdClass();
+        $elements[3]->field="`user`.`socialid`";
+        $elements[3]->sort="1";
+        $elements[3]->header="SocialId";
+        $elements[3]->alias="socialid";
+        
+        $elements[4]=new stdClass();
+        $elements[4]->field="`logintype`.`name`";
+        $elements[4]->sort="1";
+        $elements[4]->header="Logintype";
+        $elements[4]->alias="logintype";
+        
+        $elements[5]=new stdClass();
+        $elements[5]->field="`user`.`json`";
+        $elements[5]->sort="1";
+        $elements[5]->header="Json";
+        $elements[5]->alias="json";
+       
+        $elements[6]=new stdClass();
+        $elements[6]->field="`accesslevel`.`name`";
+        $elements[6]->sort="1";
+        $elements[6]->header="Accesslevel";
+        $elements[6]->alias="accesslevelname";
+       
+        $elements[7]=new stdClass();
+        $elements[7]->field="`statuses`.`name`";
+        $elements[7]->sort="1";
+        $elements[7]->header="Status";
+        $elements[7]->alias="status";
+       
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+       
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `logintype` ON `logintype`.`id`=`user`.`logintype` LEFT OUTER JOIN `accesslevel` ON `accesslevel`.`id`=`user`.`accesslevel` LEFT OUTER JOIN `statuses` ON `statuses`.`id`=`user`.`status`","WHERE `user`.`manager`='$manager' AND `user`.`accesslevel`=5");
+        
+		$this->load->view("json",$data);
+	} 
+    function viewexecutiveoftraineebymanager()
+	{
+		$access = array("4");
+		$this->checkaccess($access);
+		$data['page']='viewexecutiveoftraineebymanager';
+        $id=$this->input->get('id');
+        $data['base_url'] = site_url("site/viewexecutiveoftraineebymanagerjson?id=".$id);
+        
+		$data['title']='View Executive Of Trainee';
+		$this->load->view('template',$data);
+	} 
+    function viewexecutiveoftraineebymanagerjson()
+	{
+        $id=$this->input->get('id');
+        
+		$access = array("4");
+		$this->checkaccess($access);
+        
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`user`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`user`.`name`";
+        $elements[1]->sort="1";
+        $elements[1]->header="Name";
+        $elements[1]->alias="name";
+        
+        $elements[2]=new stdClass();
+        $elements[2]->field="`user`.`email`";
+        $elements[2]->sort="1";
+        $elements[2]->header="Email";
+        $elements[2]->alias="email";
+        
+        $elements[3]=new stdClass();
+        $elements[3]->field="`user`.`socialid`";
+        $elements[3]->sort="1";
+        $elements[3]->header="SocialId";
+        $elements[3]->alias="socialid";
+        
+        $elements[4]=new stdClass();
+        $elements[4]->field="`logintype`.`name`";
+        $elements[4]->sort="1";
+        $elements[4]->header="Logintype";
+        $elements[4]->alias="logintype";
+        
+        $elements[5]=new stdClass();
+        $elements[5]->field="`user`.`json`";
+        $elements[5]->sort="1";
+        $elements[5]->header="Json";
+        $elements[5]->alias="json";
+       
+        $elements[6]=new stdClass();
+        $elements[6]->field="`accesslevel`.`name`";
+        $elements[6]->sort="1";
+        $elements[6]->header="Accesslevel";
+        $elements[6]->alias="accesslevelname";
+       
+        $elements[7]=new stdClass();
+        $elements[7]->field="`statuses`.`name`";
+        $elements[7]->sort="1";
+        $elements[7]->header="Status";
+        $elements[7]->alias="status";
+       
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+       
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `logintype` ON `logintype`.`id`=`user`.`logintype` LEFT OUTER JOIN `accesslevel` ON `accesslevel`.`id`=`user`.`accesslevel` LEFT OUTER JOIN `statuses` ON `statuses`.`id`=`user`.`status`","WHERE `user`.`trainee`='$id' AND `user`.`accesslevel`=6");
+        
+		$this->load->view("json",$data);
+	} 
+    
 }
 ?>

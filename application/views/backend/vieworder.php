@@ -1,7 +1,6 @@
 <div id="page-title">
        <a class="btn btn-primary btn-labeled fa fa-plus margined pull-right" href="<?php echo site_url('site/createorder'); ?>">Create</a>
-<div class=" pull-right col-md-1 createbtn" ><a class="btn btn-primary btn-labeled fa fa-plus margined pull-right" href="<?php echo site_url('site/exportordercsvbyadmin1'); ?>" target="_blank"><i class="icon-plus"></i>Export to CSV </a></div>
-<!--<div class=" pull-right col-md-1 createbtn" ><a class="btn btn-primary btn-labeled fa fa-plus margined pull-right" href="<?php echo site_url('site/exportordercsvbyadmin'); ?>" target="_blank"><i class="icon-plus"></i>Export to CSV </a></div>-->
+<div class=" pull-right col-md-1 createbtn" ><a class="btn btn-primary btn-labeled fa fa-plus margined pull-right" href="<?php echo site_url('site/exportorderexcelbyadmin'); ?>" target="_blank"><i class="icon-plus"></i>Export to Excel </a></div>
     <h1 class="page-header text-overflow">Order Details</h1>
 </div>
 

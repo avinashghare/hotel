@@ -28,7 +28,11 @@ class Export{
                 }
                 else
                 {
-                    echo '<tr>'.$hotelname.'</tr>';
+                    echo '<tr ><td colspan="11" style="color:white;font-size:20px;text-align:center;background:red;">'.$hotelname.'</td></tr>';
+                    echo '<tr ><td colspan="3"></td>';
+                    echo '<td colspan="2">Dates</td>';
+                    echo '<td colspan="2">No Of People</td>';
+                    echo '<td colspan="4"></td></tr>';
                 }
                 echo '<tr>';
                 foreach($h as $key) {

