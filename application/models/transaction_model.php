@@ -3,7 +3,7 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class transaction_model extends CI_Model
 {
-    public function create($user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate)
+    public function create($user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate,$image)
     {
         $data=array(
                     "user" => $user,
@@ -14,6 +14,7 @@ class transaction_model extends CI_Model
                     "branchname" => $branchname,
                     "chequeno" => $chequeno,
                     "chequedate" => $chequedate,
+                    "image" => $image,
                     "status" => $status
                     );
         $query=$this->db->insert( "hotel_transaction", $data );
@@ -42,7 +43,7 @@ class transaction_model extends CI_Model
         $query=$this->db->get("hotel_transaction")->row();
         return $query;
     }
-    public function edit($id,$user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate)
+    public function edit($id,$user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate,$image)
     {
         
         $hoteldetails=$this->hotel_model->beforeedit($hotel);
@@ -67,6 +68,7 @@ class transaction_model extends CI_Model
                     "branchname" => $branchname,
                     "chequeno" => $chequeno,
                     "chequedate" => $chequedate,
+                    "image" => $image,
                     "status" => $status
                     );
         $this->db->where( "id", $id );
@@ -113,6 +115,34 @@ class transaction_model extends CI_Model
 WHERE `hotel_transaction`.`hotel`='$hotelid'");
 //        $query=$this->db->query($query)->result();
         return $query;
+	}
+    
+    
+	public function updateorderstatusafterpayment($orderid,$transactionid)
+    {
+        $query=$this->db->query("UPDATE `hotel_transaction` SET `status`=2 , `transactionid`='$transactionid' WHERE `id`='$orderid'");
+        return $query;
+	}
+    
+	public function checkorderstatus($orderid)
+    {
+        $query=$this->db->query("SELECT `status` FROM `hotel_transaction` WHERE `id`='$orderid'")->row();
+        $status=$query->requeststatus;
+        if($status==2)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+//        return $query;
+	}
+    
+	public function gettransactionimagebyid($id)
+	{
+		$query=$this->db->query("SELECT `image` FROM `hotel_transaction` WHERE `id`='$id'")->row();
+		return $query;
 	}
 }
 ?>

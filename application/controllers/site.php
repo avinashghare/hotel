@@ -51,6 +51,7 @@ class Site extends CI_Controller
         $data['manager']=$this->user_model->getmanagerdropdown();
         $data['trainee']=$this->user_model->gettraineedropdown();
         $data['executive']=$this->user_model->getexecutivedropdown();
+        $data['alluser']=$this->user_model->getuserdropdown();
         $data['hotel']=$this->hotel_model->gethoteldropdown();
 //        $data['category']=$this->category_model->getcategorydropdown();
 		$data[ 'page' ] = 'createuser';
@@ -76,12 +77,13 @@ class Site extends CI_Controller
 			$data['accesslevel']=$this->user_model->getaccesslevels();
             $data[ 'status' ] =$this->user_model->getstatusdropdown();
             $data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
-            $data['category']=$this->category_model->getcategorydropdown();
+//            $data['category']=$this->category_model->getcategorydropdown();
             $data[ 'gender' ] =$this->user_model->getgenderdropdown();
             $data['manager']=$this->user_model->getmanagerdropdown();
             $data['trainee']=$this->user_model->gettraineedropdown();
             $data['executive']=$this->user_model->getexecutivedropdown();
             $data['hotel']=$this->hotel_model->gethoteldropdown();
+            $data['alluser']=$this->user_model->getuserdropdown();
             $data[ 'page' ] = 'createuser';
             $data[ 'title' ] = 'Create User';
             $this->load->view( 'template', $data );	
@@ -185,7 +187,6 @@ class Site extends CI_Controller
 		$access = array("1");
 		$this->checkaccess($access);
         
-        
         $elements=array();
         $elements[0]=new stdClass();
         $elements[0]->field="`user`.`id`";
@@ -236,6 +237,24 @@ class Site extends CI_Controller
         $elements[7]->header="Status";
         $elements[7]->alias="status";
        
+        $elements[8]=new stdClass();
+        $elements[8]->field="`user`.`vouchernumber`";
+        $elements[8]->sort="1";
+        $elements[8]->header="Voucher Number";
+        $elements[8]->alias="vouchernumber";
+        
+        $elements[9]=new stdClass();
+        $elements[9]->field="`user`.`points`";
+        $elements[9]->sort="1";
+        $elements[9]->header="Points";
+        $elements[9]->alias="points";
+        
+        $elements[10]=new stdClass();
+        $elements[10]->field="`user`.`accesslevel`";
+        $elements[10]->sort="1";
+        $elements[10]->header="Accesslevel";
+        $elements[10]->alias="accesslevel";
+        
         
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
@@ -410,9 +429,9 @@ class Site extends CI_Controller
 			else
 			$data['alertsuccess']="User edited Successfully.";
 			
-			$data['redirect']="site/viewusers";
-			//$data['other']="template=$template";
-			$this->load->view("redirect",$data);
+//			$data['redirect']="site/viewusers";
+//			//$data['other']="template=$template";
+//			$this->load->view("redirect",$data);
 			
 		}
 	}
@@ -538,8 +557,44 @@ class Site extends CI_Controller
             $name=$this->input->get_post("name");
             $initialbalance=$this->input->get_post("initialbalance");
             $location=$this->input->get_post("location");
+            $address=$this->input->get_post("address");
             $user=$this->input->get_post("user");
-            if($this->hotel_model->create($name,$initialbalance,$location,$user)==0)
+            
+            $config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="image";
+			$image="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image=$uploaddata['file_name'];
+                
+                $config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
+                $config_r['maintain_ratio'] = TRUE;
+                $config_t['create_thumb'] = FALSE;///add this
+                $config_r['width']   = 800;
+                $config_r['height'] = 800;
+                $config_r['quality']    = 100;
+                //end of configs
+
+                $this->load->library('image_lib', $config_r); 
+                $this->image_lib->initialize($config_r);
+                if(!$this->image_lib->resize())
+                {
+                    echo "Failed." . $this->image_lib->display_errors();
+                    //return false;
+                }  
+                else
+                {
+                    //print_r($this->image_lib->dest_image);
+                    //dest_image
+                    $image=$this->image_lib->dest_image;
+                    //return false;
+                }
+                
+			}
+            if($this->hotel_model->create($name,$initialbalance,$location,$user,$address,$image)==0)
                 $data["alerterror"]="New hotel could not be created.";
             else
                 $data["alertsuccess"]="hotel created Successfully.";
@@ -581,8 +636,51 @@ class Site extends CI_Controller
             $name=$this->input->get_post("name");
             $initialbalance=$this->input->get_post("initialbalance");
             $location=$this->input->get_post("location");
+            $address=$this->input->get_post("address");
             $user=$this->input->get_post("user");
-            if($this->hotel_model->edit($id,$name,$initialbalance,$location,$user)==0)
+            
+            $config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="image";
+			$image="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image=$uploaddata['file_name'];
+                
+                $config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
+                $config_r['maintain_ratio'] = TRUE;
+                $config_t['create_thumb'] = FALSE;///add this
+                $config_r['width']   = 800;
+                $config_r['height'] = 800;
+                $config_r['quality']    = 100;
+                //end of configs
+
+                $this->load->library('image_lib', $config_r); 
+                $this->image_lib->initialize($config_r);
+                if(!$this->image_lib->resize())
+                {
+                    echo "Failed." . $this->image_lib->display_errors();
+                    //return false;
+                }  
+                else
+                {
+                    //print_r($this->image_lib->dest_image);
+                    //dest_image
+                    $image=$this->image_lib->dest_image;
+                    //return false;
+                }
+                
+			}
+            
+            if($image=="")
+            {
+            $image=$this->hotel_model->gethotelimagebyid($id);
+               // print_r($image);
+                $image=$image->image;
+            }
+            if($this->hotel_model->edit($id,$name,$initialbalance,$location,$user,$address,$image)==0)
                 $data["alerterror"]="New hotel could not be Updated.";
             else
                 $data["alertsuccess"]="hotel Updated Successfully.";
@@ -688,6 +786,12 @@ class Site extends CI_Controller
         $elements[12]->header="statusname";
         $elements[12]->alias="statusname";
         
+        $elements[13]=new stdClass();
+        $elements[13]->field="`hotel_order`.`timestamp`";
+        $elements[13]->sort="1";
+        $elements[13]->header="timestamp";
+        $elements[13]->alias="timestamp";
+        
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
         $orderby=$this->input->get_post("orderby");
@@ -699,8 +803,8 @@ class Site extends CI_Controller
         }
         if($orderby=="")
         {
-            $orderby="id";
-            $orderorder="ASC";
+            $orderby="timestamp";
+            $orderorder="DESC";
         }
         $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_order` LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`hotel_order`.`status`");
         $this->load->view("json",$data);
@@ -730,6 +834,7 @@ class Site extends CI_Controller
         $this->form_validation->set_rules("hotelrate","Hotel Rate","trim");
         $this->form_validation->set_rules("status","Status","trim");
         $this->form_validation->set_rules("price","Price","trim");
+        $this->form_validation->set_rules("extra","extra","trim");
         if($this->form_validation->run()==FALSE)
         {
             $data["alerterror"]=validation_errors();
@@ -762,7 +867,8 @@ class Site extends CI_Controller
             $checkintime=$this->input->get_post("checkintime");
             $checkouttime=$this->input->get_post("checkouttime");
             $foodpackage=$this->input->get_post("foodpackage");
-            if($this->order_model->create($user,$admin,$hotel,$days,$userrate,$hotelrate,$status,$price,$checkin,$checkout,$adult,$children,$rooms,$amount,$profit,$checkintime,$checkouttime,$foodpackage)==0)
+            $extra=$this->input->get_post("extra");
+            if($this->order_model->create($user,$admin,$hotel,$days,$userrate,$hotelrate,$status,$price,$checkin,$checkout,$adult,$children,$rooms,$amount,$profit,$checkintime,$checkouttime,$foodpackage,$extra)==0)
             $data["alerterror"]="New order could not be created.";
             else
             $data["alertsuccess"]="order created Successfully.";
@@ -830,7 +936,8 @@ class Site extends CI_Controller
             $checkintime=$this->input->get_post("checkintime");
             $checkouttime=$this->input->get_post("checkouttime");
             $foodpackage=$this->input->get_post("foodpackage");
-            if($this->order_model->edit($id,$user,$admin,$hotel,$days,$userrate,$hotelrate,$status,$price,$checkin,$checkout,$adult,$children,$rooms,$amount,$profit,$checkintime,$checkouttime,$foodpackage)==0)
+            $extra=$this->input->get_post("extra");
+            if($this->order_model->edit($id,$user,$admin,$hotel,$days,$userrate,$hotelrate,$status,$price,$checkin,$checkout,$adult,$children,$rooms,$amount,$profit,$checkintime,$checkouttime,$foodpackage,$extra)==0)
                 $data["alerterror"]="New order could not be Updated.";
             else
                 $data["alertsuccess"]="order Updated Successfully.";
@@ -912,6 +1019,12 @@ class Site extends CI_Controller
         $elements[8]->header="Timestamp";
         $elements[8]->alias="timestamp";
         
+        $elements[9]=new stdClass();
+        $elements[9]->field="`hotel_transaction`.`image`";
+        $elements[9]->sort="1";
+        $elements[9]->header="Image";
+        $elements[9]->alias="image";
+        
         
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
@@ -974,7 +1087,42 @@ class Site extends CI_Controller
             $branchname=$this->input->get_post('branchname');
             $chequeno=$this->input->get_post('chequeno');
             $chequedate=$this->input->get_post('chequedate');
-            if($this->transaction_model->create($user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate)==0)
+            
+            $config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="image";
+			$image="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image=$uploaddata['file_name'];
+                
+                $config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
+                $config_r['maintain_ratio'] = TRUE;
+                $config_t['create_thumb'] = FALSE;///add this
+                $config_r['width']   = 800;
+                $config_r['height'] = 800;
+                $config_r['quality']    = 100;
+                //end of configs
+
+                $this->load->library('image_lib', $config_r); 
+                $this->image_lib->initialize($config_r);
+                if(!$this->image_lib->resize())
+                {
+                    echo "Failed." . $this->image_lib->display_errors();
+                    //return false;
+                }  
+                else
+                {
+                    //print_r($this->image_lib->dest_image);
+                    //dest_image
+                    $image=$this->image_lib->dest_image;
+                    //return false;
+                }
+                
+			}
+            if($this->transaction_model->create($user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate,$image)==0)
                 $data["alerterror"]="New transaction could not be created.";
             else
                 $data["alertsuccess"]="transaction created Successfully.";
@@ -1029,7 +1177,49 @@ class Site extends CI_Controller
             $branchname=$this->input->get_post('branchname');
             $chequeno=$this->input->get_post('chequeno');
             $chequedate=$this->input->get_post('chequedate');
-            if($this->transaction_model->edit($id,$user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate)==0)
+            
+            $config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="image";
+			$image="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image=$uploaddata['file_name'];
+                
+                $config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
+                $config_r['maintain_ratio'] = TRUE;
+                $config_t['create_thumb'] = FALSE;///add this
+                $config_r['width']   = 800;
+                $config_r['height'] = 800;
+                $config_r['quality']    = 100;
+                //end of configs
+
+                $this->load->library('image_lib', $config_r); 
+                $this->image_lib->initialize($config_r);
+                if(!$this->image_lib->resize())
+                {
+                    echo "Failed." . $this->image_lib->display_errors();
+                    //return false;
+                }  
+                else
+                {
+                    //print_r($this->image_lib->dest_image);
+                    //dest_image
+                    $image=$this->image_lib->dest_image;
+                    //return false;
+                }
+                
+			}
+            
+            if($image=="")
+            {
+            $image=$this->transaction_model->gettransactionimagebyid($id);
+               // print_r($image);
+                $image=$image->image;
+            }
+            if($this->transaction_model->edit($id,$user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate,$image)==0)
                 $data["alerterror"]="New transaction could not be Updated.";
             else
                 $data["alertsuccess"]="transaction Updated Successfully.";
@@ -1799,6 +1989,12 @@ class Site extends CI_Controller
         $elements[8]->header="Manager";
         $elements[8]->alias="manager";
        
+        $elements[8]=new stdClass();
+        $elements[8]->field="`user`.`points`";
+        $elements[8]->sort="1";
+        $elements[8]->header="points";
+        $elements[8]->alias="points";
+       
         
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
@@ -1816,7 +2012,7 @@ class Site extends CI_Controller
             $orderorder="ASC";
         }
        
-        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `logintype` ON `logintype`.`id`=`user`.`logintype` LEFT OUTER JOIN `accesslevel` ON `accesslevel`.`id`=`user`.`accesslevel` LEFT OUTER JOIN `statuses` ON `statuses`.`id`=`user`.`status`","WHERE `user`.`accesslevel`=5 AND `user`.`manager`='$managerid'");
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `logintype` ON `logintype`.`id`=`user`.`logintype` LEFT OUTER JOIN `accesslevel` ON `accesslevel`.`id`=`user`.`accesslevel` LEFT OUTER JOIN `statuses` ON `statuses`.`id`=`user`.`status`","WHERE (`user`.`accesslevel`=5 OR `user`.`accesslevel`=6) AND `user`.`manager`='$managerid'");
         
 		$this->load->view("json",$data);
 	} 
@@ -2020,6 +2216,7 @@ class Site extends CI_Controller
         $this->form_validation->set_rules("hotelrate","Hotel Rate","trim");
         $this->form_validation->set_rules("status","Status","trim");
         $this->form_validation->set_rules("price","Price","trim");
+        $this->form_validation->set_rules("extra","extra","trim");
         if($this->form_validation->run()==FALSE)
         {
             $data["alerterror"]=validation_errors();
@@ -2052,8 +2249,10 @@ class Site extends CI_Controller
             $checkintime=$this->input->get_post("checkintime");
             $checkouttime=$this->input->get_post("checkouttime");
             $foodpackage=$this->input->get_post("foodpackage");
+            $extra=$this->input->get_post("extra");
+            $guestname=$this->input->get_post("guestname");
             
-            if($this->order_model->create($user,$admin,$hotel,$days,$userrate,$hotelrate,$status,$price,$checkin,$checkout,$adult,$children,$rooms,$amount,$profit,$checkintime,$checkouttime,$foodpackage)==0)
+            if($this->order_model->create($user,$admin,$hotel,$days,$userrate,$hotelrate,$status,$price,$checkin,$checkout,$adult,$children,$rooms,$amount,$profit,$checkintime,$checkouttime,$foodpackage,$extra,$guestname)==0)
             $data["alerterror"]="Your Order could not be created.";
             else
             $data["alertsuccess"]="Order created Successfully.";
@@ -2201,7 +2400,7 @@ class Site extends CI_Controller
                 $image=$image->image;
             }
             
-			if($this->user_model->edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel)==0)
+			if($this->user_model->edituserbyhotel($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel)==0)
 			$data['alerterror']="User Editing was unsuccesful";
 			else
 			$data['alertsuccess']="User edited Successfully.";
@@ -2264,7 +2463,7 @@ class Site extends CI_Controller
         $elements[6]=new stdClass();
         $elements[6]->field="`hotel_order`.`hotelrate`";
         $elements[6]->sort="1";
-        $elements[6]->header="Hotel Rate";
+        $elements[6]->header=" Rate";
         $elements[6]->alias="hotelrate";
         
         $elements[7]=new stdClass();
@@ -2302,6 +2501,12 @@ class Site extends CI_Controller
         $elements[12]->sort="1";
         $elements[12]->header="statusname";
         $elements[12]->alias="statusname";
+        
+        $elements[13]=new stdClass();
+        $elements[13]->field="`hotel_order`.`amount`";
+        $elements[13]->sort="1";
+        $elements[13]->header="Amount";
+        $elements[13]->alias="amount";
         
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
@@ -2390,6 +2595,12 @@ class Site extends CI_Controller
         $elements[8]->header="Timestamp";
         $elements[8]->alias="timestamp";
         
+        $elements[9]=new stdClass();
+        $elements[9]->field="`hotel_transaction`.`image`";
+        $elements[9]->sort="1";
+        $elements[9]->header="Image";
+        $elements[9]->alias="image";
+        
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
         $orderby=$this->input->get_post("orderby");
@@ -2401,8 +2612,8 @@ class Site extends CI_Controller
         }
         if($orderby=="")
         {
-            $orderby="id";
-            $orderorder="ASC";
+            $orderby="timestamp";
+            $orderorder="DESC";
         }
         $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_transaction` LEFT OUTER JOIN `hotel_hotel` ON `hotel_transaction`.`hotel`=`hotel_hotel`.`id` LEFT OUTER JOIN `user` ON `hotel_transaction`.`user`=`user`.`id`","WHERE `hotel_transaction`.`hotel`='$hotelid'");
         $this->load->view("json",$data);
@@ -2440,8 +2651,51 @@ class Site extends CI_Controller
             $name=$this->input->get_post("name");
             $initialbalance=$this->input->get_post("initialbalance");
             $location=$this->input->get_post("location");
+            $address=$this->input->get_post("address");
             $user=$this->input->get_post("user");
-            if($this->hotel_model->edit($id,$name,$initialbalance,$location,$user)==0)
+            
+            $config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="image";
+			$image="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image=$uploaddata['file_name'];
+                
+                $config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
+                $config_r['maintain_ratio'] = TRUE;
+                $config_t['create_thumb'] = FALSE;///add this
+                $config_r['width']   = 800;
+                $config_r['height'] = 800;
+                $config_r['quality']    = 100;
+                //end of configs
+
+                $this->load->library('image_lib', $config_r); 
+                $this->image_lib->initialize($config_r);
+                if(!$this->image_lib->resize())
+                {
+                    echo "Failed." . $this->image_lib->display_errors();
+                    //return false;
+                }  
+                else
+                {
+                    //print_r($this->image_lib->dest_image);
+                    //dest_image
+                    $image=$this->image_lib->dest_image;
+                    //return false;
+                }
+                
+			}
+            
+            if($image=="")
+            {
+            $image=$this->hotel_model->gethotelimagebyid($id);
+               // print_r($image);
+                $image=$image->image;
+            }
+            if($this->hotel_model->edit($id,$name,$initialbalance,$location,$user,$address,$image)==0)
                 $data["alerterror"]="New hotel could not be Updated.";
             else
                 $data["alertsuccess"]="hotel Updated Successfully.";
@@ -2627,7 +2881,6 @@ class Site extends CI_Controller
         $elements[0]->header="ID";
         $elements[0]->alias="id";
         
-        
         $elements[1]=new stdClass();
         $elements[1]->field="`user`.`name`";
         $elements[1]->sort="1";
@@ -2758,6 +3011,12 @@ class Site extends CI_Controller
         $elements[7]->header="Status";
         $elements[7]->alias="status";
        
+        $elements[8]=new stdClass();
+        $elements[8]->field="`user`.`points`";
+        $elements[8]->sort="1";
+        $elements[8]->header="points";
+        $elements[8]->alias="points";
+       
         
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
@@ -2775,10 +3034,143 @@ class Site extends CI_Controller
             $orderorder="ASC";
         }
        
-        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `logintype` ON `logintype`.`id`=`user`.`logintype` LEFT OUTER JOIN `accesslevel` ON `accesslevel`.`id`=`user`.`accesslevel` LEFT OUTER JOIN `statuses` ON `statuses`.`id`=`user`.`status`","WHERE `user`.`trainee`='$id' AND `user`.`accesslevel`=6");
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `logintype` ON `logintype`.`id`=`user`.`logintype` LEFT OUTER JOIN `accesslevel` ON `accesslevel`.`id`=`user`.`accesslevel` LEFT OUTER JOIN `statuses` ON `statuses`.`id`=`user`.`status`","WHERE `user`.`trainee`='$id' AND (`user`.`accesslevel`=5 OR `user`.`accesslevel`=6) ");
         
 		$this->load->view("json",$data);
 	} 
     
+    public function viewuserhotelorder()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data["page"]="viewuserhotelorder";
+        $data["title"]="Order Details";
+        $orderid=$this->input->get("orderid");
+        $hotelid=$this->input->get("hotelid");
+        $userid=$this->input->get("userid");
+        $data['userid']=$userid;
+        $data['hotelid']=$hotelid;
+        $data['orderid']=$orderid;
+        $data["before"]=$this->order_model->getuserhotelorderdetails($orderid,$hotelid);
+        $this->load->view("template",$data);
+    }
+    
+    public function viewallordersforuser()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $userid=$this->input->get('userid');
+        $data["page"]="viewallordersforuser";
+        $data['totalorderamount']=$this->order_model->gettotalamountofuser($userid);
+        $data["base_url"]=site_url("site/viewallordersforuserjson?userid=".$userid);
+        $data["title"]="View order";
+        $this->load->view("template",$data);
+    }
+    function viewallordersforuserjson()
+    {
+        $userid=$this->input->get('userid');
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`hotel_order`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`hotel_order`.`user`";
+        $elements[1]->sort="1";
+        $elements[1]->header="User";
+        $elements[1]->alias="user";
+        
+        $elements[2]=new stdClass();
+        $elements[2]->field="`hotel_order`.`admin`";
+        $elements[2]->sort="1";
+        $elements[2]->header="Admin";
+        $elements[2]->alias="admin";
+        
+        $elements[3]=new stdClass();
+        $elements[3]->field="`hotel_order`.`hotel`";
+        $elements[3]->sort="1";
+        $elements[3]->header="Hotel";
+        $elements[3]->alias="hotel";
+        
+        $elements[4]=new stdClass();
+        $elements[4]->field="`hotel_order`.`days`";
+        $elements[4]->sort="1";
+        $elements[4]->header="Days";
+        $elements[4]->alias="days";
+        
+        $elements[5]=new stdClass();
+        $elements[5]->field="`hotel_order`.`userrate`";
+        $elements[5]->sort="1";
+        $elements[5]->header="User Rate";
+        $elements[5]->alias="userrate";
+        
+        $elements[6]=new stdClass();
+        $elements[6]->field="`hotel_order`.`hotelrate`";
+        $elements[6]->sort="1";
+        $elements[6]->header="Hotel Rate";
+        $elements[6]->alias="hotelrate";
+        
+        $elements[7]=new stdClass();
+        $elements[7]->field="`hotel_order`.`status`";
+        $elements[7]->sort="1";
+        $elements[7]->header="Status";
+        $elements[7]->alias="status";
+        
+        $elements[8]=new stdClass();
+        $elements[8]->field="`hotel_order`.`price`";
+        $elements[8]->sort="1";
+        $elements[8]->header="Price";
+        $elements[8]->alias="price";
+        
+        $elements[9]=new stdClass();
+        $elements[9]->field="`tab1`.`name`";
+        $elements[9]->sort="1";
+        $elements[9]->header="User";
+        $elements[9]->alias="username";
+        
+        $elements[10]=new stdClass();
+        $elements[10]->field="`tab2`.`name`";
+        $elements[10]->sort="1";
+        $elements[10]->header="Admin";
+        $elements[10]->alias="adminname";
+        
+        $elements[11]=new stdClass();
+        $elements[11]->field="`hotel_hotel`.`name`";
+        $elements[11]->sort="1";
+        $elements[11]->header="Hotel";
+        $elements[11]->alias="hotelname";
+        
+        $elements[12]=new stdClass();
+        $elements[12]->field="`orderstatus`.`name`";
+        $elements[12]->sort="1";
+        $elements[12]->header="statusname";
+        $elements[12]->alias="statusname";
+        
+        $elements[13]=new stdClass();
+        $elements[13]->field="`hotel_order`.`timestamp`";
+        $elements[13]->sort="1";
+        $elements[13]->header="timestamp";
+        $elements[13]->alias="timestamp";
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        if($orderby=="")
+        {
+            $orderby="timestamp";
+            $orderorder="DESC";
+        }
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_order` LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`hotel_order`.`status`","WHERE `hotel_order`.`user`='$userid'");
+        $this->load->view("json",$data);
+    }
+
 }
 ?>

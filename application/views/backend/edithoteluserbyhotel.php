@@ -99,7 +99,7 @@
 				  </div>
 				</div>
 				
-				<div class=" form-group">
+				<div class=" form-group" style="display:none;">
 				  <label class="col-sm-2 control-label">Manager</label>
 				  <div class="col-sm-8">
 					<?php 	 echo form_dropdown('manager',$manager,set_value('manager',$before->manager),'id="managerid" class="chzn-select form-control" 	data-placeholder="Choose a manager..."  onchange="changeexecutive()"');
@@ -107,7 +107,7 @@
 				  </div>
 				</div>
 				
-				<div class="form-group" id="onmanagerselect">
+				<div class="form-group" id="onmanagerselect" style="display:none;">
 						<label class="col-sm-2 control-label">Executive</label>
 						<div class="col-sm-8 managerselect">
 <!--                       <select name="executive" class="chzn-select form-control">-->
@@ -124,14 +124,14 @@
                 </div>
 -->
                 
-				<div class=" form-group">
+				<div class=" form-group" style="display:none;">
 				  <label class="col-sm-2 control-label" for="normal-field">Voucher Number</label>
 				  <div class="col-sm-8">
 					<input type="text" id="normal-field" class="form-control" name="vouchernumber" value="<?php echo set_value('vouchernumber',$before->vouchernumber);?>">
 				  </div>
 				</div>
 				
-				<div class=" form-group">
+				<div class=" form-group" style="display:none;">
 				  <label class="col-sm-2 control-label" for="normal-field">Valid Till</label>
 				  <div class="col-sm-8">
 					<input type="date" id="normal-field" class="form-control" name="validtill" value="<?php echo set_value('validtill',$before->validtill);?>">
@@ -155,7 +155,7 @@
 				  </div>
 				</div>
 				
-				<div class=" form-group">
+				<div class=" form-group" style="display:none;">
 				  <label class="col-sm-2 control-label">Status</label>
 				  <div class="col-sm-8">
 					<?php
@@ -205,7 +205,7 @@
 				  </div>
 				</div>
 				
-				<div class=" form-group">
+				<div class=" form-group" style="display:none;">
 				  <label class="col-sm-2 control-label" for="normal-field">json</label>
 				  <div class="col-sm-8">
 					<input type="text" id="normal-field" class="form-control" name="json" value="<?php echo set_value('json',$before->json);?>">
@@ -242,6 +242,26 @@
                     <input type="text" id="normal-field" class="form-control" name="location" value='<?php echo set_value(' location ',$beforehotel->location);?>'>
                 </div>
             </div>
+            
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="normal-field">Address</label>
+                <div class="col-sm-8">
+                    <input type="text" id="normal-field" class="form-control" name="address" value='<?php echo set_value(' address ',$beforehotel->address);?>'>
+                </div>
+            </div>
+            <div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Image</label>
+				  <div class="col-sm-8">
+					<input type="file" id="normal-field" class="form-control" name="image" value="<?php echo set_value('image',$beforehotel->image);?>">
+					<?php if($beforehotel->image == "")
+						 { }
+						 else
+						 { ?>
+							<img src="<?php echo base_url('uploads').'/'.$beforehotel->image; ?>" width="140px" height="140px">
+						<?php }
+					?>
+				  </div>
+				</div>
             <div class=" form-group" style="display:none;">
                 <label class="col-sm-2 control-label" for="normal-field">User</label>
                 <div class="col-sm-8">

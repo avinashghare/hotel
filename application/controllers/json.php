@@ -277,4 +277,18 @@ $id=$this->input->get_post("id");
 $data["message"]=$this->log_model->getsinglelog($id);
 $this->load->view("json",$data);
 }
+ 
+ public function payumoneysuccess()
+ {
+     $orderid=$this->input->get('orderid');
+     $transactionid=$this->input->get_post('transactionid');
+     $data['message']=$this->transaction_model->updateorderstatusafterpayment($orderid,$transactionid);
+	 $this->load->view('json',$data);
+ }
+ public function checkorderstatus()
+ {
+     $orderid=$this->input->get('orderid');
+     $data['message']=$this->transaction_model->checkorderstatus($orderid);
+	 $this->load->view('json',$data);
+ }
 } ?>

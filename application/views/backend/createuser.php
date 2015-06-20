@@ -191,7 +191,7 @@
 				<div class=" form-group executivemainclass" style="display:none;">
 				  <label class="col-sm-2 control-label">Select executive</label>
 				  <div class="col-sm-4">
-					<?php 	 echo form_dropdown('executive',$executive,set_value('executive'),'id="executiveid" class="chzn-select form-control" 	data-placeholder="Choose a executive..."');
+					<?php 	 echo form_dropdown('executive',$alluser,set_value('executive'),'id="executiveid" class="chzn-select form-control" 	data-placeholder="Choose a executive..."');
 					?>
 				  </div>
 				</div>

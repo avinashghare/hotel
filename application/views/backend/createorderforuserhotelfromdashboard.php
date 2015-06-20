@@ -34,6 +34,13 @@
                             <input type="text" id="normal-field" class="form-control" name="hotel" value='<?php echo set_value(' hotel ',$hotelid);?>'>
                             </div>
                         </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">guestname</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="normal-field" class="form-control" name="guestname" value='<?php echo set_value(' guestname ');?>'>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="normal-field">Check In</label>
                             <div class="col-sm-4">
@@ -99,6 +106,12 @@
                             <label class="col-sm-2 control-label" for="normal-field">Profit</label>
                             <div class="col-sm-4">
                                 <input type="text" id="normal-field" class="form-control" name="profit" value='<?php echo set_value(' profit ');?>'>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">extra</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="normal-field" class="form-control" name="extra" value='<?php echo set_value(' extra ');?>'>
                             </div>
                         </div>
 <!--

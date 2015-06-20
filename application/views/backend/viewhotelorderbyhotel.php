@@ -22,10 +22,10 @@
                                     <th data-field="adminname">Admin</th>
                                     <th data-field="hotel">Hotel</th>
                                     <th data-field="days">Days</th>
-                                    <th data-field="userrate">User Rate</th>
-                                    <th data-field="hotelrate">Hotel Rate</th>
+<!--                                    <th data-field="userrate">User Rate</th>-->
+                                    <th data-field="hotelrate">Rate</th>
+                                    <th data-field="amount">Amount</th>
                                     <th data-field="status">Status</th>
-                                    <th data-field="price">Price</th>
 <!--                                    <th data-field="action">Action</th>-->
                                     <th data-field="Invoice">Invoice</th>
                                 </tr>
@@ -51,7 +51,7 @@
         <script>
             function drawtable(resultrow) {
 //                <a class='btn btn-primary btn-xs' href='<?php echo site_url('site/editorder?id=');?>" + resultrow.id + "'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-xs' href='<?php echo site_url('site/deleteorder?id='); ?>" + resultrow.id + "'><i class='icon-trash '></i></a>
-                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.username + "</td><td>" + resultrow.adminname + "</td><td>" + resultrow.hotelname + "</td><td>" + resultrow.days + "</td><td>" + resultrow.userrate + "</td><td>" + resultrow.hotelrate + "</td><td>" + resultrow.statusname + "</td><td>" + resultrow.price + "</td><td><a class='btn btn-secondary btn-s' target='_blank' href='<?php echo site_url('site/printorderinvoice?id='); ?>" + resultrow.id + "'>Download</a></td></tr>";
+                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.username + "</td><td>" + resultrow.adminname + "</td><td>" + resultrow.hotelname + "</td><td>" + resultrow.days + "</td><td>" + resultrow.hotelrate + "</td><td>" + resultrow.amount + "</td><td>" + resultrow.statusname + "</td><td><a class='btn btn-secondary btn-s' target='_blank' href='<?php echo site_url('site/printorderinvoice?id='); ?>" + resultrow.id + "'>Download</a></td></tr>";
             }
             generatejquery("<?php echo $base_url;?>");
         </script>

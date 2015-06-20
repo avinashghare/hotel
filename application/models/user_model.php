@@ -36,6 +36,79 @@ class User_model extends CI_Model
 	
 	public function create($name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel,$trainee)
 	{
+        echo "executive is ".$executive;
+        if($accesslevel==7)
+        {
+            $getaccesslevelofselecteduser=$this->db->query("SELECT * FROM `user` WHERE `id`='$executive'")->row();
+            $selecteduseraccesslevel=$getaccesslevelofselecteduser->accesslevel;
+            echo $selecteduseraccesslevel;
+//            $manager=$getaccesslevelofselecteduser->manager;
+//            $trainee=$getaccesslevelofselecteduser->trainee;
+//            $executive=$getaccesslevelofselecteduser->executive;
+//            echo "executive2 is ".$executive." manager is ".$manager." trainee is".$trainee;
+            if($selecteduseraccesslevel==4)
+            {
+//                $manager=$getaccesslevelofselecteduser->manager;
+                $manager=$executive;
+                $getmanagerpoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$executive'")->row();
+                $points=$getmanagerpoints->points;
+                $points=$points+1;
+                $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$executive'");
+                $executive=0;
+                $trainee=0;
+            }
+            else if($selecteduseraccesslevel==5)
+            {
+                $trainee=$executive;
+//                $managerdetails=$this->db->query("SELECT * FROM `user` WHERE `id`='$trainee'")->row();
+//                $manager=$managerdetails->manager;
+                $gettraineepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$trainee'")->row();
+                $manager=$gettraineepoints->manager;
+                $points=$gettraineepoints->points;
+                $points=$points+1;
+                $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$trainee'");
+
+                $getmanagerpoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$manager'")->row();
+                $points=$getmanagerpoints->points;
+                $points=$points+1;
+                $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$manager'");
+                $executive=0;
+            }
+            else if($selecteduseraccesslevel==6)
+            {
+                $getexecutivepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$executive'")->row();
+                $manager=$getexecutivepoints->manager;
+                $trainee=$getexecutivepoints->trainee;
+                $points=$getexecutivepoints->points;
+                $points=$points+1;
+                $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$executive'");
+
+                $gettraineepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$trainee'")->row();
+                $points=$gettraineepoints->points;
+                $points=$points+1;
+                $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$trainee'");
+
+                $getmanagerpoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$manager'")->row();
+                $points=$getmanagerpoints->points;
+                $points=$points+1;
+                $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$manager'");
+            }
+            
+//            $getexecutivepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$executive'")->row();
+//            $points=$getexecutivepoints->points;
+//            $points=$points+1;
+//            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$executive'");
+//            
+//            $gettraineepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$trainee'")->row();
+//            $points=$gettraineepoints->points;
+//            $points=$points+1;
+//            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$trainee'");
+//            
+//            $getmanagerpoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$manager'")->row();
+//            $points=$getmanagerpoints->points;
+//            $points=$points+1;
+//            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$manager'");
+        }
 		$data  = array(
 			'name' => $name,
 			'email' => $email,
@@ -61,7 +134,7 @@ class User_model extends CI_Model
 			'logintype' => $logintype
 		);
 		$query=$this->db->insert( 'user', $data );
-		$id=$this->db->insert_id();
+		$id=$this->db->insert_id(); 
         
 		if(!$query)
 			return  0;
@@ -104,6 +177,31 @@ class User_model extends CI_Model
 	
 	public function edit($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel,$trainee)
 	{
+        
+        if($accesslevel==7)
+        {
+            $beforevalues=$this->db->query("SELECT * FROM `user` WHERE `id`='$id'")->row();
+            $beforemanagerid=$beforevalues->manager;
+            $beforeexecutiveid=$beforevalues->executive;
+            $beforetraineeid=$beforevalues->trainee;
+
+            $getexecutivepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$beforeexecutiveid'")->row();
+            $points=$getexecutivepoints->points;
+            $points=$points-1;
+            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$beforeexecutiveid'");
+
+            $getmanagerpoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$beforemanagerid'")->row();
+            $points=$getmanagerpoints->points;
+            $points=$points-1;
+            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$beforemanagerid'");
+
+            $gettraineepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$beforetraineeid'")->row();
+            $points=$gettraineepoints->points;
+            $points=$points-1;
+            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$beforetraineeid'");
+        
+        }
+        
 		$data  = array(
 			'name' => $name,
 			'email' => $email,
@@ -131,6 +229,91 @@ class User_model extends CI_Model
 			$data['password'] =md5($password);
 		$this->db->where( 'id', $id );
 		$query=$this->db->update( 'user', $data );
+        if($accesslevel==7)
+        {
+            $getexecutivepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$executive'")->row();
+            $points=$getexecutivepoints->points;
+            $points=$points+1;
+            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$executive'");
+            
+            $gettraineepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$trainee'")->row();
+            $points=$gettraineepoints->points;
+            $points=$points+1;
+            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$trainee'");
+            
+            $getmanagerpoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$manager'")->row();
+            $points=$getmanagerpoints->points;
+            $points=$points+1;
+            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$manager'");
+        }
+        
+		return 1;
+	}
+    public function edituserbyhotel($id,$name,$email,$password,$accesslevel,$status,$socialid,$logintype,$image,$json,$age,$gender,$address,$contact,$mobile,$dob,$profession,$vouchernumber,$validtill,$executive,$manager,$hotel)
+	{
+        
+        if($accesslevel==7)
+        {
+            $beforevalues=$this->db->query("SELECT * FROM `user` WHERE `id`='$id'")->row();
+            $beforemanagerid=$beforevalues->manager;
+            $beforeexecutiveid=$beforevalues->executive;
+            $beforetraineeid=$beforevalues->trainee;
+
+            $getexecutivepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$beforeexecutiveid'")->row();
+            $points=$getexecutivepoints->points;
+            $points=$points-1;
+            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$beforeexecutiveid'");
+
+            $getmanagerpoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$beforemanagerid'")->row();
+            $points=$getmanagerpoints->points;
+            $points=$points-1;
+            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$beforemanagerid'");
+
+            $gettraineepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$beforetraineeid'")->row();
+            $points=$gettraineepoints->points;
+            $points=$points-1;
+            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$beforetraineeid'");
+        
+        }
+        
+		$data  = array(
+			'name' => $name,
+			'email' => $email,
+            'socialid'=> $socialid,
+            'image'=> $image,
+            'json'=> $json,
+            'age'=> $age,
+            'gender'=> $gender,
+            'address'=> $address,
+            'contact'=> $contact,
+            'mobile'=> $mobile,
+            'dob'=> $dob,
+            'profession'=> $profession,
+            'vouchernumber'=> $vouchernumber,
+            'validtill'=> $validtill,
+			'logintype' => $logintype
+		);
+		if($password != "")
+			$data['password'] =md5($password);
+		$this->db->where( 'id', $id );
+		$query=$this->db->update( 'user', $data );
+//        if($accesslevel==7)
+//        {
+//            $getexecutivepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$executive'")->row();
+//            $points=$getexecutivepoints->points;
+//            $points=$points+1;
+//            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$executive'");
+//            
+//            $gettraineepoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$trainee'")->row();
+//            $points=$gettraineepoints->points;
+//            $points=$points+1;
+//            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$trainee'");
+//            
+//            $getmanagerpoints=$this->db->query("SELECT * FROM `user` WHERE `id`='$manager'")->row();
+//            $points=$getmanagerpoints->points;
+//            $points=$points+1;
+//            $this->db->query("UPDATE `user` SET `points`='$points' WHERE `id`='$manager'");
+//        }
         
 		return 1;
 	}
@@ -170,7 +353,7 @@ class User_model extends CI_Model
 		);
 		foreach($query as $row)
 		{
-			$return[$row->id]=$row->name;
+			$return[$row->id]=$row->name."(".$row->email.")";
 		}
 		
 		return $return;

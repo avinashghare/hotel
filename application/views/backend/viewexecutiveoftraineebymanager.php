@@ -21,6 +21,7 @@
                                     <th data-field="name">Name</th>
                                     <!--                        <th data-field="username">Username</th>-->
                                     <th data-field="email">Email</th>
+                                    <th data-field="points">points</th>
                                     <th data-field="accesslevelname">accesslevel</th>
 <!--                                    <th data-field="status">status</th>-->
 <!--                                    <th data-field="Executive">Executives</th>-->
@@ -59,7 +60,7 @@
                 {
                     resultrow.json="";
                 }
-                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.name + "</td><td>" + resultrow.email + "</td><td>" + resultrow.accesslevelname + "</td><tr>";
+                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.name + "</td><td>" + resultrow.email + "</td><td>" + resultrow.points + "</td><td>" + resultrow.accesslevelname + "</td><tr>";
             }
             generatejquery('<?php echo $base_url;?>');
         </script>

@@ -11,6 +11,13 @@
                     <?php echo form_dropdown( "user",$user,set_value( 'user',$before->user),"class='chzn-select form-control'");?>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="normal-field">Guest Name</label>
+                <div class="col-sm-4">
+                    <input type="date" id="normal-field" class="form-control" name="guestname" value='<?php echo set_value(' guestname ',$before->guestname);?>'>
+                </div>
+            </div>
             <div class=" form-group">
                 <label class="col-sm-2 control-label" for="normal-field">Admin</label>
                 <div class="col-sm-4">
@@ -114,6 +121,13 @@
                 <label class="col-sm-2 control-label" for="normal-field">Status</label>
                 <div class="col-sm-4">
                     <?php echo form_dropdown( "status",$status,set_value( 'status',$before->status),"class='chzn-select form-control'");?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="normal-field">extra</label>
+                <div class="col-sm-4">
+                    <input type="text" id="normal-field" class="form-control" name="extra" value='<?php echo set_value(' extra ',$before->extra);?>'>
                 </div>
             </div>
             <div class="form-group">

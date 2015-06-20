@@ -3,9 +3,16 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class hotel_model extends CI_Model
 {
-    public function create($name,$initialbalance,$location,$user)
+    public function create($name,$initialbalance,$location,$user,$address,$image)
     {
-        $data=array("name" => $name,"initialbalance" => $initialbalance,"location" => $location,"user" => $user);
+        $data=array(
+            "name" => $name,
+            "initialbalance" => $initialbalance,
+            "location" => $location,
+            "address" => $address,
+            "image" => $image,
+            "user" => $user
+        );
         $query=$this->db->insert( "hotel_hotel", $data );
         $id=$this->db->insert_id();
         if(!$query)
@@ -25,10 +32,18 @@ class hotel_model extends CI_Model
         $query=$this->db->get("hotel_hotel")->row();
         return $query;
     }
-    public function edit($id,$name,$initialbalance,$location,$user)
+    public function edit($id,$name,$initialbalance,$location,$user,$address,$image)
     {
-        $data=array("name" => $name,"initialbalance" => $initialbalance,"location" => $location,"user" => $user);
-        $this->db->where( "id", $id );
+        $data=array(
+            "name" => $name,
+            "initialbalance" => $initialbalance,
+            "location" => $location,
+            "address" => $address,
+            "image" => $image,
+            "user" => $user
+        );
+        $this->db->where( "id",
+                         $id );
         $query=$this->db->update( "hotel_hotel", $data );
         return 1;
     }
@@ -57,6 +72,12 @@ class hotel_model extends CI_Model
         $query=$this->db->query("SELECT `hotel_hotel`.`id`, `hotel_hotel`.`name`, `hotel_hotel`.`initialbalance`, `hotel_hotel`.`location` ,`hotel_order`.`id` AS `orderid`, `hotel_order`.`user`, `hotel_order`.`admin`, `hotel_order`.`hotel`, `hotel_order`.`days`, `hotel_order`.`userrate`, `hotel_order`.`hotelrate`, `hotel_order`.`status`, `hotel_order`.`price`, `hotel_order`.`timestamp` FROM `hotel_order` RIGHT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` AND `hotel_order`.`user`='$id'")->result();
         return $query;
     }
+    
+	public function gethotelimagebyid($id)
+	{
+		$query=$this->db->query("SELECT `image` FROM `hotel_hotel` WHERE `id`='$id'")->row();
+		return $query;
+	}
     
 }
 ?>
