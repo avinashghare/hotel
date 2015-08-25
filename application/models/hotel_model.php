@@ -79,5 +79,28 @@ class hotel_model extends CI_Model
 		return $query;
 	}
     
+	function changeorderstatusbyhotel($id)
+	{
+		$query=$this->db->query("SELECT `status` FROM `hotel_order` WHERE `id`='$id'")->row();
+		$status=$query->status;
+		if($status==1)
+		{
+			$status=2;
+		}
+		else if($status==2)
+		{
+			$status=1;
+		}
+		$data  = array(
+			'status' =>$status,
+		);
+		$this->db->where('id',$id);
+		$query=$this->db->update( 'hotel_order', $data );
+		if(!$query)
+			return  0;
+		else
+			return  1;
+	}
+    
 }
 ?>

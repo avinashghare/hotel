@@ -144,5 +144,74 @@ WHERE `hotel_transaction`.`hotel`='$hotelid'");
 		$query=$this->db->query("SELECT `image` FROM `hotel_transaction` WHERE `id`='$id'")->row();
 		return $query;
 	}
+    
+    function exporttransactionreportbyadmin($hotel,$startdate,$enddate)
+	{
+        
+		$this->load->dbutil();
+        $where="WHERE `hotel_transaction`.`timestamp` BETWEEN '$startdate' AND '$enddate' ";
+        if($hotel!="" || $hotel!=0)
+        {
+            $where.=" AND `hotel_transaction`.`hotel`='$hotel'";
+        }
+		$query=$this->db->query("SELECT `hotel_transaction`.`id`,`user`.`name` AS `username`,`hotel_hotel`.`name` AS `hotelname`,`hotel_transaction`. `amount`,`hotel_transaction`. `status`,`hotel_transaction`. `paymentmethod`,`hotel_transaction`. `bankname`,`hotel_transaction`. `branchname`,`hotel_transaction`. `chequeno`,`hotel_transaction`. `chequedate`,`hotel_transaction`. `timestamp`,`hotel_transaction`. `transactionid`,`hotel_transaction`. `image` 
+FROM `hotel_transaction` 
+LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_transaction`.`hotel`
+LEFT OUTER JOIN `user`ON `hotel_transaction`.`user`=`user`.`id` $where");
+//        $query=$this->db->query($query)->result();
+        return $query;
+	}
+    
+    function exporttransactionreportbyadmintotal($hotel,$startdate,$enddate)
+	{
+        
+		$this->load->dbutil();
+        $where="WHERE `hotel_transaction`.`timestamp` BETWEEN '$startdate' AND '$enddate' ";
+        if($hotel!="" || $hotel!=0)
+        {
+            $where.=" AND `hotel_transaction`.`hotel`='$hotel'";
+        }
+		$query=$this->db->query("SELECT SUM(`hotel_transaction`. `amount`) AS `amount`,`hotel_hotel`.`name` AS `hotelname` 
+FROM `hotel_transaction` 
+LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_transaction`.`hotel`
+LEFT OUTER JOIN `user`ON `hotel_transaction`.`user`=`user`.`id` $where");
+//        $query=$this->db->query($query)->result();
+        return $query;
+	}
+    
+    function exporttransactionreportbyhotel($hotel,$startdate,$enddate)
+	{
+        
+		$this->load->dbutil();
+        $where="WHERE `hotel_transaction`.`timestamp` BETWEEN '$startdate' AND '$enddate' ";
+        if($hotel!="" || $hotel!=0)
+        {
+            $where.=" AND `hotel_transaction`.`hotel`='$hotel'";
+        }
+		$query=$this->db->query("SELECT `hotel_transaction`.`id`,`user`.`name` AS `username`,`hotel_hotel`.`name` AS `hotelname`,`hotel_transaction`. `amount`,`hotel_transaction`. `status`,`hotel_transaction`. `paymentmethod`,`hotel_transaction`. `bankname`,`hotel_transaction`. `branchname`,`hotel_transaction`. `chequeno`,`hotel_transaction`. `chequedate`,`hotel_transaction`. `timestamp`,`hotel_transaction`. `transactionid`,`hotel_transaction`. `image` 
+FROM `hotel_transaction` 
+LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_transaction`.`hotel`
+LEFT OUTER JOIN `user`ON `hotel_transaction`.`user`=`user`.`id` $where");
+//        $query=$this->db->query($query)->result();
+        return $query;
+	}
+    
+    function exporttransactionreportbyhoteltotal($hotel,$startdate,$enddate)
+	{
+        
+		$this->load->dbutil();
+        $where="WHERE `hotel_transaction`.`timestamp` BETWEEN '$startdate' AND '$enddate' ";
+        if($hotel!="" || $hotel!=0)
+        {
+            $where.=" AND `hotel_transaction`.`hotel`='$hotel'";
+        }
+		$query=$this->db->query("SELECT SUM(`hotel_transaction`. `amount`) AS `amount`,`hotel_hotel`.`name` AS `hotelname` 
+FROM `hotel_transaction` 
+LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_transaction`.`hotel`
+LEFT OUTER JOIN `user`ON `hotel_transaction`.`user`=`user`.`id` $where");
+//        $query=$this->db->query($query)->result();
+        return $query;
+	}
+    
 }
 ?>

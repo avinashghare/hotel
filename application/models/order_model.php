@@ -3,7 +3,7 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class order_model extends CI_Model
 {
-    public function create($user,$admin,$hotel,$days,$userrate,$hotelrate,$status,$price,$checkin,$checkout,$adult,$children,$rooms,$amount,$profit,$checkintime,$checkouttime,$foodpackage,$extra,$guestname)
+    public function create($user,$admin,$hotel,$days,$userrate,$hotelrate,$status,$price,$checkin,$checkout,$adult,$children,$rooms,$amount,$profit,$checkintime,$checkouttime,$foodpackage,$extra,$guestname,$paymenttype,$bankname)
     {
         $newinitialbalance=0;
         $data=array(
@@ -26,6 +26,8 @@ class order_model extends CI_Model
                     "checkouttime" => $checkouttime,
                     "foodpackage" => $foodpackage,
                     "guestname" => $guestname,
+                    "paymenttype" => $paymenttype,
+                    "bankname" => $bankname,
                     "extra" => $extra
                     );
         $query=$this->db->insert( "hotel_order", $data );
@@ -34,9 +36,12 @@ class order_model extends CI_Model
         $selecthotelquery=$this->db->query("SELECT * FROM `hotel_hotel` WHERE `id`='$hotel'")->row();
         $initialbalancebefore=$selecthotelquery->initialbalance;
         
+        
+        
+        
         $newinitialbalance=$initialbalancebefore+$amount;
         $updatehotelquery=$this->db->query("UPDATE `hotel_hotel` SET `initialbalance`='$newinitialbalance' WHERE `id`='$hotel'");
-        $table=$this->db->query("SELECT DATE(`hotel_order`.`timestamp`) AS `booking`, `hotel_order`.`checkin` AS `checkin`, `hotel_order`.`checkout` AS `checkout`, `hotel_order`.`checkintime` AS `checkintime`, `hotel_order`.`checkouttime` AS `checkouttime`, `hotel_order`.`foodpackage` AS `foodpackage`, `hotel_order`.`adult` AS `adult`, `hotel_order`.`children` AS `children`, `hotel_order`.`rooms` AS `rooms`, `hotel_order`.`days` AS `days`, `hotel_order`.`userrate` AS `userrate`, `hotel_order`.`price` AS `total`, `hotel_order`.`hotelrate` AS `hotelrate`, `hotel_order`.`amount` AS `amount`, `hotel_order`.`profit` AS `profit`, `hotel_order`.`extra` AS `extra`, `hotel_order`.`guestname` AS `guestname`,`tab1`.`name` AS `username`,`tab1`.`vouchernumber` AS `vouchernumber`,`tab2`.`name` AS `adminname`,`hotel_hotel`.`name` AS `hotelname`,`hotel_hotel`.`address` AS `hoteladdress`,`hotel_hotel`.`image` AS `hotelimage`,`tab1`.`mobile` AS `mobile`,`tab1`.`email` AS `email`
+        $table=$this->db->query("SELECT DATE(`hotel_order`.`timestamp`) AS `booking`, `hotel_order`.`checkin` AS `checkin`, `hotel_order`.`checkout` AS `checkout`, `hotel_order`.`checkintime` AS `checkintime`, `hotel_order`.`checkouttime` AS `checkouttime`, `hotel_order`.`foodpackage` AS `foodpackage`, `hotel_order`.`adult` AS `adult`, `hotel_order`.`children` AS `children`, `hotel_order`.`rooms` AS `rooms`, `hotel_order`.`days` AS `days`, `hotel_order`.`userrate` AS `userrate`, `hotel_order`.`price` AS `total`, `hotel_order`.`hotelrate` AS `hotelrate`, `hotel_order`.`amount` AS `amount`, `hotel_order`.`profit` AS `profit`, `hotel_order`.`extra` AS `extra`, `hotel_order`.`guestname` AS `guestname`,`tab1`.`name` AS `username`,`tab1`.`mobile` AS `mobile`,`tab1`.`vouchernumber` AS `vouchernumber`,`tab2`.`name` AS `adminname`,`hotel_hotel`.`name` AS `hotelname`,`hotel_hotel`.`address` AS `hoteladdress`,`hotel_hotel`.`image` AS `hotelimage`,`tab1`.`mobile` AS `mobile`,`tab1`.`email` AS `email`
 FROM `hotel_order` 
 LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` 
 LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` 
@@ -44,7 +49,17 @@ LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel`
 LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`hotel_order`.`status` 
 WHERE `hotel_order`.`id`='$id'")->row();
         
-        
+        $hotelnameformessage=$table->hotelname;
+        $tomessage=$table->mobile;	
+        $messageformessage="Dear%20User%2C%20Your%20Order%20Placed%20Successfully!%20in%20".$hotelnameformessage."%20Thank%20You%20-%20Hotel";
+		$check="http://alerts.sinfini.com/api/web2sms.php?workingkey=A9bbf9dc96af98b1fac5bc7d641665a9b&to=".$tomessage."&sender=ApLion&message=".$messageformessage;
+		//echo $check;
+//$homepage=$otp;
+
+		$homepage = file_get_contents($check);
+//		return $homepage ;
+		//print_r($homepage);
+	
         $message="<!DOCTYPE html>
 <html lang=''>
 
@@ -481,6 +496,119 @@ WHERE `hotel_order`.`user`='$id'")->row();
         return $query;
 
 	}
+    
+    
+    function exportorderreportbyadmin($hotel,$startdate,$enddate)
+	{
+        
+		$this->load->dbutil();
+        $where="WHERE `hotel_order`.`timestamp` BETWEEN '$startdate' AND '$enddate' ";
+        if($hotel!="" || $hotel!=0)
+        {
+            $where.=" AND `hotel_order`.`hotel`='$hotel'";
+        }
+		$query=$this->db->query("SELECT `tab1`.`vouchernumber` AS `Voucher Number`, DATE(`hotel_order`.`timestamp`) AS `Booking`,`tab1`.`name` as `Customer Name`, `hotel_order`.`checkin` AS `Check-In`, `hotel_order`.`checkout` AS `Check-Out`, `hotel_order`.`adult` AS `Adult`, `hotel_order`.`children` AS `Children`, `hotel_order`.`rooms` AS `Number Of Rooms`, `hotel_order`.`days` AS `Number Of Days`,`hotel_order`.`userrate` AS `Per Person`,`hotel_order`.`price` AS `Total`, `hotel_order`.`hotelrate` AS `Hotel`, `hotel_order`.`amount` AS `Amt.`,`hotel_order`.`profit` AS `Profit`
+FROM `hotel_order` 
+LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` 
+LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` 
+LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` 
+LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`hotel_order`.`status` $where");
+//        $query=$this->db->query($query)->result();
+        return $query;
+	}
+    
+    function exportorderreportbyadmintotal($hotel,$startdate,$enddate)
+	{
+        
+		$this->load->dbutil();
+        $where="WHERE `hotel_order`.`timestamp` BETWEEN '$startdate' AND '$enddate' ";
+        if($hotel!="" || $hotel!=0)
+        {
+            $where.=" AND `hotel_order`.`hotel`='$hotel'";
+        }
+		$query=$this->db->query("SELECT SUM(`hotel_order`.`price`) AS `total`, SUM(`hotel_order`.`amount`) AS `amount`,SUM(`hotel_order`.`profit`) AS `profit`
+FROM `hotel_order` 
+LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` 
+LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` 
+LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` 
+LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`hotel_order`.`status` $where");
+//        $query=$this->db->query($query)->result();
+        return $query;
+	}
+    
+    function exportorderreportbyhotel($hotel,$startdate,$enddate)
+	{
+        
+		$this->load->dbutil();
+        $where="WHERE `hotel_order`.`timestamp` BETWEEN '$startdate' AND '$enddate' ";
+        if($hotel!="" || $hotel!=0)
+        {
+            $where.=" AND `hotel_order`.`hotel`='$hotel'";
+        }
+		$query=$this->db->query("SELECT `tab1`.`vouchernumber` AS `Voucher Number`, DATE(`hotel_order`.`timestamp`) AS `Booking`,`tab1`.`name` as `Customer Name`, `hotel_order`.`checkin` AS `Check-In`, `hotel_order`.`checkout` AS `Check-Out`, `hotel_order`.`adult` AS `Adult`, `hotel_order`.`children` AS `Children`, `hotel_order`.`rooms` AS `Number Of Rooms`, `hotel_order`.`days` AS `Number Of Days`, `hotel_order`.`hotelrate` AS `Hotel`, `hotel_order`.`amount` AS `Amt.`
+FROM `hotel_order` 
+LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` 
+LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` 
+LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` 
+LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`hotel_order`.`status` $where");
+//        $query=$this->db->query($query)->result();
+        return $query;
+	}
+    
+    function exportorderreportbyhoteltotal($hotel,$startdate,$enddate)
+	{
+        
+		$this->load->dbutil();
+        $where="WHERE `hotel_order`.`timestamp` BETWEEN '$startdate' AND '$enddate' ";
+        if($hotel!="" || $hotel!=0)
+        {
+            $where.=" AND `hotel_order`.`hotel`='$hotel'";
+        }
+		$query=$this->db->query("SELECT SUM(`hotel_order`.`price`) AS `total`, SUM(`hotel_order`.`amount`) AS `amount`,SUM(`hotel_order`.`profit`) AS `profit`
+FROM `hotel_order` 
+LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` 
+LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` 
+LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` 
+LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`hotel_order`.`status` $where");
+//        $query=$this->db->query($query)->result();
+        return $query;
+	}
+    
+//    function exportorderreportbyadmincsvold($hotel,$startdate,$enddate)
+//	{
+//		$this->load->dbutil();
+//        $where="WHERE `hotel_order`.`timestamp` BETWEEN '$startdate' AND '$enddate' ";
+//        if($hotel!="" || $hotel!=0)
+//        {
+//            $where.=" AND `hotel_order`.`hotel`='$hotel'";
+//        }
+//        
+//		$query=$this->db->query("SELECT DATE(`hotel_order`.`timestamp`) AS `booking`, `hotel_order`.`checkin` AS `checkin`, `hotel_order`.`checkout` AS `checkout`, `hotel_order`.`checkintime` AS `checkintime`, `hotel_order`.`checkouttime` AS `checkouttime`, `hotel_order`.`foodpackage` AS `foodpackage`, `hotel_order`.`adult` AS `adult`, `hotel_order`.`children` AS `children`, `hotel_order`.`rooms` AS `rooms`, `hotel_order`.`days` AS `days`, `hotel_order`.`userrate` AS `userrate`, `hotel_order`.`price` AS `total`, `hotel_order`.`hotelrate` AS `hotelrate`, `hotel_order`.`amount` AS `amount`, `hotel_order`.`profit` AS `profit`, `hotel_order`.`extra` AS `extra`, `hotel_order`.`guestname` AS `guestname`,`tab1`.`name` AS `username`,`tab1`.`vouchernumber` AS `vouchernumber`,`tab2`.`name` AS `adminname`,`hotel_hotel`.`name` AS `hotelname`,`hotel_hotel`.`address` AS `hoteladdress`,`hotel_hotel`.`image` AS `hotelimage`,`tab1`.`mobile` AS `mobile`
+//FROM `hotel_order` 
+//LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` 
+//LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` 
+//LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` 
+//LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`hotel_order`.`status` $where ORDER BY `hotel_order`.`id` ASC");
+//
+//        $content= $this->dbutil->csv_from_result($query);
+//        
+//        $timestamp=new DateTime();
+//        $timestamp=$timestamp->format('Y-m-d_H.i.s');
+////        file_put_contents("gs://magicmirroruploads/users_$timestamp.csv", $content);
+////		redirect("http://magicmirror.in/servepublic?name=users_$timestamp.csv", 'refresh');
+//        
+//        
+//        if ( ! write_file("./csvgenerated/order_'$timestamp.csv'", $content))
+//        {
+//             echo 'Unable to write the file';
+//        }
+//        else
+//        {
+//            redirect(base_url("csvgenerated/order_'$timestamp.csv'"), "refresh");
+//             echo 'File written!';
+//        }
+//	}
+     
     
 }
 ?>

@@ -1,4 +1,29 @@
-<div class="row">
+<?php
+//$ip  = !empty($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+//$url = "http://freegeoip.net/json/$ip";
+//$ch  = curl_init();
+//echo $ip." ip";
+//curl_setopt($ch, CURLOPT_URL, $url);
+//curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+//$data = curl_exec($ch);
+//curl_close($ch);
+//print_r($data);
+//if ($data) {
+//    $location = json_decode($data);
+//
+//    $lat = $location->latitude;
+//    $lon = $location->longitude;
+//echo $lat;
+//    echo $lon;
+//    $sun_info = date_sun_info(time(), $lat, $lon);
+//    print_r($sun_info);
+//}
+
+?>
+   
+
+   <div class="row">
     <div class="col-md-4">
     </div>
     <div class="col-md-4">
@@ -83,10 +108,12 @@
 
 
     <div id="userhotel" class="">
-    <div class="alluserhotels">
+    <div class="alluserhotels col-md-8">
+    </div>
+    <div class="alluserdetails col-md-4">
     </div>
 <!--
-        <div class="col-xs-2 ffff" style="border:1px solid red;">
+        <div class="col-xs-2 ffff" style="border:2px solid red;">
             <div class=""><span>Demo</span>
                 <a href="" class="btn btn-primary">Book Now</a>
             </div>
@@ -131,6 +158,7 @@
                 nodata = data;
                 // $("#store").html(data);
                 hotelorders(data);
+                userdetails(data);
 
             }
         );
@@ -152,9 +180,9 @@
             var orderid = data['hotels'][i].orderid;
             var userid = data['userid'];
             var makeorder = "";
-            var classvalue="border-right:1px solid white;border-bottom:1px solid white;background-color:green;color:white";
+            var classvalue="border-right:2px solid white;border-bottom:2px solid white;background-color:red;color:white";
             if (orderid == "" || orderid == null) {
-                var classvalue="border-right:1px solid white;border-bottom:1px solid white;background-color:red;color:white";
+                var classvalue="border-right:2px solid white;border-bottom:2px solid white;background-color:green;color:white";
                 var makeorder = "<a class='btn btn-primary' href='<?php echo site_url('site/createorderforuserhotelfromdashboard?userid=');?>" + userid + "&hotelid=" + id + "'><i class=''></i>Book Now</a>"
                 
             $("#userhotel .alluserhotels").append("<div class='col-xs-2 ffff' style='"+classvalue+"; height:100px'><div class=''><span>"+name+"</span><br>"+makeorder+"</div></div>");
@@ -177,6 +205,23 @@
         //  console.log(key);
         //}
         //        console.log(data(userdetail.id));
+
+    };
+    function userdetails(data) {
+        $(".hoteltable").show();
+        $("#userhotel .alluserdetails").html("");
+            console.log(data['userdetails'].name);
+            console.log(data['userid']);
+            var id = data['userdetails'].id;
+            var name = data['userdetails'].name;
+            var email = data['userdetails'].email;
+            var address = data['userdetails'].address;
+            var contact = data['userdetails'].contact;
+            var mobile = data['userdetails'].mobile;
+            var dob = data['userdetails'].dob;
+            var vouchernumber = data['userdetails'].vouchernumber;
+        console.log(name);
+        $("#userhotel .alluserdetails").append("<table class='table table-hover'><tr><td>Name: </td><td>"+name+"</td></tr><tr><td>email: </td><td>"+email+"</td></tr><tr><td>address: </td><td>"+address+"</td></tr><tr><td>contact: </td><td>"+contact+"</td></tr><tr><td>mobile: </td><td>"+mobile+"</td></tr><tr><td>dob: </td><td>"+dob+"</td></tr><tr><td>vouchernumber: </td><td>"+vouchernumber+"</td></tr></table>");
 
     };
 </script>

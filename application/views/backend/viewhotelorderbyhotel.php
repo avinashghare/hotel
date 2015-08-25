@@ -50,8 +50,18 @@
        
         <script>
             function drawtable(resultrow) {
+                var showstatus="";
+                if(resultrow.status==1)
+                {
+                    var showstatus="<a href='<?php echo site_url('site/changeorderstatusbyhotel?id='); ?>"+resultrow.id+"' class='label label-danger label-mini'>Pending</a>";
+                    
+                }
+                else
+                {
+                    var showstatus="<a href='<?php echo site_url('site/changeorderstatusbyhotel?id='); ?>"+resultrow.id+"' class='label label-success label-mini'>Confirm</a>";
+                }
 //                <a class='btn btn-primary btn-xs' href='<?php echo site_url('site/editorder?id=');?>" + resultrow.id + "'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-xs' href='<?php echo site_url('site/deleteorder?id='); ?>" + resultrow.id + "'><i class='icon-trash '></i></a>
-                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.username + "</td><td>" + resultrow.adminname + "</td><td>" + resultrow.hotelname + "</td><td>" + resultrow.days + "</td><td>" + resultrow.hotelrate + "</td><td>" + resultrow.amount + "</td><td>" + resultrow.statusname + "</td><td><a class='btn btn-secondary btn-s' target='_blank' href='<?php echo site_url('site/printorderinvoice?id='); ?>" + resultrow.id + "'>Download</a></td></tr>";
+                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.username + "</td><td>" + resultrow.adminname + "</td><td>" + resultrow.hotelname + "</td><td>" + resultrow.days + "</td><td>" + resultrow.hotelrate + "</td><td>" + resultrow.amount + "</td><td>" + showstatus + "</td><td><a class='btn btn-secondary btn-s' target='_blank' href='<?php echo site_url('site/printorderinvoice?id='); ?>" + resultrow.id + "'>Download</a></td></tr>";
             }
             generatejquery("<?php echo $base_url;?>");
         </script>

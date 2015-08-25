@@ -272,7 +272,111 @@ class Site extends CI_Controller
             $orderorder="ASC";
         }
        
-        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `logintype` ON `logintype`.`id`=`user`.`logintype` LEFT OUTER JOIN `accesslevel` ON `accesslevel`.`id`=`user`.`accesslevel` LEFT OUTER JOIN `statuses` ON `statuses`.`id`=`user`.`status`");
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `logintype` ON `logintype`.`id`=`user`.`logintype` LEFT OUTER JOIN `accesslevel` ON `accesslevel`.`id`=`user`.`accesslevel` LEFT OUTER JOIN `statuses` ON `statuses`.`id`=`user`.`status`","WHERE `user`.`accesslevel` < 7");
+        
+		$this->load->view("json",$data);
+	} 
+    function viewmember()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['page']='viewmember';
+        $data['base_url'] = site_url("site/viewmemberjson");
+        
+		$data['title']='View member';
+		$this->load->view('template',$data);
+	} 
+    function viewmemberjson()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+        
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`user`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`user`.`name`";
+        $elements[1]->sort="1";
+        $elements[1]->header="Name";
+        $elements[1]->alias="name";
+        
+        $elements[2]=new stdClass();
+        $elements[2]->field="`user`.`email`";
+        $elements[2]->sort="1";
+        $elements[2]->header="Email";
+        $elements[2]->alias="email";
+        
+        $elements[3]=new stdClass();
+        $elements[3]->field="`user`.`socialid`";
+        $elements[3]->sort="1";
+        $elements[3]->header="SocialId";
+        $elements[3]->alias="socialid";
+        
+        $elements[4]=new stdClass();
+        $elements[4]->field="`logintype`.`name`";
+        $elements[4]->sort="1";
+        $elements[4]->header="Logintype";
+        $elements[4]->alias="logintype";
+        
+        $elements[5]=new stdClass();
+        $elements[5]->field="`user`.`json`";
+        $elements[5]->sort="1";
+        $elements[5]->header="Json";
+        $elements[5]->alias="json";
+       
+        $elements[6]=new stdClass();
+        $elements[6]->field="`accesslevel`.`name`";
+        $elements[6]->sort="1";
+        $elements[6]->header="Accesslevel";
+        $elements[6]->alias="accesslevelname";
+       
+        $elements[7]=new stdClass();
+        $elements[7]->field="`statuses`.`name`";
+        $elements[7]->sort="1";
+        $elements[7]->header="Status";
+        $elements[7]->alias="status";
+       
+        $elements[8]=new stdClass();
+        $elements[8]->field="`user`.`vouchernumber`";
+        $elements[8]->sort="1";
+        $elements[8]->header="Voucher Number";
+        $elements[8]->alias="vouchernumber";
+        
+        $elements[9]=new stdClass();
+        $elements[9]->field="`user`.`points`";
+        $elements[9]->sort="1";
+        $elements[9]->header="Points";
+        $elements[9]->alias="points";
+        
+        $elements[10]=new stdClass();
+        $elements[10]->field="`user`.`accesslevel`";
+        $elements[10]->sort="1";
+        $elements[10]->header="Accesslevel";
+        $elements[10]->alias="accesslevel";
+        
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+       
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `logintype` ON `logintype`.`id`=`user`.`logintype` LEFT OUTER JOIN `accesslevel` ON `accesslevel`.`id`=`user`.`accesslevel` LEFT OUTER JOIN `statuses` ON `statuses`.`id`=`user`.`status`","WHERE `user`.`accesslevel`=7");
         
 		$this->load->view("json",$data);
 	} 
@@ -945,6 +1049,7 @@ class Site extends CI_Controller
             $this->load->view("redirect",$data);
         }
     }
+    
     public function deleteorder()
     {
         $access=array("1");
@@ -2199,6 +2304,7 @@ class Site extends CI_Controller
         $this->checkaccess($access);
         $data["page"]="createorderforuserhotelfromdashboard";
         $data["title"]="Make order";
+        $data['paymenttype']=$this->transaction_model->gettypedropdown();
         $data['userid']=$this->input->get('userid');
         $data['hotelid']=$this->input->get('hotelid');
         $data['status']=$this->user_model->getstatusdropdown();
@@ -2235,7 +2341,7 @@ class Site extends CI_Controller
             $days=$this->input->get_post("days");
             $userrate=$this->input->get_post("userrate");
             $hotelrate=$this->input->get_post("hotelrate");
-            $status=$this->input->get_post("status");
+            $status=1;
             $price=$this->input->get_post("price");
             
             $checkin=$this->input->get_post("checkin");
@@ -2251,8 +2357,16 @@ class Site extends CI_Controller
             $foodpackage=$this->input->get_post("foodpackage");
             $extra=$this->input->get_post("extra");
             $guestname=$this->input->get_post("guestname");
+            $paymenttype=$this->input->get_post("paymenttype");
+            $bankname=$this->input->get_post("bankname");
             
-            if($this->order_model->create($user,$admin,$hotel,$days,$userrate,$hotelrate,$status,$price,$checkin,$checkout,$adult,$children,$rooms,$amount,$profit,$checkintime,$checkouttime,$foodpackage,$extra,$guestname)==0)
+            $totalmembers=intval($adult)+intval($children);
+            $total=((floatval($userrate)*$totalmembers)*intval($days))+$extra;
+            $amount=((floatval($hotelrate)*$totalmembers)*intval($days))+$extra;
+            $profit=$total-$amount;
+            $price=$total;
+//            echo $price;
+            if($this->order_model->create($user,$admin,$hotel,$days,$userrate,$hotelrate,$status,$price,$checkin,$checkout,$adult,$children,$rooms,$amount,$profit,$checkintime,$checkouttime,$foodpackage,$extra,$guestname,$paymenttype,$bankname)==0)
             $data["alerterror"]="Your Order could not be created.";
             else
             $data["alertsuccess"]="Order created Successfully.";
@@ -2782,7 +2896,7 @@ class Site extends CI_Controller
 
     public function exportorderexcelbyadmin()
 	{
-		$access = array("1","3");
+		$access = array("1");
 		$this->checkaccess($access);
         $this->load->library('exportorderforadmin');
         $sql = $this->order_model->exportorderforadmin();
@@ -3154,6 +3268,18 @@ class Site extends CI_Controller
         $elements[13]->header="timestamp";
         $elements[13]->alias="timestamp";
         
+        $elements[14]=new stdClass();
+        $elements[14]->field="`hotel_order`.`checkin`";
+        $elements[14]->sort="1";
+        $elements[14]->header="checkin";
+        $elements[14]->alias="checkin";
+        
+        $elements[15]=new stdClass();
+        $elements[15]->field="`hotel_order`.`checkout`";
+        $elements[15]->sort="1";
+        $elements[15]->header="checkout";
+        $elements[15]->alias="checkout";
+        
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
         $orderby=$this->input->get_post("orderby");
@@ -3171,6 +3297,453 @@ class Site extends CI_Controller
         $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_order` LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`hotel_order`.`status`","WHERE `hotel_order`.`user`='$userid'");
         $this->load->view("json",$data);
     }
+    
+    public function viewtodayorder()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data["page"]="viewtodayorder";
+        $data["base_url"]=site_url("site/viewtodayorderjson");
+        $data["title"]="View order";
+        $this->load->view("template",$data);
+    }
+    function viewtodayorderjson()
+    {
+        $date = date("Y-m-d");
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`hotel_order`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`hotel_order`.`user`";
+        $elements[1]->sort="1";
+        $elements[1]->header="User";
+        $elements[1]->alias="user";
+        
+        $elements[2]=new stdClass();
+        $elements[2]->field="`hotel_order`.`admin`";
+        $elements[2]->sort="1";
+        $elements[2]->header="Admin";
+        $elements[2]->alias="admin";
+        
+        $elements[3]=new stdClass();
+        $elements[3]->field="`hotel_order`.`hotel`";
+        $elements[3]->sort="1";
+        $elements[3]->header="Hotel";
+        $elements[3]->alias="hotel";
+        
+        $elements[4]=new stdClass();
+        $elements[4]->field="`hotel_order`.`days`";
+        $elements[4]->sort="1";
+        $elements[4]->header="Days";
+        $elements[4]->alias="days";
+        
+        $elements[5]=new stdClass();
+        $elements[5]->field="`hotel_order`.`userrate`";
+        $elements[5]->sort="1";
+        $elements[5]->header="User Rate";
+        $elements[5]->alias="userrate";
+        
+        $elements[6]=new stdClass();
+        $elements[6]->field="`hotel_order`.`hotelrate`";
+        $elements[6]->sort="1";
+        $elements[6]->header="Hotel Rate";
+        $elements[6]->alias="hotelrate";
+        
+        $elements[7]=new stdClass();
+        $elements[7]->field="`hotel_order`.`status`";
+        $elements[7]->sort="1";
+        $elements[7]->header="Status";
+        $elements[7]->alias="status";
+        
+        $elements[8]=new stdClass();
+        $elements[8]->field="`hotel_order`.`price`";
+        $elements[8]->sort="1";
+        $elements[8]->header="Price";
+        $elements[8]->alias="price";
+        
+        $elements[9]=new stdClass();
+        $elements[9]->field="`tab1`.`name`";
+        $elements[9]->sort="1";
+        $elements[9]->header="User";
+        $elements[9]->alias="username";
+        
+        $elements[10]=new stdClass();
+        $elements[10]->field="`tab2`.`name`";
+        $elements[10]->sort="1";
+        $elements[10]->header="Admin";
+        $elements[10]->alias="adminname";
+        
+        $elements[11]=new stdClass();
+        $elements[11]->field="`hotel_hotel`.`name`";
+        $elements[11]->sort="1";
+        $elements[11]->header="Hotel";
+        $elements[11]->alias="hotelname";
+        
+        $elements[12]=new stdClass();
+        $elements[12]->field="`orderstatus`.`name`";
+        $elements[12]->sort="1";
+        $elements[12]->header="statusname";
+        $elements[12]->alias="statusname";
+        
+        $elements[13]=new stdClass();
+        $elements[13]->field="`hotel_order`.`timestamp`";
+        $elements[13]->sort="1";
+        $elements[13]->header="timestamp";
+        $elements[13]->alias="timestamp";
+        
+        $elements[14]=new stdClass();
+        $elements[14]->field="`hotel_order`.`checkin`";
+        $elements[14]->sort="1";
+        $elements[14]->header="checkin";
+        $elements[14]->alias="checkin";
+        
+        $elements[15]=new stdClass();
+        $elements[15]->field="`hotel_order`.`checkout`";
+        $elements[15]->sort="1";
+        $elements[15]->header="checkout";
+        $elements[15]->alias="checkout";
+        
+        $elements[16]=new stdClass();
+        $elements[16]->field="`tab1`.`contact`";
+        $elements[16]->sort="1";
+        $elements[16]->header="contact";
+        $elements[16]->alias="contact";
+        
+        $elements[17]=new stdClass();
+        $elements[17]->field="`tab1`.`contact`";
+        $elements[17]->sort="1";
+        $elements[17]->header="contact";
+        $elements[17]->alias="contact";
+        
+        $elements[18]=new stdClass();
+        $elements[18]->field="`tab1`.`mobile`";
+        $elements[18]->sort="1";
+        $elements[18]->header="mobile";
+        $elements[18]->alias="mobile";
+        
+        $elements[19]=new stdClass();
+        $elements[19]->field="`tab1`.`vouchernumber`";
+        $elements[19]->sort="1";
+        $elements[19]->header="vouchernumber";
+        $elements[19]->alias="vouchernumber";
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        if($orderby=="")
+        {
+            $orderby="timestamp";
+            $orderorder="DESC";
+        }
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_order` LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`hotel_order`.`status`","WHERE `hotel_order`.`checkin`='$date'");
+        $this->load->view("json",$data);
+    }
 
+    
+    public function viewtomorroworder()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data["page"]="viewtomorroworder";
+        $data["base_url"]=site_url("site/viewtomorroworderjson");
+        $data["title"]="View order";
+        $this->load->view("template",$data);
+    }
+    function viewtomorroworderjson()
+    {
+        $date = date("Y-m-d", strtotime("tomorrow"));
+//        echo $date;
+//        $today=NOW();
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`hotel_order`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`hotel_order`.`user`";
+        $elements[1]->sort="1";
+        $elements[1]->header="User";
+        $elements[1]->alias="user";
+        
+        $elements[2]=new stdClass();
+        $elements[2]->field="`hotel_order`.`admin`";
+        $elements[2]->sort="1";
+        $elements[2]->header="Admin";
+        $elements[2]->alias="admin";
+        
+        $elements[3]=new stdClass();
+        $elements[3]->field="`hotel_order`.`hotel`";
+        $elements[3]->sort="1";
+        $elements[3]->header="Hotel";
+        $elements[3]->alias="hotel";
+        
+        $elements[4]=new stdClass();
+        $elements[4]->field="`hotel_order`.`days`";
+        $elements[4]->sort="1";
+        $elements[4]->header="Days";
+        $elements[4]->alias="days";
+        
+        $elements[5]=new stdClass();
+        $elements[5]->field="`hotel_order`.`userrate`";
+        $elements[5]->sort="1";
+        $elements[5]->header="User Rate";
+        $elements[5]->alias="userrate";
+        
+        $elements[6]=new stdClass();
+        $elements[6]->field="`hotel_order`.`hotelrate`";
+        $elements[6]->sort="1";
+        $elements[6]->header="Hotel Rate";
+        $elements[6]->alias="hotelrate";
+        
+        $elements[7]=new stdClass();
+        $elements[7]->field="`hotel_order`.`status`";
+        $elements[7]->sort="1";
+        $elements[7]->header="Status";
+        $elements[7]->alias="status";
+        
+        $elements[8]=new stdClass();
+        $elements[8]->field="`hotel_order`.`price`";
+        $elements[8]->sort="1";
+        $elements[8]->header="Price";
+        $elements[8]->alias="price";
+        
+        $elements[9]=new stdClass();
+        $elements[9]->field="`tab1`.`name`";
+        $elements[9]->sort="1";
+        $elements[9]->header="User";
+        $elements[9]->alias="username";
+        
+        $elements[10]=new stdClass();
+        $elements[10]->field="`tab2`.`name`";
+        $elements[10]->sort="1";
+        $elements[10]->header="Admin";
+        $elements[10]->alias="adminname";
+        
+        $elements[11]=new stdClass();
+        $elements[11]->field="`hotel_hotel`.`name`";
+        $elements[11]->sort="1";
+        $elements[11]->header="Hotel";
+        $elements[11]->alias="hotelname";
+        
+        $elements[12]=new stdClass();
+        $elements[12]->field="`orderstatus`.`name`";
+        $elements[12]->sort="1";
+        $elements[12]->header="statusname";
+        $elements[12]->alias="statusname";
+        
+        $elements[13]=new stdClass();
+        $elements[13]->field="`hotel_order`.`timestamp`";
+        $elements[13]->sort="1";
+        $elements[13]->header="timestamp";
+        $elements[13]->alias="timestamp";
+        
+        $elements[14]=new stdClass();
+        $elements[14]->field="`hotel_order`.`checkin`";
+        $elements[14]->sort="1";
+        $elements[14]->header="checkin";
+        $elements[14]->alias="checkin";
+        
+        $elements[15]=new stdClass();
+        $elements[15]->field="`hotel_order`.`checkout`";
+        $elements[15]->sort="1";
+        $elements[15]->header="checkout";
+        $elements[15]->alias="checkout";
+        
+        $elements[16]=new stdClass();
+        $elements[16]->field="`tab1`.`contact`";
+        $elements[16]->sort="1";
+        $elements[16]->header="contact";
+        $elements[16]->alias="contact";
+        
+        $elements[17]=new stdClass();
+        $elements[17]->field="`tab1`.`contact`";
+        $elements[17]->sort="1";
+        $elements[17]->header="contact";
+        $elements[17]->alias="contact";
+        
+        $elements[18]=new stdClass();
+        $elements[18]->field="`tab1`.`mobile`";
+        $elements[18]->sort="1";
+        $elements[18]->header="mobile";
+        $elements[18]->alias="mobile";
+        
+        $elements[19]=new stdClass();
+        $elements[19]->field="`tab1`.`vouchernumber`";
+        $elements[19]->sort="1";
+        $elements[19]->header="vouchernumber";
+        $elements[19]->alias="vouchernumber";
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        if($orderby=="")
+        {
+            $orderby="timestamp";
+            $orderorder="DESC";
+        }
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `hotel_order` LEFT OUTER JOIN `user` AS `tab1` ON `hotel_order`.`user`=`tab1`.`id` LEFT OUTER JOIN `user` AS `tab2` ON `tab2`.`id`=`hotel_order`.`admin` LEFT OUTER JOIN `hotel_hotel` ON `hotel_hotel`.`id`=`hotel_order`.`hotel` LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`hotel_order`.`status`","WHERE `hotel_order`.`checkin`='$date'");
+        $this->load->view("json",$data);
+    }
+function changeorderstatusbyhotel()
+	{
+		$access = array("1","3");
+		$this->checkaccess($access);
+		$this->hotel_model->changeorderstatusbyhotel($this->input->get('id'));
+		$data['alertsuccess']="Status Changed Successfully";
+		$data['redirect']="site/viewhotelorderbyhotel";
+		//$data['other']="template=$template";
+		$this->load->view("redirect",$data);
+	}
+
+    //reports for admin
+    
+	function vieworderreportbyadmin()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['hotel']=$this->hotel_model->gethoteldropdown();
+		$data['page']='vieworderreportbyadmin';
+		$data['title']='Order Excel';
+		$this->load->view('template',$data);
+	}
+    
+	function vieworderreportbyhotel()
+	{
+		$access = array("3");
+		$this->checkaccess($access);
+		$data['hotel']=$this->hotel_model->gethoteldropdown();
+		$data['page']='vieworderreportbyhotel';
+		$data['title']='Order Excel';
+		$this->load->view('template',$data);
+	}
+    
+	function viewtransactionreportbyadmin()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['hotel']=$this->hotel_model->gethoteldropdown();
+		$data['page']='viewtransactionreportbyadmin';
+		$data['title']='Order Excel';
+		$this->load->view('template',$data);
+	}
+    
+	function viewtransactionreportbyhotel()
+	{
+		$access = array("3");
+		$this->checkaccess($access);
+		$data['hotel']=$this->hotel_model->gethoteldropdown();
+		$data['page']='viewtransactionreportbyhotel';
+		$data['title']='Order Excel';
+		$this->load->view('template',$data);
+	}
+    
+//    	public function createorderreportbyadminsubmit()
+//	{
+//		$access = array("1");
+//		$this->checkaccess($access);
+//        $hotel=$this->input->post('hotel');
+//        $startdate=$this->input->post('startdate');
+//        $enddate=$this->input->post('enddate');
+//		$this->order_model->exportorderreportbyadmincsv($hotel,$startdate,$enddate);
+//            
+//        $data['hotel']=$this->hotel_model->gethoteldropdown();
+//		$data['page']='vieworderreportbyadmin';
+//		$data['title']='Order Excel';
+//		$this->load->view('template',$data);
+//	}
+    
+    
+    public function createorderreportbyadminsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+        
+        $hotel=$this->input->post('hotel');
+        $startdate=$this->input->post('startdate');
+        $enddate=$this->input->post('enddate');
+        
+        $timestamp=new DateTime();
+        $timestamp=$timestamp->format('Y-m-d_H.i.s');
+        
+        $this->load->library('exportorderreportbyadmin');
+        $sql = $this->order_model->exportorderreportbyadmin($hotel,$startdate,$enddate);
+        $sql2 = $this->order_model->exportorderreportbyadmintotal($hotel,$startdate,$enddate);
+        $name="Order Reports_".$timestamp;
+        $this->exportorderreportbyadmin->to_excel($sql, $name, $sql2);
+	}
+    
+    public function createorderreportbyhotelsubmit()
+	{
+		$access = array("3");
+		$this->checkaccess($access);
+        
+        $hotel=$this->session->userdata('hotel');
+        $startdate=$this->input->post('startdate');
+        $enddate=$this->input->post('enddate');
+        
+        $timestamp=new DateTime();
+        $timestamp=$timestamp->format('Y-m-d_H.i.s');
+        
+        $this->load->library('exportorderreportbyhotel');
+        $sql = $this->order_model->exportorderreportbyhotel($hotel,$startdate,$enddate);
+        $sql2 = $this->order_model->exportorderreportbyhoteltotal($hotel,$startdate,$enddate);
+        $name="Order Reports_".$timestamp;
+        $this->exportorderreportbyhotel->to_excel($sql, $name,$sql2);
+	}
+    
+    public function createtransactionreportbyadminsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+        
+        $hotel=$this->input->post('hotel');
+        $startdate=$this->input->post('startdate');
+        $enddate=$this->input->post('enddate');
+        
+        $timestamp=new DateTime();
+        $timestamp=$timestamp->format('Y-m-d_H.i.s');
+        
+        $this->load->library('exporttransactionreportbyadmin');
+        $sql = $this->transaction_model->exporttransactionreportbyadmin($hotel,$startdate,$enddate);
+        $sql2 = $this->transaction_model->exporttransactionreportbyadmintotal($hotel,$startdate,$enddate);
+        $name="Transaction Reports_".$timestamp;
+        $this->exporttransactionreportbyadmin->to_excel($sql, $name,$sql2);
+	}
+    public function createtransactionreportbyhotelsubmit()
+	{
+		$access = array("3");
+		$this->checkaccess($access);
+        
+        $hotel=$this->session->userdata('hotel');
+        $startdate=$this->input->post('startdate');
+        $enddate=$this->input->post('enddate');
+        
+        $timestamp=new DateTime();
+        $timestamp=$timestamp->format('Y-m-d_H.i.s');
+        
+        $this->load->library('exporttransactionreportbyadmin');
+        $sql = $this->transaction_model->exporttransactionreportbyhotel($hotel,$startdate,$enddate);
+        $sql2 = $this->transaction_model->exporttransactionreportbyhoteltotal($hotel,$startdate,$enddate);
+        $name="Transaction Reports_".$timestamp;
+        $this->exporttransactionreportbyadmin->to_excel($sql, $name,$sql2);
+	}
 }
 ?>
