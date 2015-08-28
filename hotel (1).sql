@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.1.1
+-- version 4.3.11
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2015 at 01:51 PM
--- Server version: 5.5.32
--- PHP Version: 5.4.19
+-- Generation Time: Aug 28, 2015 at 10:06 AM
+-- Server version: 5.6.24
+-- PHP Version: 5.5.24
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -218,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `isactive` int(11) NOT NULL,
   `order` int(11) NOT NULL,
   `icon` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `menu`
@@ -237,7 +237,8 @@ INSERT INTO `menu` (`id`, `name`, `description`, `keyword`, `url`, `linktype`, `
 (12, 'Hotel Orders', '', '', 'site/viewhotelorderbyhotel', 1, 0, 1, 10, 'icon-user'),
 (13, 'Hotel Transactions', '', '', 'site/viewtransactionbyhotel', 1, 0, 1, 11, 'icon-user'),
 (14, 'Dashboard', '', '', 'site/managerdashboard', 1, 0, 1, 12, 'icon-dashboard'),
-(15, 'Trainee', '', '', 'site/viewtraineebymanager', 1, 0, 1, 13, 'icon-dashboard');
+(15, 'Trainee', '', '', 'site/viewtraineebymanager', 1, 0, 1, 13, 'icon-dashboard'),
+(16, 'Payment Orders', '', '', 'site/viewpaymentorder', 1, 0, 1, 9, 'icon-dashboard');
 
 -- --------------------------------------------------------
 
@@ -269,7 +270,8 @@ INSERT INTO `menuaccess` (`menu`, `access`) VALUES
 (12, 3),
 (13, 3),
 (14, 4),
-(15, 4);
+(15, 4),
+(16, 1);
 
 -- --------------------------------------------------------
 
@@ -292,6 +294,63 @@ INSERT INTO `orderstatus` (`id`, `name`) VALUES
 (3, 'Cancel'),
 (4, 'Refund Applied'),
 (5, 'Refunded');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `paymentorder`
+--
+
+CREATE TABLE IF NOT EXISTS `paymentorder` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `billingaddress` text NOT NULL,
+  `billingcity` varchar(255) NOT NULL,
+  `billingstate` varchar(255) NOT NULL,
+  `billingzipcode` varchar(255) NOT NULL,
+  `billingcontact` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `transactionid` varchar(255) NOT NULL,
+  `orderstatus` varchar(255) NOT NULL,
+  `user` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `amount` varchar(255) NOT NULL,
+  `billingcountry` varchar(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `paymentorder`
+--
+
+INSERT INTO `paymentorder` (`id`, `name`, `billingaddress`, `billingcity`, `billingstate`, `billingzipcode`, `billingcontact`, `email`, `transactionid`, `orderstatus`, `user`, `timestamp`, `amount`, `billingcountry`) VALUES
+(51, 'ghhhjk', 'rtsyyrs', 'gyhuj', 'tyghuj', 'tgh', 'tyui', 'poojathakare55@gmail.com', 'ghj', '1', 6, '0000-00-00 00:00:00', '566768', 'india'),
+(52, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:11:09', '8789', 'ghj'),
+(53, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '1', 9, '2015-08-27 13:13:17', '8789', 'ghj'),
+(54, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '1', 9, '2015-08-27 13:14:00', '8789', 'ghj'),
+(55, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:14:32', '8789', 'ghj'),
+(56, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:15:07', '8789', 'ghj'),
+(57, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:16:20', '8789', 'ghj'),
+(58, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:17:09', '8789', 'ghj'),
+(59, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:17:34', '8789', 'ghj'),
+(60, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:18:43', '8789', 'ghj'),
+(61, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:20:03', '8789', 'ghj'),
+(62, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:21:17', '8789', 'ghj'),
+(63, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:24:05', '8789', 'ghj'),
+(64, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:31:09', '8789', 'ghj'),
+(65, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:32:31', '8789', 'ghj'),
+(66, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:33:51', '8789', 'ghj'),
+(67, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:35:55', '8789', 'ghj'),
+(68, 'jagruti', 'airoli', 'Navimumbai', 'maharashtra', '400708', '545665', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 05:37:17', '321', 'dfawsd'),
+(69, 'dcgvhn', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'mjnhb', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:27:40', '100', 'dgh'),
+(70, 'dcgvhn', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'mjnhb', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:28:55', '100', 'dgh'),
+(71, 'rftgh', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'rddtgyh', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:29:50', '564', 'gyh'),
+(72, 'ghj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '686784', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:56:52', '87', 'dghj'),
+(73, 'ghj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '686784', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:57:43', '87', 'dghj'),
+(74, 'ghj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '686784', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:59:42', '87', 'dghj'),
+(75, 'ghj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '686784', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 07:00:59', '87', 'dghj'),
+(76, 'dcgvhbjn', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'dfgh', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 07:01:54', '454', 'drgh'),
+(77, 'dcgvhbjn', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'dfgh', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 07:03:14', '454', 'drgh'),
+(78, 'cvghbjnk', 'airoli', 'Navimumbai', 'maharashtra', '400708', '54', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 07:15:44', '546', 'dajbsh');
 
 -- --------------------------------------------------------
 
@@ -344,7 +403,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `manager` int(11) NOT NULL,
   `hotel` int(11) NOT NULL,
   `trainee` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
@@ -356,7 +415,7 @@ INSERT INTO `user` (`id`, `name`, `password`, `email`, `accesslevel`, `timestamp
 (5, 'wohlig123', 'wohlig123', 'wohlig1@wohlig.com', 1, '2014-05-12 06:52:44', 1, NULL, '', '', 0, '', '', 0, '', '', '', '0000-00-00', '', '', '0000-00-00', 0, 0, 0, 0),
 (6, 'wohlig1', 'a63526467438df9566c508027d9cb06b', 'wohlig2@wohlig.com', 1, '2014-05-12 06:52:44', 1, NULL, '', '', 0, '', '', 0, '', '', '', '0000-00-00', '', '', '0000-00-00', 0, 0, 0, 0),
 (7, 'Avinash', '7b0a80efe0d324e937bbfc7716fb15d3', 'avinash@wohlig.com', 1, '2014-10-17 06:22:29', 1, NULL, '', '', 0, '', '', 0, '', '', '', '0000-00-00', '', '', '0000-00-00', 0, 0, 0, 0),
-(9, 'avinash', 'a208e5837519309129fa466b0c68396b', 'a@email.com', 4, '2014-12-03 11:06:19', 1, '', '', '123', 1, 'demojson', '23', 1, 'Karjat India', '765757657657', '767678678787', '1991-12-12', 'Web Developer', '123456787', '2015-04-26', 0, 0, 0, 0),
+(9, 'avinash', '81dc9bdb52d04dc20036dbd8313ed055', 'a@email.com', 4, '2014-12-03 11:06:19', 1, '', '', '123', 1, 'demojson', '23', 1, 'Karjat India', '765757657657', '767678678787', '1991-12-12', 'Web Developer', '1234', '2015-04-26', 0, 0, 0, 0),
 (13, 'MMMMM', 'a208e5837519309129fa466b0c68396b', 'aaa3@email.com', 5, '2014-12-04 06:55:42', 2, NULL, '', '1', 2, 'userjson', '22', 1, 'asaxas', '8768768', '878787', '2015-04-25', 'jbsahxjashb', 'v6776uyg76t', '2015-04-25', 0, 9, 0, 0),
 (14, 'avinashghare', 'a208e5837519309129fa466b0c68396b', 'avinash66@wohlig.com', 5, '2015-04-25 12:19:20', 2, '', '', '', 1, 'json', '23', 1, 'karjat', '867687', '87687', '1109-12-20', 'ausankjsa', 'ksajnajks', '2015-04-11', 0, 9, 0, 0),
 (15, 'Mahesh', '7cb323203b1306810d65271d8e9228ef', 'mahesh@wohlig.com', 6, '2015-04-27 09:53:53', 2, '', '', '', 1, 'json', '24', 1, 'Shahad Kalyan', '9876757467', '987987989', '2015-04-17', 'BCS', '1234', '2015-04-30', 1, 9, 0, 0),
@@ -369,7 +428,17 @@ INSERT INTO `user` (`id`, `name`, `password`, `email`, `accesslevel`, `timestamp
 (22, 'manager', '0795151defba7a4b5dfa89170de46277', 'manager@wohlig.com', 4, '2015-05-16 08:12:32', 1, '', '', '', 1, '', '43', 1, 'Kalyan Shahad', '8787878', '98798798', '0000-00-00', 'jabshj', 'mm1', '0000-00-00', 0, 0, 0, 0),
 (23, 'trainee', '63f4a689dca289ec493b58fea1ce57b0', 'trainee@wohlig.com', 5, '2015-05-16 08:14:08', 1, '', '', '', 1, '', '42', 1, 'Kalyan Shahad', '8776767788', '6765765765', '0000-00-00', 'jabshj', 'mm2', '0000-00-00', 0, 22, 0, 0),
 (24, 'executive', '05e8cc14fca017a28ed0eaabd2e5a13e', 'executive@wohlig.com', 6, '2015-05-16 08:15:41', 1, '', '', '', 1, '', '41', 1, 'Dombivli', '8776767788', '6765765765', '0000-00-00', 'jabshj', 'mm3', '0000-00-00', 0, 22, 0, 23),
-(25, 'user', '6ad14ba9986e3615423dfca256d04e3f', 'user@wohlig.com', 7, '2015-05-16 08:17:08', 1, '', '', '', 1, '', '40', 1, 'Dombivli', '8776767788', '6765765765', '0000-00-00', 'jabshj', 'mm4', '2014-12-12', 24, 22, 0, 23);
+(25, 'user', '6ad14ba9986e3615423dfca256d04e3f', 'user@wohlig.com', 7, '2015-05-16 08:17:08', 1, '', '', '', 1, '', '40', 1, 'Dombivli', '8776767788', '6765765765', '0000-00-00', 'jabshj', 'mm4', '2014-12-12', 24, 22, 0, 23),
+(76, 'last try', '', 'dsa@jdfha.djf', NULL, '2015-08-26 08:14:58', NULL, NULL, 'last', '', 0, '', '', 0, 'airoli', '879879', '', '1992-12-16', 'sjdggs', '', '0000-00-00', 0, 0, 0, 0),
+(77, 'djgsh', '', 'dsa@jdfha.djf', NULL, '2015-08-26 08:18:59', NULL, NULL, 'rdghj', '', 0, '', '', 0, 'airoli', 'dguh', '', '1992-12-16', 'dtgy', '', '0000-00-00', 0, 0, 0, 0),
+(78, 'pooja', '', 'pooja.wohlig@gmail.com', NULL, '2015-08-26 10:23:41', NULL, NULL, 'pooja01', '', 0, '', '', 0, 'airoli', '898989', '', '1992-12-16', 'developer', '', '0000-00-00', 0, 0, 0, 0),
+(79, 'hdakjgew', '', 'dsa@jdfha.djf', NULL, '2015-08-26 10:29:46', NULL, NULL, 'srwerw', '', 0, '', '', 0, 'airoli', 'dstret45', '', '1992-12-16', '45ghtrs', '', '0000-00-00', 0, 0, 0, 0),
+(80, 'dfghj', '', 'dsa@jdfha.djf', NULL, '2015-08-27 08:10:50', NULL, NULL, 'dfghj', '', 0, '', '', 0, 'airoli', '54654', '', '1649-05-16', 'ggvhbjnkm', '', '0000-00-00', 0, 0, 0, 0),
+(81, 'ygyjhggjhg', '', 'gjhghjg@gmail', NULL, '2015-08-27 08:14:06', NULL, NULL, 'jhjh', '', 0, '', '', 0, 'gjtg', '654654', '', '2015-08-04', 'jgkjgjkg', '', '0000-00-00', 0, 0, 0, 0),
+(82, 'erdrftgh', '', 'dsa@jdfha.djf', NULL, '2015-08-27 11:16:01', NULL, NULL, 'dfgh', '', 0, '', '', 0, 'airoli', 'xdcvgbh', '', '1992-12-16', 'cvgbhn', '', '0000-00-00', 0, 0, 0, 0),
+(83, 'namejagruti', '', 'jagruti@wohlig.com', NULL, '2015-08-28 05:36:50', NULL, NULL, 'dfsdf', '', 0, '', '', 0, 'addresss', '6565465465', '', '2015-08-05', 'dsasd', '', '0000-00-00', 0, 0, 0, 0),
+(84, 'ghjk', '', 'dsa@jdfha.djf', NULL, '2015-08-28 07:13:54', NULL, NULL, 'cvbhj', '', 0, '', '', 0, 'airoli', '4574', '', '1992-12-16', 'cvgbhnj', '', '0000-00-00', 0, 0, 0, 0),
+(85, 'ghjkm', '', 'dsa@jdfha.djf', NULL, '2015-08-28 07:14:49', NULL, NULL, 'ghjk', '', 0, '', '', 0, 'airoli', '655', '', '1992-12-16', 'cvbjn', '', '0000-00-00', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -431,8 +500,7 @@ INSERT INTO `userlog` (`id`, `onuser`, `status`, `description`, `timestamp`) VAL
 -- Indexes for table `accesslevel`
 --
 ALTER TABLE `accesslevel`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`);
+  ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Indexes for table `hotel_hotel`
@@ -480,6 +548,12 @@ ALTER TABLE `menuaccess`
 -- Indexes for table `orderstatus`
 --
 ALTER TABLE `orderstatus`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `paymentorder`
+--
+ALTER TABLE `paymentorder`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -538,12 +612,17 @@ ALTER TABLE `logintype`
 -- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `orderstatus`
 --
 ALTER TABLE `orderstatus`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `paymentorder`
+--
+ALTER TABLE `paymentorder`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=79;
 --
 -- AUTO_INCREMENT for table `statuses`
 --
@@ -553,7 +632,7 @@ ALTER TABLE `statuses`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=86;
 --
 -- AUTO_INCREMENT for table `userlog`
 --
