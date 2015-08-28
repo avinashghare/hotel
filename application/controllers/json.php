@@ -285,10 +285,71 @@ $this->load->view("json",$data);
      $data['message']=$this->transaction_model->updateorderstatusafterpayment($orderid,$transactionid);
 	 $this->load->view('json',$data);
  }
+ public function payumoneysuccess1()
+ {
+     $orderid=$this->input->get('orderid');
+     $data['message']=$this->restapi_model->updateorderstatusafterpayment($orderid);
+       redirect('http://localhost/myholidays/#/thankyou', 'refresh');
+	 $this->load->view('json',$data);
+ }
  public function checkorderstatus()
  {
      $orderid=$this->input->get('orderid');
+     $redirecturl=$this->input->get('redirecturl');
      $data['message']=$this->transaction_model->checkorderstatus($orderid);
+     redirect($redirecturl, 'refresh');
 	 $this->load->view('json',$data);
  }
-} ?>
+ public function createprofile(){
+ $data = json_decode(file_get_contents('php://input'), true);
+$name=$data['name'];
+$email=$data['email'];
+$username=$data['username'];
+$gender=$data['gender'];
+$address=$data['address'];
+$contact=$data['contact'];
+$dob=$data['dob'];
+$profession=$data['profession'];
+$data['message']=$this->restapi_model->createprofile($name,$email,$username,$gender,$address,$contact,$dob,$profession);
+$this->load->view('json',$data);
+ }
+ public function createpaymentorder(){
+ $data = json_decode(file_get_contents('php://input'), true);
+$user=$data['user'];
+$name=$data['name'];
+$email=$data['email'];
+$amount=$data['amount'];
+$billingaddress=$data['billingaddress'];
+$billingcity=$data['billingcity'];
+$billingstate=$data['billingstate'];
+$billingzipcode=$data['billingzipcode'];
+$billingcontact=$data['billingcontact'];
+$billingcountry=$data['billingcountry'];
+$data['message']=$this->restapi_model->createpaymentorder($user,$name,$email,$amount,$billingaddress,$billingcity,$billingstate,$billingzipcode,$billingcontact,$billingcountry);
+$this->load->view('json',$data);
+ }
+  public function login(){
+//  $voucherno=$this->input->get("voucherno");
+//        $password=$this->input->get("password");
+       $data = json_decode(file_get_contents('php://input'), true);
+        $voucherno=$data['voucherno'];
+        $password=$data['password'];
+        $data['message']=$this->user_model->login($voucherno,$password);
+        $this->load->view('json',$data);
+ }
+  public function authenticate() {
+    $data['message']=$this->user_model->authenticate();
+	 $this->load->view('json',$data);
+        }
+  public function logout()
+    {
+        $this->session->sess_destroy();
+		$this->load->view('json',true);
+    }
+  public function checkstatus() {
+      $orderid=$this->input->get('orderid');
+    $data['message']=$this->paymentorder_model->checkstatus($orderid);
+	 $this->load->view('json',$data);
+        }
+    }
+ ?>

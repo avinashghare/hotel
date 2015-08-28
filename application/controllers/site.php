@@ -3745,5 +3745,175 @@ function changeorderstatusbyhotel()
         $name="Transaction Reports_".$timestamp;
         $this->exporttransactionreportbyadmin->to_excel($sql, $name,$sql2);
 	}
+    
+    // PAYMENT ORDER BY POOJA
+    
+     public function viewpaymentorder()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data["page"]="viewpaymentorder";
+        $data["base_url"]=site_url("site/viewpaymentorderjson");
+        $data["title"]="View paymentorder";
+        $this->load->view("template",$data);
+    }
+    function viewpaymentorderjson()
+    {
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`paymentorder`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`paymentorder`.`name`";
+        $elements[1]->sort="1";
+        $elements[1]->header="Name";
+        $elements[1]->alias="name";
+        
+        $elements[2]=new stdClass();
+        $elements[2]->field="`paymentorder`.`email`";
+        $elements[2]->sort="1";
+        $elements[2]->header="Email";
+        $elements[2]->alias="email";
+        
+        $elements[3]=new stdClass();
+        $elements[3]->field="`paymentorder`.`orderstatus`";
+        $elements[3]->sort="1";
+        $elements[3]->header="Status";
+        $elements[3]->alias="orderstatus";
+        
+        $elements[4]=new stdClass();
+        $elements[4]->field="`paymentorder`.`transactionid`";
+        $elements[4]->sort="1";
+        $elements[4]->header="Transactionid";
+        $elements[4]->alias="transactionid";
+        
+        $elements[5]=new stdClass();
+        $elements[5]->field="`paymentorder`.`billingcontact`";
+        $elements[5]->sort="1";
+        $elements[5]->header="Contact";
+        $elements[5]->alias="billingcontact";
+        
+        $elements[6]=new stdClass();
+        $elements[6]->field="`user`.`name`";
+        $elements[6]->sort="1";
+        $elements[6]->header="User";
+        $elements[6]->alias="user";
+        
+        $elements[7]=new stdClass();
+        $elements[7]->field="`paymentorder`.`timestamp`";
+        $elements[7]->sort="1";
+        $elements[7]->header="Timestamp";
+        $elements[7]->alias="timestamp"; 
+        
+        $elements[8]=new stdClass();
+        $elements[8]->field="`paymentorder`.`amount`";
+        $elements[8]->sort="1";
+        $elements[8]->header="Amount";
+        $elements[8]->alias="amount";
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        if($orderby=="")
+        {
+            $orderby="timestamp";
+            $orderorder="DESC";
+        }
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `paymentorder` LEFT OUTER JOIN `user` ON `user`.`id`=`paymentorder`.`user`");
+        $this->load->view("json",$data);
+    }
+
+    public function createpaymentorder()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data["page"]="createpaymentorder";
+        $data["title"]="Create paymentorder";
+        $data['user']=$this->user_model->getuserdropdown();
+        $data['admin']=$this->user_model->getadmindropdown();
+        $data['orderstatus']=$this->paymentorder_model->getpaymentorderstatusdropdown();
+        $data['hotel']=$this->hotel_model->gethoteldropdown();
+        $this->load->view("template",$data);
+    }
+    public function createpaymentordersubmit() 
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+            $name=$this->input->get_post("name");
+            $billingaddress=$this->input->get_post("billingaddress");
+            $billingcity=$this->input->get_post("billingcity");
+            $billingstate=$this->input->get_post("billingstate");
+            $billingzipcode=$this->input->get_post("billingzipcode");
+            $billingcontact=$this->input->get_post("billingcontact");
+            $email=$this->input->get_post("email");
+            $transactionid=$this->input->get_post("transactionid");
+            $orderstatus=$this->input->get_post("orderstatus");
+            $user=$this->input->get_post("user");
+            $billingcountry=$this->input->get_post("billingcountry");
+            $amount=$this->input->get_post("amount");
+            if($this->paymentorder_model->create($name,$billingaddress,$billingcity,$billingstate,$billingzipcode,$billingcontact,$email,$transactionid,$orderstatus,$user,$billingcountry,$amount)==0)
+            $data["alerterror"]="New paymentorder could not be created.";
+            else
+            $data["alertsuccess"]="paymentorder created Successfully.";
+            $data["redirect"]="site/viewpaymentorder";
+            $this->load->view("redirect",$data);
+        
+    }
+    public function editpaymentorder()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $data["page"]="editpaymentorder";
+        $data["title"]="Edit paymentorder";
+        $data['user']=$this->user_model->getuserdropdown();
+        $data['orderstatus']=$this->paymentorder_model->getpaymentorderstatusdropdown();
+        $data['hotel']=$this->hotel_model->gethoteldropdown();
+        $data["before"]=$this->paymentorder_model->beforeedit($this->input->get("id"));
+        $this->load->view("template",$data);
+    }
+    public function editpaymentordersubmit()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+            $id=$this->input->get_post("id");
+            $name=$this->input->get_post("name");
+            $billingaddress=$this->input->get_post("billingaddress");
+            $billingcity=$this->input->get_post("billingcity");
+            $billingstate=$this->input->get_post("billingstate");
+            $billingzipcode=$this->input->get_post("billingzipcode");
+            $billingcontact=$this->input->get_post("billingcontact");
+            $email=$this->input->get_post("email");
+            $transactionid=$this->input->get_post("transactionid");
+            $orderstatus=$this->input->get_post("orderstatus");
+            $user=$this->input->get_post("user");
+         $billingcountry=$this->input->get_post("billingcountry");
+            $amount=$this->input->get_post("amount");
+            $timestamp=$this->input->get_post("timestamp");
+            if($this->paymentorder_model->edit($id,$name,$billingaddress,$billingcity,$billingstate,$billingzipcode,$billingcontact,$email,$transactionid,$orderstatus,$user,$billingcountry,$amount,$timestamp)==0)
+                $data["alerterror"]="New paymentorder could not be Updated.";
+            else
+                $data["alertsuccess"]="paymentorder Updated Successfully.";
+            $data["redirect"]="site/viewpaymentorder";
+            $this->load->view("redirect",$data);
+        
+    }
+    
+    public function deletepaymentorder()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+        $this->paymentorder_model->delete($this->input->get("id"));
+        $data["redirect"]="site/viewpaymentorder";
+        $this->load->view("redirect",$data);
+    }
 }
 ?>
