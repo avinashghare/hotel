@@ -9,7 +9,7 @@ $firstSplitArr = array("name"=>"splitID1", "value"=>"6", "merchantId"=>"5089108"
 $paymentPartsArr = array($firstSplitArr);	
 $finalInputArr = array("paymentParts" => $paymentPartsArr);
 $Prod_info = json_encode($finalInputArr);
-var_dump($Prod_info);
+//var_dump($Prod_info);
 
 // Merchant Salt as provided by Payu
 $SALT = "c4AYftqh";
@@ -101,7 +101,7 @@ if(empty($posted['hash']) && sizeof($posted) > 0) {
       <input type="hidden" name="key" value="<?php echo $MERCHANT_KEY ?>" />
 	  <input type="hidden" name="productinfo" value="<?php echo htmlspecialchars($Prod_info); ?>" />
       <input type="hidden" name="hash" value="<?php echo $hash ?>"/>
-      <input type="hidden" name="txnid" value="<?php echo $txnid ?>" />
+      <input type="text" name="txnid" value="<?php echo $txnid ?>" />
       <table>
         <tr>
           <td><b>Mandatory Parameters</b></td>
@@ -127,7 +127,7 @@ if(empty($posted['hash']) && sizeof($posted) > 0) {
         
         <tr>
           <td>Success URI: </td>
-          <td colspan="3"><input name="surl" value="<?php echo (empty($posted['surl'])) ? '' : $posted['surl'] ?>" size="64" /></td>
+          <td colspan="3"><input name="surl" value="<?php echo (empty($posted['surl'])) ? '' : $posted['surl'].'&transactionid='.$txnid ?>" size="64" /></td>
         </tr>
         <tr>
           <td>Failure URI: </td>

@@ -43,8 +43,8 @@ class restapi_model extends CI_Model
         return  $id;
     
     }
-    public function updateorderstatusafterpayment($orderid){
-          $query=$this->db->query("UPDATE `paymentorder` SET `orderstatus`=1 WHERE `id`='$orderid'");
+    public function updateorderstatusafterpayment($orderid,$transactionid){
+          $query=$this->db->query("UPDATE `paymentorder` SET `orderstatus`=1,`transactionid`='$transactionid' WHERE `id`='$orderid'");
         return 1;
     
     }

@@ -288,7 +288,8 @@ $this->load->view("json",$data);
  public function payumoneysuccess1()
  {
      $orderid=$this->input->get('orderid');
-     $data['message']=$this->restapi_model->updateorderstatusafterpayment($orderid);
+     $transactionid=$this->input->get('transactionid');
+     $data['message']=$this->restapi_model->updateorderstatusafterpayment($orderid,$transactionid);
        redirect('http://localhost/myholidays/#/thankyou', 'refresh');
 	 $this->load->view('json',$data);
  }
