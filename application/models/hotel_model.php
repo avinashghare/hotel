@@ -9,8 +9,6 @@ class hotel_model extends CI_Model
             "name" => $name,
             "initialbalance" => $initialbalance,
             "location" => $location,
-            "address" => $address,
-            "image" => $image,
             "user" => $user
         );
         $query=$this->db->insert( "hotel_hotel", $data );
@@ -38,8 +36,6 @@ class hotel_model extends CI_Model
             "name" => $name,
             "initialbalance" => $initialbalance,
             "location" => $location,
-            "address" => $address,
-            "image" => $image,
             "user" => $user
         );
         $this->db->where( "id",

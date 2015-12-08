@@ -243,17 +243,12 @@ class Site extends CI_Controller
         $elements[8]->header="Voucher Number";
         $elements[8]->alias="vouchernumber";
         
-        $elements[9]=new stdClass();
-        $elements[9]->field="`user`.`points`";
-        $elements[9]->sort="1";
-        $elements[9]->header="Points";
-        $elements[9]->alias="points";
         
-        $elements[10]=new stdClass();
-        $elements[10]->field="`user`.`accesslevel`";
-        $elements[10]->sort="1";
-        $elements[10]->header="Accesslevel";
-        $elements[10]->alias="accesslevel";
+        $elements[9]=new stdClass();
+        $elements[9]->field="`user`.`accesslevel`";
+        $elements[9]->sort="1";
+        $elements[9]->header="Accesslevel";
+        $elements[9]->alias="accesslevel";
         
         
         $search=$this->input->get_post("search");
@@ -1124,11 +1119,6 @@ class Site extends CI_Controller
         $elements[8]->header="Timestamp";
         $elements[8]->alias="timestamp";
         
-        $elements[9]=new stdClass();
-        $elements[9]->field="`hotel_transaction`.`image`";
-        $elements[9]->sort="1";
-        $elements[9]->header="Image";
-        $elements[9]->alias="image";
         
         
         $search=$this->input->get_post("search");
@@ -2094,11 +2084,6 @@ class Site extends CI_Controller
         $elements[8]->header="Manager";
         $elements[8]->alias="manager";
        
-        $elements[8]=new stdClass();
-        $elements[8]->field="`user`.`points`";
-        $elements[8]->sort="1";
-        $elements[8]->header="points";
-        $elements[8]->alias="points";
        
         
         $search=$this->input->get_post("search");
@@ -3860,7 +3845,12 @@ function changeorderstatusbyhotel()
             $user=$this->input->get_post("user");
             $billingcountry=$this->input->get_post("billingcountry");
             $amount=$this->input->get_post("amount");
-            if($this->paymentorder_model->create($name,$billingaddress,$billingcity,$billingstate,$billingzipcode,$billingcontact,$email,$transactionid,$orderstatus,$user,$billingcountry,$amount)==0)
+            $checkindate=$this->input->get_post("checkindate");
+            $checkoutdate=$this->input->get_post("checkoutdate");
+            $resort=$this->input->get_post("resort");
+            $noofpacks=$this->input->get_post("noofpacks");
+            $noofchildrenabove5=$this->input->get_post("noofchildrenabove5");
+            if($this->paymentorder_model->create($name,$billingaddress,$billingcity,$billingstate,$billingzipcode,$billingcontact,$email,$transactionid,$orderstatus,$user,$billingcountry,$amount,$checkindate,$checkoutdate,$resort,$noofpacks,$noofchildrenabove5)==0)
             $data["alerterror"]="New paymentorder could not be created.";
             else
             $data["alertsuccess"]="paymentorder created Successfully.";
@@ -3897,8 +3887,13 @@ function changeorderstatusbyhotel()
             $user=$this->input->get_post("user");
          $billingcountry=$this->input->get_post("billingcountry");
             $amount=$this->input->get_post("amount");
+        $checkindate=$this->input->get_post("checkindate");
+            $checkoutdate=$this->input->get_post("checkoutdate");
+            $resort=$this->input->get_post("resort");
+            $noofpacks=$this->input->get_post("noofpacks");
+            $noofchildrenabove5=$this->input->get_post("noofchildrenabove5");
             $timestamp=$this->input->get_post("timestamp");
-            if($this->paymentorder_model->edit($id,$name,$billingaddress,$billingcity,$billingstate,$billingzipcode,$billingcontact,$email,$transactionid,$orderstatus,$user,$billingcountry,$amount,$timestamp)==0)
+            if($this->paymentorder_model->edit($id,$name,$billingaddress,$billingcity,$billingstate,$billingzipcode,$billingcontact,$email,$transactionid,$orderstatus,$user,$billingcountry,$amount,$timestamp,$checkindate,$checkoutdate,$resort,$noofpacks,$noofchildrenabove5)==0)
                 $data["alerterror"]="New paymentorder could not be Updated.";
             else
                 $data["alertsuccess"]="paymentorder Updated Successfully.";

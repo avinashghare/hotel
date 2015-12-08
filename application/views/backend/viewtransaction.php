@@ -25,7 +25,6 @@
                                     <th data-field="amount">Amount</th>
                                     <th data-field="paymentmethod">paymentmethod</th>
                                     <th data-field="timestamp">timestamp</th>
-                                    <th data-field="image">image</th>
                                     <th data-field="Action">Action</th>
 <!--
                                     <th data-field="id">ID</th>
@@ -63,7 +62,7 @@
                 {
                 image="No Receipt Available";
                 }
-                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.username + "</td><td>" + resultrow.hotelname + "</td><td>" + resultrow.amount + "</td><td>" + resultrow.paymentmethod + "</td><td>" + resultrow.timestamp + "</td><td>" + image + "</td><td><a class='btn btn-primary btn-xs' href='<?php echo site_url('site/edittransaction?id=');?>" + resultrow.id + "'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-xs' href='<?php echo site_url('site/deletetransaction?id='); ?>" + resultrow.id + "'><i class='icon-trash '></i></a></td></tr>";
+                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.username + "</td><td>" + resultrow.hotelname + "</td><td>" + resultrow.amount + "</td><td>" + resultrow.paymentmethod + "</td><td>" + resultrow.timestamp + "</td><td><a class='btn btn-primary btn-xs' href='<?php echo site_url('site/edittransaction?id=');?>" + resultrow.id + "'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-xs' href='<?php echo site_url('site/deletetransaction?id='); ?>" + resultrow.id + "'><i class='icon-trash '></i></a></td></tr>";
             }
             generatejquery("<?php echo $base_url;?>");
         </script>

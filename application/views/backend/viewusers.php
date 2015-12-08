@@ -22,7 +22,6 @@
                                     <!--                        <th data-field="username">Username</th>-->
                                     <th data-field="email">Email</th>
                                     <th data-field="vouchernumber">Voucher Number</th>
-                                    <th data-field="points">Points</th>
                                     <th data-field="json">json</th>
                                     <th data-field="accesslevelname">accesslevel</th>
                                     <th data-field="status">status</th>
@@ -68,7 +67,7 @@
                 {
                 var orders = "<a class='btn btn-primary' href='<?php echo site_url('site/viewallordersforuser?userid=');?>" + resultrow.id + "'><i class=''></i>Orders</a>"
                 }
-                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.name + "</td><td>" + resultrow.email + "</td><td>" + resultrow.vouchernumber + "</td><td>" + resultrow.points + "</td><td>" + resultrow.json + "</td><td>" + resultrow.accesslevelname + "</td><td>" + resultrow.status + "</td><td>" + orders + "</td><td><a class='btn btn-primary btn-m' href='<?php echo site_url('site/edituser?id=');?>"+resultrow.id +"'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-m' href='<?php echo site_url('site/deleteuser?id='); ?>"+resultrow.id +"'><i class='icon-trash '></i></a></td><tr>";
+                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.name + "</td><td>" + resultrow.email + "</td><td>" + resultrow.vouchernumber + "</td><td>" + resultrow.json + "</td><td>" + resultrow.accesslevelname + "</td><td>" + resultrow.status + "</td><td>" + orders + "</td><td><a class='btn btn-primary btn-m' href='<?php echo site_url('site/edituser?id=');?>"+resultrow.id +"'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-m' href='<?php echo site_url('site/deleteuser?id='); ?>"+resultrow.id +"'><i class='icon-trash '></i></a></td><tr>";
 //                return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.name + "</td><td>" + resultrow.email + "</td><td>" + resultrow.vouchernumber + "</td><td>" + resultrow.points + "</td><td>" + resultrow.json + "</td><td>" + resultrow.accesslevelname + "</td><td>" + resultrow.status + "</td><td>" + orders + "</td><td><a class='btn btn-primary btn-m' href='<?php echo site_url('site/viewuserhotel?id=');?>"+resultrow.id +"'><i class='icon-tag'></i></a><a class='btn btn-primary btn-m' href='<?php echo site_url('site/edituser?id=');?>"+resultrow.id +"'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-m' href='<?php echo site_url('site/deleteuser?id='); ?>"+resultrow.id +"'><i class='icon-trash '></i></a></td><tr>";
             }
             generatejquery('<?php echo $base_url;?>');

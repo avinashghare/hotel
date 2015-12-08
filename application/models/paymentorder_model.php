@@ -3,7 +3,7 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class paymentorder_model extends CI_Model
 {
-    public function create($name,$billingaddress,$billingcity,$billingstate,$billingzipcode,$billingcontact,$email,$transactionid,$orderstatus,$user,$billingcountry,$amount)
+    public function create($name,$billingaddress,$billingcity,$billingstate,$billingzipcode,$billingcontact,$email,$transactionid,$orderstatus,$user,$billingcountry,$amount,$checkindate,$checkoutdate,$resort,$noofpacks,$noofchildrenabove5)
     {
         $data=array(
             "name" => $name,
@@ -18,7 +18,12 @@ class paymentorder_model extends CI_Model
             "user" => $user,
             "billingcountry" => $billingcountry,
             "amount" => $amount,
-            "timestamp" => $timestamp
+            "timestamp" => $timestamp,
+            "checkindate" => $checkindate,
+            "checkoutdate" => $checkoutdate,
+            "resort" => $resort,
+            "noofpacks" => $noofpacks,
+            "noofchildrenabove5" => $noofchildrenabove5
         );
         $query=$this->db->insert( "paymentorder", $data );
         $id=$this->db->insert_id();
@@ -39,7 +44,7 @@ class paymentorder_model extends CI_Model
         $query=$this->db->get("paymentorder")->row();
         return $query;
     }
-    public function edit($id,$name,$billingaddress,$billingcity,$billingstate,$billingzipcode,$billingcontact,$email,$transactionid,$orderstatus,$user,$billingcountry,$amount,$timestamp)
+    public function edit($id,$name,$billingaddress,$billingcity,$billingstate,$billingzipcode,$billingcontact,$email,$transactionid,$orderstatus,$user,$billingcountry,$amount,$timestamp,$checkindate,$checkoutdate,$resort,$noofpacks,$noofchildrenabove5)
     {
         $data=array(
            "name" => $name,
@@ -54,7 +59,12 @@ class paymentorder_model extends CI_Model
             "user" => $user,
              "billingcountry" => $billingcountry,
             "amount" => $amount,
-            "timestamp" => $timestamp
+            "timestamp" => $timestamp,
+            "checkindate" => $checkindate,
+            "checkoutdate" => $checkoutdate,
+            "resort" => $resort,
+            "noofpacks" => $noofpacks,
+            "noofchildrenabove5" => $noofchildrenabove5
         );
         $this->db->where( "id",$id );
         $query=$this->db->update( "paymentorder", $data );
