@@ -22,6 +22,7 @@
                                     <!--                        <th data-field="username">Username</th>-->
                                     <th data-field="email">Email</th>
                                     <th data-field="vouchernumber">Voucher Number</th>
+                                 
                                     <th data-field="json">json</th>
                                     <th data-field="accesslevelname">accesslevel</th>
                                     <th data-field="status">status</th>

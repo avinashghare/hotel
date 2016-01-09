@@ -243,6 +243,7 @@ class Site extends CI_Controller
         $elements[8]->header="Voucher Number";
         $elements[8]->alias="vouchernumber";
         
+       
         
         $elements[9]=new stdClass();
         $elements[9]->field="`user`.`accesslevel`";
@@ -528,9 +529,9 @@ class Site extends CI_Controller
 			else
 			$data['alertsuccess']="User edited Successfully.";
 			
-//			$data['redirect']="site/viewusers";
-//			//$data['other']="template=$template";
-//			$this->load->view("redirect",$data);
+			$data['redirect']="site/viewusers";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
 			
 		}
 	}
@@ -1119,6 +1120,7 @@ class Site extends CI_Controller
         $elements[8]->header="Timestamp";
         $elements[8]->alias="timestamp";
         
+       
         
         
         $search=$this->input->get_post("search");
@@ -1183,41 +1185,41 @@ class Site extends CI_Controller
             $chequeno=$this->input->get_post('chequeno');
             $chequedate=$this->input->get_post('chequedate');
             
-            $config['upload_path'] = './uploads/';
-			$config['allowed_types'] = 'gif|jpg|png|jpeg';
-			$this->load->library('upload', $config);
-			$filename="image";
-			$image="";
-			if (  $this->upload->do_upload($filename))
-			{
-				$uploaddata = $this->upload->data();
-				$image=$uploaddata['file_name'];
-                
-                $config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
-                $config_r['maintain_ratio'] = TRUE;
-                $config_t['create_thumb'] = FALSE;///add this
-                $config_r['width']   = 800;
-                $config_r['height'] = 800;
-                $config_r['quality']    = 100;
-                //end of configs
-
-                $this->load->library('image_lib', $config_r); 
-                $this->image_lib->initialize($config_r);
-                if(!$this->image_lib->resize())
-                {
-                    echo "Failed." . $this->image_lib->display_errors();
-                    //return false;
-                }  
-                else
-                {
-                    //print_r($this->image_lib->dest_image);
-                    //dest_image
-                    $image=$this->image_lib->dest_image;
-                    //return false;
-                }
-                
-			}
-            if($this->transaction_model->create($user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate,$image)==0)
+//            $config['upload_path'] = './uploads/';
+//			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+//			$this->load->library('upload', $config);
+//			$filename="image";
+//			$image="";
+//			if (  $this->upload->do_upload($filename))
+//			{
+//				$uploaddata = $this->upload->data();
+//				$image=$uploaddata['file_name'];
+//                
+//                $config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
+//                $config_r['maintain_ratio'] = TRUE;
+//                $config_t['create_thumb'] = FALSE;///add this
+//                $config_r['width']   = 800;
+//                $config_r['height'] = 800;
+//                $config_r['quality']    = 100;
+//                //end of configs
+//
+//                $this->load->library('image_lib', $config_r); 
+//                $this->image_lib->initialize($config_r);
+//                if(!$this->image_lib->resize())
+//                {
+//                    echo "Failed." . $this->image_lib->display_errors();
+//                    //return false;
+//                }  
+//                else
+//                {
+//                    //print_r($this->image_lib->dest_image);
+//                    //dest_image
+//                    $image=$this->image_lib->dest_image;
+//                    //return false;
+//                }
+//                
+//			}
+            if($this->transaction_model->create($user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate)==0)
                 $data["alerterror"]="New transaction could not be created.";
             else
                 $data["alertsuccess"]="transaction created Successfully.";
@@ -1273,48 +1275,48 @@ class Site extends CI_Controller
             $chequeno=$this->input->get_post('chequeno');
             $chequedate=$this->input->get_post('chequedate');
             
-            $config['upload_path'] = './uploads/';
-			$config['allowed_types'] = 'gif|jpg|png|jpeg';
-			$this->load->library('upload', $config);
-			$filename="image";
-			$image="";
-			if (  $this->upload->do_upload($filename))
-			{
-				$uploaddata = $this->upload->data();
-				$image=$uploaddata['file_name'];
-                
-                $config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
-                $config_r['maintain_ratio'] = TRUE;
-                $config_t['create_thumb'] = FALSE;///add this
-                $config_r['width']   = 800;
-                $config_r['height'] = 800;
-                $config_r['quality']    = 100;
-                //end of configs
-
-                $this->load->library('image_lib', $config_r); 
-                $this->image_lib->initialize($config_r);
-                if(!$this->image_lib->resize())
-                {
-                    echo "Failed." . $this->image_lib->display_errors();
-                    //return false;
-                }  
-                else
-                {
-                    //print_r($this->image_lib->dest_image);
-                    //dest_image
-                    $image=$this->image_lib->dest_image;
-                    //return false;
-                }
-                
-			}
-            
-            if($image=="")
-            {
-            $image=$this->transaction_model->gettransactionimagebyid($id);
-               // print_r($image);
-                $image=$image->image;
-            }
-            if($this->transaction_model->edit($id,$user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate,$image)==0)
+//            $config['upload_path'] = './uploads/';
+//			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+//			$this->load->library('upload', $config);
+//			$filename="image";
+//			$image="";
+//			if (  $this->upload->do_upload($filename))
+//			{
+//				$uploaddata = $this->upload->data();
+//				$image=$uploaddata['file_name'];
+//                
+//                $config_r['source_image']   = './uploads/' . $uploaddata['file_name'];
+//                $config_r['maintain_ratio'] = TRUE;
+//                $config_t['create_thumb'] = FALSE;///add this
+//                $config_r['width']   = 800;
+//                $config_r['height'] = 800;
+//                $config_r['quality']    = 100;
+//                //end of configs
+//
+//                $this->load->library('image_lib', $config_r); 
+//                $this->image_lib->initialize($config_r);
+//                if(!$this->image_lib->resize())
+//                {
+//                    echo "Failed." . $this->image_lib->display_errors();
+//                    //return false;
+//                }  
+//                else
+//                {
+//                    //print_r($this->image_lib->dest_image);
+//                    //dest_image
+//                    $image=$this->image_lib->dest_image;
+//                    //return false;
+//                }
+//                
+//			}
+//            
+//            if($image=="")
+//            {
+//            $image=$this->transaction_model->gettransactionimagebyid($id);
+//               // print_r($image);
+//                $image=$image->image;
+//            }
+            if($this->transaction_model->edit($id,$user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate)==0)
                 $data["alerterror"]="New transaction could not be Updated.";
             else
                 $data["alertsuccess"]="transaction Updated Successfully.";
@@ -2084,6 +2086,11 @@ class Site extends CI_Controller
         $elements[8]->header="Manager";
         $elements[8]->alias="manager";
        
+        $elements[8]=new stdClass();
+        $elements[8]->field="`user`.`points`";
+        $elements[8]->sort="1";
+        $elements[8]->header="points";
+        $elements[8]->alias="points";
        
         
         $search=$this->input->get_post("search");
@@ -3885,14 +3892,14 @@ function changeorderstatusbyhotel()
             $transactionid=$this->input->get_post("transactionid");
             $orderstatus=$this->input->get_post("orderstatus");
             $user=$this->input->get_post("user");
-         $billingcountry=$this->input->get_post("billingcountry");
+            $billingcountry=$this->input->get_post("billingcountry");
             $amount=$this->input->get_post("amount");
-        $checkindate=$this->input->get_post("checkindate");
+            $timestamp=$this->input->get_post("timestamp");
+            $checkindate=$this->input->get_post("checkindate");
             $checkoutdate=$this->input->get_post("checkoutdate");
             $resort=$this->input->get_post("resort");
             $noofpacks=$this->input->get_post("noofpacks");
             $noofchildrenabove5=$this->input->get_post("noofchildrenabove5");
-            $timestamp=$this->input->get_post("timestamp");
             if($this->paymentorder_model->edit($id,$name,$billingaddress,$billingcity,$billingstate,$billingzipcode,$billingcontact,$email,$transactionid,$orderstatus,$user,$billingcountry,$amount,$timestamp,$checkindate,$checkoutdate,$resort,$noofpacks,$noofchildrenabove5)==0)
                 $data["alerterror"]="New paymentorder could not be Updated.";
             else

@@ -71,8 +71,8 @@ class hotel_model extends CI_Model
     
 	public function gethotelimagebyid($id)
 	{
-		$query=$this->db->query("SELECT `image` FROM `hotel_hotel` WHERE `id`='$id'")->row();
-		return $query;
+//		$query=$this->db->query("SELECT `image` FROM `hotel_hotel` WHERE `id`='$id'")->row();
+//		return $query;
 	}
     
 	function changeorderstatusbyhotel($id)

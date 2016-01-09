@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 28, 2015 at 10:06 AM
+-- Generation Time: Jan 09, 2016 at 05:39 AM
 -- Server version: 5.6.24
 -- PHP Version: 5.5.24
 
@@ -56,15 +56,15 @@ CREATE TABLE IF NOT EXISTS `hotel_hotel` (
   `initialbalance` double NOT NULL,
   `location` varchar(255) NOT NULL,
   `user` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `hotel_hotel`
 --
 
 INSERT INTO `hotel_hotel` (`id`, `name`, `initialbalance`, `location`, `user`) VALUES
-(5, 'Elysium Resort (Alibaug)', 3000, 'Alibaug', 1),
-(6, 'Indus Valley(Lonavala)', 0, 'Lonavala', 1),
+(5, 'Elysium Resort (Alibaug)', 2500, 'Alibaug', 1),
+(6, 'Indus Valley(Lonavala)', -4501, 'Lonavala', 1),
 (7, 'Icchapurti Sai Residency (Shirdi)', 0, 'Shirdi', 1),
 (8, 'Horseland Hotel and Mountain SPA (Matheran)', 0, 'Matheran', 1),
 (9, 'Hotel Saikripa Imperial (Daman)', 0, 'Daman', 1),
@@ -80,7 +80,8 @@ INSERT INTO `hotel_hotel` (`id`, `name`, `initialbalance`, `location`, `user`) V
 (19, 'Golden Heights Enclave (Darjeeling)', 0, 'Darjeeling', 1),
 (20, 'Elysium Resort (Alibaug)1', 0, 'Alibaug', 1),
 (21, 'Kalyani Village Resort (Vajreshwari)', 2800, 'Vajreshwari', 1),
-(22, 'Ashwin Hotel (Igatpuri)', 5500, 'Igatpuri', 1);
+(22, 'Ashwin Hotel (Igatpuri)', 5500, 'Igatpuri', 1),
+(24, 'pooja1', 100011, 'airoli1', 4);
 
 -- --------------------------------------------------------
 
@@ -167,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `hotel_transaction` (
   `chequeno` varchar(255) DEFAULT NULL,
   `chequedate` date DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `hotel_transaction`
@@ -178,7 +179,8 @@ INSERT INTO `hotel_transaction` (`id`, `user`, `hotel`, `amount`, `status`, `pay
 (2, 4, 5, '5000', 2, 'Cheque', 'HDFC', 'KURLA', '1056', '2015-05-21', '0000-00-00 00:00:00'),
 (3, 1, 5, '20000', 2, 'Cash', '', '', '', '0000-00-00', '0000-00-00 00:00:00'),
 (4, 1, 5, '500', 2, 'Cash', '', '', '', '0000-00-00', '0000-00-00 00:00:00'),
-(5, 1, 5, '2100', 2, 'Cash', '', '', '', '0000-00-00', '0000-00-00 00:00:00');
+(5, 1, 5, '2100', 2, 'Cash', '', '', '', '0000-00-00', '0000-00-00 00:00:00'),
+(6, 1, 6, '5001', 2, 'Cheque', 'dena', 'airoli', 'D123', '2015-12-12', '2015-12-08 12:11:30');
 
 -- --------------------------------------------------------
 
@@ -315,42 +317,50 @@ CREATE TABLE IF NOT EXISTS `paymentorder` (
   `user` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `amount` varchar(255) NOT NULL,
-  `billingcountry` varchar(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=latin1;
+  `billingcountry` varchar(11) NOT NULL,
+  `checkindate` date NOT NULL,
+  `checkoutdate` date NOT NULL,
+  `resort` varchar(255) NOT NULL,
+  `noofpacks` varchar(255) NOT NULL,
+  `noofchildrenabove5` varchar(255) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `paymentorder`
 --
 
-INSERT INTO `paymentorder` (`id`, `name`, `billingaddress`, `billingcity`, `billingstate`, `billingzipcode`, `billingcontact`, `email`, `transactionid`, `orderstatus`, `user`, `timestamp`, `amount`, `billingcountry`) VALUES
-(51, 'ghhhjk', 'rtsyyrs', 'gyhuj', 'tyghuj', 'tgh', 'tyui', 'poojathakare55@gmail.com', 'ghj', '1', 6, '0000-00-00 00:00:00', '566768', 'india'),
-(52, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:11:09', '8789', 'ghj'),
-(53, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '1', 9, '2015-08-27 13:13:17', '8789', 'ghj'),
-(54, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '1', 9, '2015-08-27 13:14:00', '8789', 'ghj'),
-(55, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:14:32', '8789', 'ghj'),
-(56, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:15:07', '8789', 'ghj'),
-(57, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:16:20', '8789', 'ghj'),
-(58, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:17:09', '8789', 'ghj'),
-(59, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:17:34', '8789', 'ghj'),
-(60, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:18:43', '8789', 'ghj'),
-(61, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:20:03', '8789', 'ghj'),
-(62, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:21:17', '8789', 'ghj'),
-(63, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:24:05', '8789', 'ghj'),
-(64, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:31:09', '8789', 'ghj'),
-(65, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:32:31', '8789', 'ghj'),
-(66, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:33:51', '8789', 'ghj'),
-(67, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:35:55', '8789', 'ghj'),
-(68, 'jagruti', 'airoli', 'Navimumbai', 'maharashtra', '400708', '545665', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 05:37:17', '321', 'dfawsd'),
-(69, 'dcgvhn', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'mjnhb', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:27:40', '100', 'dgh'),
-(70, 'dcgvhn', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'mjnhb', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:28:55', '100', 'dgh'),
-(71, 'rftgh', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'rddtgyh', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:29:50', '564', 'gyh'),
-(72, 'ghj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '686784', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:56:52', '87', 'dghj'),
-(73, 'ghj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '686784', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:57:43', '87', 'dghj'),
-(74, 'ghj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '686784', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:59:42', '87', 'dghj'),
-(75, 'ghj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '686784', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 07:00:59', '87', 'dghj'),
-(76, 'dcgvhbjn', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'dfgh', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 07:01:54', '454', 'drgh'),
-(77, 'dcgvhbjn', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'dfgh', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 07:03:14', '454', 'drgh'),
-(78, 'cvghbjnk', 'airoli', 'Navimumbai', 'maharashtra', '400708', '54', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 07:15:44', '546', 'dajbsh');
+INSERT INTO `paymentorder` (`id`, `name`, `billingaddress`, `billingcity`, `billingstate`, `billingzipcode`, `billingcontact`, `email`, `transactionid`, `orderstatus`, `user`, `timestamp`, `amount`, `billingcountry`, `checkindate`, `checkoutdate`, `resort`, `noofpacks`, `noofchildrenabove5`) VALUES
+(51, 'ghhhjk', 'rtsyyrs', 'gyhuj', 'tyghuj', 'tgh', 'tyui', 'poojathakare55@gmail.com', 'ghj', '1', 6, '0000-00-00 00:00:00', '566768', 'india', '0000-00-00', '0000-00-00', '', '', ''),
+(52, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:11:09', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(53, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '1', 9, '2015-08-27 13:13:17', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(54, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '1', 9, '2015-08-27 13:14:00', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(55, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:14:32', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(56, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:15:07', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(57, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:16:20', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(58, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:17:09', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(59, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:17:34', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(60, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:18:43', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(61, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:20:03', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(62, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:21:17', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(63, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:24:05', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(64, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:31:09', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(65, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:32:31', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(66, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:33:51', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(67, 'cvbhnj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '68989', 'dsa@jdfha.djf', '', '', 9, '2015-08-27 13:35:55', '8789', 'ghj', '0000-00-00', '0000-00-00', '', '', ''),
+(68, 'jagruti', 'airoli', 'Navimumbai', 'maharashtra', '400708', '545665', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 05:37:17', '321', 'dfawsd', '0000-00-00', '0000-00-00', '', '', ''),
+(69, 'dcgvhn', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'mjnhb', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:27:40', '100', 'dgh', '0000-00-00', '0000-00-00', '', '', ''),
+(70, 'dcgvhn', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'mjnhb', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:28:55', '100', 'dgh', '0000-00-00', '0000-00-00', '', '', ''),
+(71, 'rftgh', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'rddtgyh', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:29:50', '564', 'gyh', '0000-00-00', '0000-00-00', '', '', ''),
+(72, 'ghj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '686784', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:56:52', '87', 'dghj', '0000-00-00', '0000-00-00', '', '', ''),
+(73, 'ghj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '686784', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:57:43', '87', 'dghj', '0000-00-00', '0000-00-00', '', '', ''),
+(74, 'ghj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '686784', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 06:59:42', '87', 'dghj', '0000-00-00', '0000-00-00', '', '', ''),
+(75, 'ghj', 'airoli', 'Navimumbai', 'maharashtra', '400708', '686784', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 07:00:59', '87', 'dghj', '0000-00-00', '0000-00-00', '', '', ''),
+(76, 'dcgvhbjn', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'dfgh', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 07:01:54', '454', 'drgh', '0000-00-00', '0000-00-00', '', '', ''),
+(77, 'dcgvhbjn', 'airoli', 'Navimumbai', 'maharashtra', '400708', 'dfgh', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 07:03:14', '454', 'drgh', '0000-00-00', '0000-00-00', '', '', ''),
+(78, 'cvghbjnk', 'airoli', 'Navimumbai', 'maharashtra', '400708', '54', 'dsa@jdfha.djf', '', '', 9, '2015-08-28 07:15:44', '546', 'dajbsh', '0000-00-00', '0000-00-00', '', '', ''),
+(79, 'Chintan Shah', 'a/30, laxmi Niwas', 'Mumbai', 'Maharashtra', '400022', '9876543212', 'wohligbot@gmail.com', '', '', 15, '2015-12-03 12:38:44', '1', 'India', '0000-00-00', '0000-00-00', '', '', ''),
+(80, 'Chintan Shah', 'A/30, Laxmi Niwas', 'Mumbai', 'Maharashtra', '400022', '9876543212', 'info@wohlig.com', '', '', 15, '2015-12-03 12:39:47', '1', 'India', '0000-00-00', '0000-00-00', '', '', ''),
+(81, 'pooja1', '11111111111111111', 'city1', 'state1', '11111111', '11111111', 'pooja11@wohlig.com', 'T1231', '2', 78, '0000-00-00 00:00:00', '5001', 'india1111', '2015-12-08', '2015-12-09', 'sdfhs1', '121', '151');
 
 -- --------------------------------------------------------
 
@@ -403,7 +413,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `manager` int(11) NOT NULL,
   `hotel` int(11) NOT NULL,
   `trainee` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
@@ -418,10 +428,8 @@ INSERT INTO `user` (`id`, `name`, `password`, `email`, `accesslevel`, `timestamp
 (9, 'avinash', '81dc9bdb52d04dc20036dbd8313ed055', 'a@email.com', 4, '2014-12-03 11:06:19', 1, '', '', '123', 1, 'demojson', '23', 1, 'Karjat India', '765757657657', '767678678787', '1991-12-12', 'Web Developer', '1234', '2015-04-26', 0, 0, 0, 0),
 (13, 'MMMMM', 'a208e5837519309129fa466b0c68396b', 'aaa3@email.com', 5, '2014-12-04 06:55:42', 2, NULL, '', '1', 2, 'userjson', '22', 1, 'asaxas', '8768768', '878787', '2015-04-25', 'jbsahxjashb', 'v6776uyg76t', '2015-04-25', 0, 9, 0, 0),
 (14, 'avinashghare', 'a208e5837519309129fa466b0c68396b', 'avinash66@wohlig.com', 5, '2015-04-25 12:19:20', 2, '', '', '', 1, 'json', '23', 1, 'karjat', '867687', '87687', '1109-12-20', 'ausankjsa', 'ksajnajks', '2015-04-11', 0, 9, 0, 0),
-(15, 'Mahesh', '7cb323203b1306810d65271d8e9228ef', 'mahesh@wohlig.com', 6, '2015-04-27 09:53:53', 2, '', '', '', 1, 'json', '24', 1, 'Shahad Kalyan', '9876757467', '987987989', '2015-04-17', 'BCS', '1234', '2015-04-30', 1, 9, 0, 0),
+(15, 'Mahesh', 'a63526467438df9566c508027d9cb06b', 'mahesh@wohlig.com', 6, '2015-04-27 09:53:53', 2, '', '', '', 1, 'json', '24', 1, 'Shahad Kalyan', '9876757467', '987987989', '2015-04-17', 'BCS', '1234', '2015-04-30', 1, 9, 0, 0),
 (16, 'Sapana', '02b732785a9444ee5ea6990f8a48ef65', 'sapana@wohlig.com', 4, '2015-04-28 09:05:41', 1, '', '', '', 1, 'json', '24', 1, 'karjat raigad', '9029888888', '89898', '2015-04-19', 'Web Designer', '1234567', '2015-04-16', 0, 0, 0, 0),
-(17, 'Pooja', '4bcc674371a91bf32377cd878d754527', 'pooja@wohlig.com', 4, '2015-04-28 09:12:31', 2, '', '', '', 1, 'json', '22', 0, 'Ghatkopar', '98798987987', '876767y8768', '2015-04-07', 'Web Designer,Web Developer And Integration As Well...', '876887687', '2015-04-30', 0, 0, 0, 0),
-(18, '9', '7cb323203b1306810d65271d8e9228ef', 'mahesh99@wohlig.com', 4, '2015-04-28 09:28:05', 2, '', '', '', 1, 'jjjj', '24', 1, 'Shahad Kalyan', '98798798', '989879879', '2015-04-25', 'Web Designer', '87876576', '2015-04-19', 0, 0, 0, 0),
 (19, 'Ganesh', '277a094bea5311135bd7abd73d28a01d', 'ganesh@gmail.com', 6, '2015-05-09 06:47:22', 2, '', '', '', 1, 'ijnijni', '32', 1, 'Vangani', '98998989898', '87687687888', '2015-05-13', 'ganesh buildings', 'mh1000', '2015-05-31', 14, 9, 0, 0),
 (20, 'Hotel1', 'a63526467438df9566c508027d9cb06b', 'elysium@wohlig.com', 3, '2015-05-09 07:09:31', 1, '', '', '', 1, 'jabsxjas', '12', 1, 'Panchgani', '8987876565', '9898777777', '2015-05-15', 'Restaurant', 'mh1001', '2015-05-16', 14, 9, 5, 0),
 (21, 'Vighnesh', 'c8568a42e7f150dc81613ee8c059906a', 'v@gmail.com', 7, '2015-05-16 08:06:11', 1, '', '', '', 1, '', '22', 1, 'Dombivli', '8776767788', '6765765765', '0000-00-00', 'BSc IT', 'mh1221', '0000-00-00', 15, 0, 0, 0),
@@ -438,7 +446,9 @@ INSERT INTO `user` (`id`, `name`, `password`, `email`, `accesslevel`, `timestamp
 (82, 'erdrftgh', '', 'dsa@jdfha.djf', NULL, '2015-08-27 11:16:01', NULL, NULL, 'dfgh', '', 0, '', '', 0, 'airoli', 'xdcvgbh', '', '1992-12-16', 'cvgbhn', '', '0000-00-00', 0, 0, 0, 0),
 (83, 'namejagruti', '', 'jagruti@wohlig.com', NULL, '2015-08-28 05:36:50', NULL, NULL, 'dfsdf', '', 0, '', '', 0, 'addresss', '6565465465', '', '2015-08-05', 'dsasd', '', '0000-00-00', 0, 0, 0, 0),
 (84, 'ghjk', '', 'dsa@jdfha.djf', NULL, '2015-08-28 07:13:54', NULL, NULL, 'cvbhj', '', 0, '', '', 0, 'airoli', '4574', '', '1992-12-16', 'cvgbhnj', '', '0000-00-00', 0, 0, 0, 0),
-(85, 'ghjkm', '', 'dsa@jdfha.djf', NULL, '2015-08-28 07:14:49', NULL, NULL, 'ghjk', '', 0, '', '', 0, 'airoli', '655', '', '1992-12-16', 'cvbjn', '', '0000-00-00', 0, 0, 0, 0);
+(85, 'ghjkm', '', 'dsa@jdfha.djf', NULL, '2015-08-28 07:14:49', NULL, NULL, 'ghjk', '', 0, '', '', 0, 'airoli', '655', '', '1992-12-16', 'cvbjn', '', '0000-00-00', 0, 0, 0, 0),
+(86, 'Wohlig Shah', '', 'info@wohlig.com', NULL, '2015-12-03 12:37:18', NULL, NULL, 'wohligdemo', '', 0, '', '', 0, 'A/30, Laxmi Niwas', '9876543212', '', '1994-05-22', 'Dancer', '', '0000-00-00', 0, 0, 0, 0),
+(89, 'pooja1111', '4bcc674371a91bf32377cd878d754527', 'pooja111@wohlig.com', 1, '2015-12-08 09:49:07', 2, '', '', '', 1, '1111', '23111', 0, 'Airoli111', '98989811', '0986725252511', '1559-08-12', 'Developer11', 'A1101111', '1998-08-12', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -587,7 +597,7 @@ ALTER TABLE `accesslevel`
 -- AUTO_INCREMENT for table `hotel_hotel`
 --
 ALTER TABLE `hotel_hotel`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT for table `hotel_log`
 --
@@ -602,7 +612,7 @@ ALTER TABLE `hotel_order`
 -- AUTO_INCREMENT for table `hotel_transaction`
 --
 ALTER TABLE `hotel_transaction`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `logintype`
 --
@@ -622,7 +632,7 @@ ALTER TABLE `orderstatus`
 -- AUTO_INCREMENT for table `paymentorder`
 --
 ALTER TABLE `paymentorder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=79;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=82;
 --
 -- AUTO_INCREMENT for table `statuses`
 --
@@ -632,7 +642,7 @@ ALTER TABLE `statuses`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=86;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=90;
 --
 -- AUTO_INCREMENT for table `userlog`
 --

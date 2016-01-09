@@ -70,24 +70,17 @@
                             </div>
                         </div>  
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="normal-field">Amount</label>
-                            <div class="col-sm-4">
-                                <input type="text" id="normal-field" class="form-control" name="amount" value='<?php echo set_value(' amount ');?>'>
-                            </div>
-                        </div>
-<!--                        /////////////////////////////////////////-->
-                          <div class="form-group">
                             <label class="col-sm-2 control-label" for="normal-field">Check In Date</label>
                             <div class="col-sm-4">
-                                <input type="text" id="normal-field" class="form-control" name="checkindate" value='<?php echo set_value(' checkindate ');?>'>
+                                <input type="date" id="normal-field" class="form-control" name="checkindate" value='<?php echo set_value(' checkindate ');?>'>
                             </div>
                         </div>
-                          <div class="form-group">
+                        <div class="form-group">
                             <label class="col-sm-2 control-label" for="normal-field">Check Out Date</label>
                             <div class="col-sm-4">
-                                <input type="text" id="normal-field" class="form-control" name="checkoutdate" value='<?php echo set_value(' checkoutdate ');?>'>
+                                <input type="date" id="normal-field" class="form-control" name="checkoutdate" value='<?php echo set_value(' checkoutdate ');?>'>
                             </div>
-                        </div> 
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="normal-field">Resort</label>
                             <div class="col-sm-4">
@@ -95,18 +88,23 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="normal-field">noofpacks</label>
+                            <label class="col-sm-2 control-label" for="normal-field">No of Packs</label>
                             <div class="col-sm-4">
                                 <input type="text" id="normal-field" class="form-control" name="noofpacks" value='<?php echo set_value(' noofpacks ');?>'>
                             </div>
-                        </div> 
+                        </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="normal-field">noofchildrenabove5</label>
+                            <label class="col-sm-2 control-label" for="normal-field">No Of Children Above 5</label>
                             <div class="col-sm-4">
                                 <input type="text" id="normal-field" class="form-control" name="noofchildrenabove5" value='<?php echo set_value(' noofchildrenabove5 ');?>'>
                             </div>
                         </div>
-<!--                        ///////////////////////-->
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="normal-field">Amount</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="normal-field" class="form-control" name="amount" value='<?php echo set_value(' amount ');?>'>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="normal-field">Transaction id</label>
                             <div class="col-sm-4">

@@ -3,7 +3,7 @@ if ( !defined( "BASEPATH" ) )
 exit( "No direct script access allowed" );
 class transaction_model extends CI_Model
 {
-    public function create($user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate,$image)
+    public function create($user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate)
     {
         $data=array(
                     "user" => $user,
@@ -14,7 +14,6 @@ class transaction_model extends CI_Model
                     "branchname" => $branchname,
                     "chequeno" => $chequeno,
                     "chequedate" => $chequedate,
-                    "image" => $image,
                     "status" => $status
                     );
         $query=$this->db->insert( "hotel_transaction", $data );
@@ -43,7 +42,7 @@ class transaction_model extends CI_Model
         $query=$this->db->get("hotel_transaction")->row();
         return $query;
     }
-    public function edit($id,$user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate,$image)
+    public function edit($id,$user,$hotel,$amount,$status,$paymentmethod,$bankname,$branchname,$chequeno,$chequedate)
     {
         
         $hoteldetails=$this->hotel_model->beforeedit($hotel);
@@ -68,7 +67,6 @@ class transaction_model extends CI_Model
                     "branchname" => $branchname,
                     "chequeno" => $chequeno,
                     "chequedate" => $chequedate,
-                    "image" => $image,
                     "status" => $status
                     );
         $this->db->where( "id", $id );
